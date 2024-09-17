@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management</title>
+</head>
+
+<body>
+    <h1>Account Profile DApp</h1>
+
+    <!-- Button to connect to MetaMask -->
+    <button id="connectButton">Connect to MetaMask</button>
+    <div id="accountArea"></div>
+
+    <!-- Registration Section -->
+    <div id="registrationSection" style="display:none;">
+        <h2>Register Account</h2>
+        <form id="registerForm">
+            <label>Name: </label><input type="text" id="regName" required><br>
+            <label>Email: </label><input type="email" id="regEmail" required><br>
+            <label>Age: </label><input type="number" id="regAge" required><br>
+            <label>Register as Parent: </label><input type="checkbox" id="isParent"><br>
+            <label>Parent Address (if Child): </label><input type="text" id="parentAddress" placeholder="0x..."><br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <!-- Profile Section -->
+    <div id="profileSection" style="display: none;">
+        <h2>Profile</h2>
+        <pre id="profile"></pre>
+        <h3>Account Balance: <span id="accountBalance"></span> ETH</h3>
+        <!-- Parent/Child Accounts Section -->
+        <div id="linkedAccountsSection" style="display: none;">
+            <h2>Linked Accounts</h2>
+            <div id="linkedAccountsInfo"></div>
+        </div>
+        <h2>Modify Profile</h2>
+        <form id="modifyForm">
+            <label>Name: </label><input type="text" id="modName" required><br>
+            <label>Email: </label><input type="email" id="modEmail" required><br>
+            <label>Age: </label><input type="number" id="modAge" required><br>
+            <button type="submit">Modify Profile</button>
+        </form>
+
+        <h2>Delete Account</h2>
+        <button id="deleteAccountBtn">Delete Account</button>
+
+       
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script>
+        const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
+
+        const contractAddress = "0x88AB2c67AF55521f43e5E53260336096478D2BFb";  // Replace with deployed contract address
+        const contractABI =[
+	{
+		"inputs": [],
+		"name": "deleteAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			}
+		],
+		"name": "modifyProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_parent",
+				"type": "address"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "children",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_parent",
+				"type": "address"
+			}
+		],
+		"name": "getChildren",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "getParent",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "age",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Account.AccountType",
+						"name": "accountType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "address",
+						"name": "parent",
+						"type": "address"
+					}
+				],
+				"internalType": "struct Account.User",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getProfile",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "age",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Account.AccountType",
+						"name": "accountType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "address",
+						"name": "parent",
+						"type": "address"
+					}
+				],
+				"internalType": "struct Account.User",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "login",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "users",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum Account.AccountType",
+				"name": "accountType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "address",
+				"name": "parent",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+        const accountContract = new web3.eth.Contract(contractABI, contractAddress);
+
+        let account;
+
+        // Function to connect to MetaMask and check account status
+        const accessToMetamask = async () => {
+            if (window.ethereum !== "undefined") {
+                const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+                account = accounts[0];
+                document.getElementById("accountArea").innerHTML = `Connected Account: ${account}`;
+
+                // Check if the account is registered
+                const isRegistered = await accountContract.methods.login(account).call();
+                if (isRegistered) {
+                    // Fetch and display profile if registered
+                    const profile = await accountContract.methods.getProfile().call({ from: account });
+                    displayProfile(profile);
+                    document.getElementById("registrationSection").style.display = "none";
+                    document.getElementById("profileSection").style.display = "block";
+                } else {
+                    // Show registration form if not registered
+                    document.getElementById("registrationSection").style.display = "block";
+                    document.getElementById("profileSection").style.display = "none";
+                }
+            } else {
+                alert("MetaMask is not installed");
+            }
+        };
+
+         // Function to display profile details and account balance
+         const displayProfile = async (profile) => {
+            const profileArea = document.getElementById("profile");
+
+            // Fetch account balance in Ether
+            const balance = await web3.eth.getBalance(account);
+            const balanceInEth = web3.utils.fromWei(balance, 'ether');
+            const balanceFormatted = parseFloat(balanceInEth).toFixed(4);
+
+            // Display profile details and account balance
+            profileArea.textContent = `Name: ${profile.name}\nEmail: ${profile.email}\nAge: ${profile.age}`;
+            document.getElementById("accountBalance").textContent = `${balanceFormatted} ETH`;
+
+            // Show linked accounts information
+            const linkedAccountsInfo = document.getElementById("linkedAccountsInfo");
+
+            if (profile.accountType == '0') { // 0 corresponds to Parent in the enum
+                // Fetch and display child accounts
+                const childAccounts = await accountContract.methods.getChildren(account).call();
+                linkedAccountsInfo.innerHTML = '<h3>Children Accounts:</h3><ul>';
+                for (const child of childAccounts) {
+                    const childProfile = await accountContract.methods.getProfile().call({ from: child });
+                    linkedAccountsInfo.innerHTML += `<li>${child}: ${childProfile.name}, ${childProfile.email}, ${childProfile.age} years old</li>`;
+                }
+                linkedAccountsInfo.innerHTML += '</ul>';
+            } else { // Child account
+                // Fetch and display parent account
+                const parentProfile = await accountContract.methods.getParent(account).call();
+                linkedAccountsInfo.innerHTML = `<h3>Parent Account:</h3>${parentProfile.account}: ${parentProfile.name}, ${parentProfile.email}, ${parentProfile.age} years old`;
+            }
+
+            document.getElementById("linkedAccountsSection").style.display = "block";
+        };
+
+        // Register account
+        document.getElementById("registerForm").onsubmit = async function (event) {
+            event.preventDefault();
+            const regName = document.getElementById("regName").value;
+            const regEmail = document.getElementById("regEmail").value;
+            const regAge = document.getElementById("regAge").value;
+            const isParent = document.getElementById("isParent").checked;
+            const parentAddress = document.getElementById("parentAddress").value;
+
+            const parentAccount = isParent ? "0x0000000000000000000000000000000000000000" : parentAddress;
+
+            await accountContract.methods.register(regName, regEmail, regAge, parentAccount).send({ from: account, gas: 300000 });
+            alert("Registration successful!");
+
+            // Refresh profile information
+            const profile = await accountContract.methods.getProfile().call({ from: account });
+            displayProfile(profile);
+        };
+
+        // Modify profile
+        document.getElementById("modifyForm").onsubmit = async function (event) {
+            event.preventDefault();
+            const modName = document.getElementById("modName").value;
+            const modEmail = document.getElementById("modEmail").value;
+            const modAge = document.getElementById("modAge").value;
+
+            await accountContract.methods.modifyProfile(modName, modEmail, modAge).send({ from: account });
+            alert("Profile updated!");
+
+            // Refresh profile information
+            const updatedProfile = await accountContract.methods.getProfile().call({ from: account });
+            displayProfile(updatedProfile);
+        };
+
+        // Delete account
+        document.getElementById("deleteAccountBtn").onclick = async function () {
+            await accountContract.methods.deleteAccount().send({ from: account });
+            alert("Account deleted!");
+            document.getElementById("profileSection").style.display = "none";  // Hide the section after deletion
+        };
+
+        // Event listener for connect button
+        document.getElementById("connectButton").onclick = accessToMetamask;
+    </script>
+</body>
+
+</html>
