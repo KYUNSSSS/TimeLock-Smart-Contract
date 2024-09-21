@@ -612,7 +612,30 @@ function upgradeToParent(address _child) internal {
         // Clear the parent reference, as the user is now a parent
         users[_child].parent = address(0);
     }
+    uint256 public constant SECONDS_IN_A_YEAR = 365 * 24 * 60 * 60;
+// Function to copy User details into Account
+    function copyUserToAccount(address userAddress) public {
+        // Fetch the user data from the mapping
+        User memory user = users[userAddress];
 
+        // Initialize a new Account object
+        Account storage account = accounts[userAddress];
+
+        // Convert age to startTime
+        uint256 currentTime = block.timestamp;
+        uint256 ageInSeconds = user.age * SECONDS_IN_A_YEAR;
+        account.startTime = currentTime - ageInSeconds;
+
+        // Set the isChild flag based on the accountType (1 for child, 0 for parent)
+        account.isChild = (user.accountType == AccountType.CHILD);
+
+        // Set parent if the user is a child
+        if (account.isChild) {
+            account.parent = user.parent;
+        }
+
+
+    }
 
 
 }
