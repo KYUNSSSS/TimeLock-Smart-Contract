@@ -2,449 +2,158 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
+	<meta charset="UTF-8">	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Deposit and Withdrawal</title>
-	<link rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css"
-		integrity="sha384-NvKbDTEnL+A8F/AA5Tc5kmMLSJHUO868P+lDtTpJIeQdGYaUIuLr4lVGOEA1OcMy" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css" integrity="sha384-NvKbDTEnL+A8F/AA5Tc5kmMLSJHUO868P+lDtTpJIeQdGYaUIuLr4lVGOEA1OcMy" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
-
-		body {
-			font-family: Arial, sans-serif;
-			height: 100vh;
-			width: 100vw;
-			margin: 0;
-			display: flex;
-			flex-direction: row;
-			min-height: 100vh;
-		}
-
-		.hidden-section h3 {
-			font-size: 2.5em;
-
-		}
-
-		.hidden-section {
-			display: none;
-		}
-
-		.table-container {
-			max-height: 400px;
-			overflow-y: auto;
-			margin: 20px auto;
-			width: 80%;
-		}
-
-		#scheduledWithdrawalsTable {
-			width: 100%;
-			table-layout: fixed;
-			border-collapse: collapse;
-		}
-
-		#scheduledWithdrawalsTable {
-			margin: 20px auto;
-			width: 50%;
-			table-layout: fixed;
-			border-collapse: collapse;
-		}
-
-		#scheduledWithdrawalsTable th,
-		#scheduledWithdrawalsTable td {
-			border: 1px solid #ddd;
-			padding: 8px;
-			text-align: center;
-			width: 20%;
-		}
-
-		input {
-			width: 50%;
-			height: 30px;
-			padding: 20px 40px;
-			margin-top: 30px;
-			border: 1px solid #ccc;
-			border-radius: 30px;
-			background: #fafcff;
-			box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			overflow: hidden;
-
-			&::-webkit-file-upload-button {
-				padding: 6px;
-				border-radius: 20px;
-				border: 1px solid #ccc;
-				background: linear-gradient(to bottom right, #f7fbff, #ccd1d8);
-				cursor: pointer;
-			}
-		}
-
-		#scheduledWithdrawalsTable th {
-			background-color: #f2f2f2;
-			font-weight: bold;
-		}
-
-		button {
-			font-size: 1em;
-			padding: 15px 30px;
-			background: linear-gradient(to bottom right, #42b7f1, #2385e6);
-			color: white;
-			border: none;
-			border-radius: 30px;
-			cursor: pointer;
-			box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-			transition: background-color 0.3s ease-in-out;
-			margin: 5px;
-		}
-
-		button:hover {
-			background: linear-gradient(to bottom right, rgb(29, 4, 90), #0d56a5);
-		}
-
-		#status {
-			margin-top: 20px;
-			font-weight: bold;
-		}
-
-		html {
-			scroll-behavior: smooth;
-			/* Enables smooth scrolling for the whole page */
-		}
-
-		.side-bar {
-			width: 250px;
-			background: #33bbff;
-			height: 100vh; /* Full height of the viewport */
-			position: fixed;
-			top: 0;
-			left: 0;
-			transition: width 0.5s ease;
-			padding: 20px 0;
-			overflow-y: auto; /* Enable vertical scrolling */
-		}
-
-		.side-bar::-webkit-scrollbar {
-			width: 10px;
-			/* Width of the scrollbar */
-		}
-
-		.side-bar::-webkit-scrollbar-thumb {
-			background: linear-gradient(180deg, #127b8e, #42b7f1);
-			/* Gradient for the scrollbar thumb */
-			border-radius: 20px;
-			/* Rounded edges for the scrollbar */
-		}
-
-		.side-bar::-webkit-scrollbar-track {
-			background: #c0e7f9;
-			/* Light background for the scrollbar track */
-		}
-
-		.side-bar h1 {
-			padding: 0 20px;
-			margin-bottom: 20px;
-
-
-		}
-
-		.side-bar ul li {
-			font-size: 20px;
-			padding: 10px 20px;
-			transition: 500ms background;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			cursor: pointer;
-		}
-
-		.side-bar ul li:hover {
-			background: #127b8e;
-		}
-
-		.side-bar ul {
-			list-style-type: none;
-			margin: 20px 0;
-			/* Add space between each section */
-			padding: 0;
-			background-color: #42b7f1;
-			/* Background color for each section */
-			border-radius: 10px;
-			/* Rounded corners for sections */
-			overflow: hidden;
-			/* Hide any overflowing content */
-		}
-
-		.side-bar span {
-			display: block;
-			padding: 15px 20px;
-			font-weight: bold;
-			color: white;
-			border-radius: 30px;
-			margin-bottom: 10px;
-			/* Separate header from the content */
-			cursor: pointer;
-		}
-
-		.side-bar span:hover {
-			background-color: #1f7aa7;
-		}
-
-
-		.navBar {
-			display: none;
-		}
-
-		.navBar.show {
-			display: block;
-		}
-
-		main {
-			margin-left: 250px; /* Space for the sidebar */
-			flex-grow: 1;
-			padding: 20px;
-			overflow-y: auto; /* Allow scrolling for the main content */
-		}
-
-		@media (max-width: 768px) {
-			.side-bar {
-				width: 200px; /* Change width for smaller screens */
-			}
-
-			main {
-				margin-left: 200px; /* Adjust margin accordingly */
-			}
-		}
-	</style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+         *{
+           margin: 0;
+           padding: 0;
+           user-select: none;
+           box-sizing: border-box;
+           font-family: 'Poppins', sans-serif;
+         }
+         .btn{
+           position: absolute;
+           top: 15px;
+           left: 45px;
+           height: 45px;
+           width: 45px;
+           text-align: center;
+           background: #1b1b1b;
+           border-radius: 3px;
+           cursor: pointer;
+           transition: left 0.4s ease;
+         }
+         .btn.click{
+           left: 260px;
+         }
+         .btn span{
+           color: white;
+           font-size: 28px;
+           line-height: 45px;
+         }
+         .btn.click span:before{
+           content: '\f00d';
+         }
+         .sidebar{
+           position: fixed;
+           width: 250px;
+           height: 100%;
+           left: -250px;
+           background: #1b1b1b;
+           transition: left 0.4s ease;
+         }
+         .sidebar.show{
+           left: 0px;
+         }
+         .sidebar .text{
+           color: white;
+           font-size: 25px;
+           font-weight: 600;
+           line-height: 65px;
+           text-align: center;
+           background: #1e1e1e;
+           letter-spacing: 1px;
+         }
+         nav ul{
+           background: #1b1b1b;
+           height: 100%;
+           width: 100%;
+           list-style: none;
+         }
+         nav ul li{
+           line-height: 60px;
+           border-top: 1px solid rgba(255,255,255,0.1);
+         }
+         nav ul li:last-child{
+           border-bottom: 1px solid rgba(255,255,255,0.05);
+         }
+         nav ul li a{
+           position: relative;
+           color: white;
+           text-decoration: none;
+           font-size: 18px;
+           padding-left: 40px;
+           font-weight: 500;
+           display: block;
+           width: 100%;
+           border-left: 3px solid transparent;
+         }
+         nav ul li.active a{
+           color: cyan;
+           background: #1e1e1e;
+           border-left-color: cyan;
+         }
+         nav ul li a:hover{
+           background: #1e1e1e;
+         }
+         nav ul ul{
+           position: static;
+           display: none;
+         }
+         nav ul .feat-show.show{
+           display: block;
+         }
+         nav ul .serv-show.show1{
+           display: block;
+         }
+         nav ul ul li{
+           line-height: 42px;
+           border-top: none;
+         }
+         nav ul ul li a{
+           font-size: 17px;
+           color: #e6e6e6;
+           padding-left: 80px;
+         }
+         nav ul li.active ul li a{
+           color: #e6e6e6;
+           background: #1b1b1b;
+           border-left-color: transparent;
+         }
+         nav ul ul li a:hover{
+           color: cyan!important;
+           background: #1e1e1e!important;
+         }
+         nav ul li a span{
+           position: absolute;
+           top: 50%;
+           right: 20px;
+           transform: translateY(-50%);
+           font-size: 22px;
+           transition: transform 0.4s;
+         }
+         nav ul li a span.rotate{
+           transform: translateY(-50%) rotate(-180deg);
+         }
+         .content{
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%,-50%);
+           color: #202020;
+           z-index: -1;
+           text-align: center;
+         }
+         .content .header{
+           font-size: 45px;
+           font-weight: 600;
+         }
+         .content p{
+           font-size: 30px;
+           font-weight: 500;
+         }
+         .hidden-section {
+           display: none;
+         }
+      </style>
 </head>
 
 <body>
-	<nav class="side-bar">
-		<h1>Saving Account</h1>
-		<span onclick="showSection('checkAccount')">Account Details</span>
-		<span onclick="toggleNavBar('DepositAndWithdraw')">Deposit And Withdrawals</span>
-		<ul id="DepositAndWithdraw" class="navBar">
-			<li onclick="showSection('addFundsSection')">Add Funds</li>
-			<li onclick="showSection('listScheduledSection'), listScheduledWithdrawals()">List Scheduled Withdrawals</li>
-			<li onclick="showSection('instantWithdrawSection')">Instant Withdraw</li>
-			<li onclick="showSection('scheduleWithdrawSection')">Schedule Withdraw</li>
-			<li onclick="showSection('executeWithdrawSection')">Execute Withdrawal</li>
-			<li onclick="showSection('cancelWithdrawal')">Cancel Scheduled Withdraw</li>
-			<li onclick="showSection('childScheduleWithdraw')">Schedule Withdrawal for Child</li>
-		</ul>
-
-		<span onclick="toggleNavBar('Transaction')">Transaction</span>
-		<ul id="Transaction" class="navBar">
-			<li onclick="showSection('instantTransfer')">Instant Transfer</li>
-			<li onclick="showSection('getAllScheduledTransfers')">Get All Scheduled Transfers</li>
-			<li onclick="showSection('cancelScheduleTransfer')">Cancel Schedule Transfer</li>
-			<li onclick="showSection('scheduleAutoExecutionTransfer')">Schedule Auto Execution Transfer</li>
-			<li onclick="showSection('getTransferHistory')">Get Transfer History</li>
-			<li onclick="showSection('getAllScheduledTransfers')">Get All Scheduled Transfers</li>
-			<li onclick="showSection('getTransferDetails')">Get Transfer Details</li>
-			<li onclick="showSection('getTotalTransactionAmount')">Get Total Transaction Amount</li>
-		</ul>
-
-		<span onclick="toggleNavBar('Interest')">Interest</span>
-		<ul id="Interest" class="navBar">
-			<li>Interest Calculation</li>
-			<li>Interest Withdrawal</li>
-			<li>Interest Rate Adjustment</li>
-			<li>Interest Distribution</li>
-			<li>Penalty</li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
-
-		<span onclick="toggleNavBar('Reward')">Reward</span>
-		<ul id="Reward" class="navBar">
-			<li>Daily Reward</li>
-			<li>Cashback on Transaction</li>
-			<li>Reward Distribution</li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
-	</nav>
-	<main>
-		<!-- Display account info -->
-		<div id="checkAccount" class="hidden-section" style="display: block;">
-			<div>
-				<h3>Connected Account: <span id="account"></span></h3>
-				<h3>Connected Smart Contract: <span id="contractArea"></span></h3>
-				<!-- <button onclick="connectWallet()">Connect</button> -->
-			</div>
-			<!-- Check Balance Section -->
-			<div>
-				<h3>Check Balance: <span id="balanceResult"></span></h3>
-				<button id="checkBalanceBtn">Check My Balance</button>
-			</div>
-			<!-- Get Current Block Timestamp -->
-			<div class="blockTIme">
-				<h3>Current Block Timestamp: <span id="timestampResult"></span></h3>
-				<button id="getTimestampBtn">Get Block Timestamp</button>
-			</div>
-			<div>
-				<!-- Child Check time remaining -->
-				<h3>Time Remaining: <span id="timeRemainingResult"></span></h3>
-				<button id="checkTimeBtn">Check Time Remaining</button>
-			</div>
-		</div>
-
-		<!-- Add Funds Section -->
-		<div id="addFundsSection" class="hidden-section">
-			<form id="addFundsForm">
-				<h3>Add Funds</h3>
-				<input type="number" id="amount" name="amount" min="0.0001" step="0.0001" required
-					placeholder="Enter Amount in Ether">
-				<button type="submit">Add Funds</button>
-			</form>
-		</div>
-
-		<!-- List Scheduled Withdrawals Section -->
-		<div id="listScheduledSection" class="hidden-section" style="text-align: center; ">
-			<h3>Scheduled Withdrawals</h3>
-			<table id="scheduledWithdrawalsTable" border="1">
-				<thead>
-					<tr>
-						<th>Index</th>
-						<th>Amount (ETH)</th>
-						<th>Unlock Time</th>
-						<th>Active</th>
-					</tr>
-				</thead>
-				<tbody id="withdrawalsBody"></tbody>
-			</table>
-		</div>
-
-		<!-- Instant Withdraw Section -->
-		<div id="instantWithdrawSection" class="hidden-section">
-			<h3>Instant Withdraw</h3>
-			<input type="number" id="instantWithdrawAmount" placeholder="Amount in ETH" /> <br>
-			<button onclick="instantWithdraw()">Withdraw</button>
-		</div>
-
-		<!-- Schedule Withdrawal Section -->
-		<div id="scheduleWithdrawSection" class="hidden-section">
-			<h3>Schedule Withdrawal</h3>
-			<input type="number" id="withdrawAmount" placeholder="Amount in ETH" /> <br>
-			<input type="datetime-local" id="withdrawDateTime" /> <br>
-			<button onclick="addScheduleWithdraw()">Schedule Withdraw</button>
-		</div>
-
-		<!-- Execute Withdrawal Section -->
-		<div id="executeWithdrawSection" class="hidden-section">
-			<h3>Execute Scheduled Withdrawal</h3>
-			<input type="number" id="withdrawIndex" placeholder="Withdrawal Index" /> <br>
-			<button onclick="executeScheduledWithdraw()">Execute Withdrawal</button>
-		</div>
-
-		<!-- Cancel Scheduled Withdraw -->
-		<div id="cancelWithdrawal" class="hidden-section">
-			<form id="cancelWithdrawalForm">
-				<h3>Cancel Scheduled Withdraw</h3>
-				<input type="number" id="withdrawalIndex" name="withdrawalIndex" min="0" required
-					placeholder="Enter index Schedule Withdraw">
-				<button type="submit">Cancel Withdrawal</button>
-			</form>
-			<p id="cancelResponse"></p>
-		</div>
-
-		<div id="childScheduleWithdraw" class="hidden-section">
-			<form id="withdrawForm">
-				<h3>Schedule Withdrawal for Child</h3>
-				<label for="childAddress">Child's Address:</label><br>
-				<input type="text" id="childAddress" name="childAddress" placeholder="Enter child's address"
-					required><br><br>
-
-				<label for="amountWithdraw">Amount (in Ether):</label><br>
-				<input type="number" id="amountWithdraw" name="amountWithdraw" placeholder="Enter amount in Ether"
-					required><br><br>
-
-				<label for="unlockTime">Unlock Date:</label><br>
-				<input type="datetime-local" id="unlockTime" name="unlockTime" required><br><br>
-
-				<button type="submit">Schedule Withdrawal</button>
-			</form>
-		</div>
-
-		<div id="status"></div>
-
-		<div id="instantTransfer" class="hidden-section">
-			<h2>Instant Transfer</h2>
-			<input type="text" id="instantTransferTo" placeholder="To Address">
-			<input type="number" id="instantTransferAmount" placeholder="Amount in Ether">
-			<button onclick="instantTransfer()">Transfer</button>
-		</div>
-
-
-		<div id="getAllScheduledTransfers" class="hidden-section">
-			<h2>Get All Scheduled Transfers</h2>
-			<button onclick="getAllScheduledTransfers()">Get All Scheduled Transfers</button>
-		</div>
-
-
-		<div id="cancelScheduleTransfer" class="hidden-section">
-			<h2>Cancel Scheduled Transfer</h2>
-			<input type="number" id="cancelTransferIndex" placeholder="Transfer Index">
-			<button onclick="cancelScheduledTransfer()">Cancel Transfer</button>
-		</div>
-
-
-		<div id="scheduleAutoExecutionTransfer" class="hidden-section"">
-			<h2>Schedule Auto Execution Transfer</h2>
-			<input type=" text" id="autoScheduleTransferTo" placeholder="To Address">
-			<input type="number" id="autoScheduleTransferAmount" placeholder="Amount in Ether">
-			<input type="datetime-local" id="autoScheduleTransferUnlockTime" placeholder="Unlock Time">
-			<button onclick="scheduleAutoExecution()">Schedule Auto Execution</button>
-		</div>
-
-
-		<div id="executeAutoScheduledTransfers" class="hidden-section">
-			<h2>Execute Auto Scheduled Transfers</h2>
-			<button onclick="executeAutoScheduledTransfers()">Execute Auto Scheduled Transfers</button>
-		</div>
-
-
-		<div id="getTransferHistory" class="hidden-section">
-			<h2>Get Transfer History</h2>
-			<input type="text" id="transferHistoryUser1" placeholder="User 1 Address">
-			<input type="text" id="transferHistoryUser2" placeholder="User 2 Address">
-			<button onclick="getTransferHistory()">Get History</button>
-		</div>
-
-
-		<div id="getAllScheduledTransfers" class="hidden-section">
-			<h2>Get All Transfer History</h2>
-			<input type="text" id="allTransferHistoryUser" placeholder="User Address">
-			<button onclick="getAllTransferHistory()">Get All History</button>
-		</div>
-
-
-		<div id="getTransferDetails" class="hidden-section">
-			<h2>Get Transfer Details</h2>
-			<input type="text" id="transferDetailsUser" placeholder="User Address">
-			<input type="number" id="transferDetailsIndex" placeholder="Transfer Index">
-			<button onclick="getTransferDetails()">Get Details</button>
-		</div>
-
-
-		<div id="getTotalTransactionAmount" class="hidden-section">
-			<h2>Get Total Transaction Amount</h2>
-			<input type="text" id="totalAmountSender" placeholder="Sender Address">
-			<input type="text" id="totalAmountReceiver" placeholder="Receiver Address">
-			<button onclick="getTotalTransactionAmount()">Get Total Amount</button>
-		</div>
-	</main>
 
 
 	<script>
@@ -1351,17 +1060,10 @@
 			document.getElementById(sectionId).style.display = 'block';  // Show the selected section
 		}
 
-		function toggleNavBar(id) {
-			const nav = document.getElementById(id);
-			nav.classList.toggle('show');
-		}
-		function toggleSection(sectionId) {
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(section => section.style.display = 'none');
-    const selectedSection = document.getElementById(sectionId);
-    if (selectedSection) {
-        selectedSection.style.display = 'block';
-    }
+		function showNav(sectionId) {
+			const sections = document.querySelectorAll('.navBar');
+			sections.forEach(section => section.style.display = 'none');  // Hide all sections
+			document.getElementById(sectionId).style.display = 'block';  // Show the selected section
 		}
 
 		// Connect MetaMask Wallet
@@ -1819,6 +1521,29 @@
 				document.getElementById('status').innerText = 'Failed to unpause contract: ' + error.message;
 			}
 		}
+
+		$('.btn').click(function(){
+           $(this).toggleClass("click");
+           $('.sidebar').toggleClass("show");
+         });
+         $('.feat-btn').click(function(){
+           $('nav ul .feat-show').toggleClass("show");
+           $('nav ul .first').toggleClass("rotate");
+         });
+         $('.serv-btn').click(function(){
+           $('nav ul .serv-show').toggleClass("show1");
+           $('nav ul .second').toggleClass("rotate");
+         });
+         $('nav ul li').click(function(){
+           $(this).addClass("active").siblings().removeClass("active");
+         });
+         
+         // Function to show the correct section and hide others
+         function showSection(sectionId) {
+           const sections = document.querySelectorAll('.section');
+           sections.forEach(section => section.classList.add('hidden-section'));
+           document.getElementById(sectionId).classList.remove('hidden-section');
+         }
 	</script>
 </body>
 
