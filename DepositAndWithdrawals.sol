@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract Transaction {
+contract DepositAndWithdraw {
 
     struct Account {
         uint256 balance;
@@ -45,15 +45,23 @@ contract Transaction {
         _;
     }
 
-    // Add funds to an account
-    function addFunds(uint256 _amount) external payable {
-        require(msg.value == _amount, "Sent Ether does not match the specified amount");
-        accounts[msg.sender].balance += _amount;
+    modifier greaterZero(){
+        require(msg.value > 0, "Must be > 0");
+        _;
     }
 
-    // Check balance of an account
-    function checkBalance(address _account) external view returns (uint256) {
-        return accounts[_account].balance;
+    function getCurrentBlockTimestamp() public view returns (uint256){
+        return block.timestamp;
+    }
+
+    // Add funds to an account
+    function addFunds() external greaterZero payable {
+        accounts[msg.sender].balance += msg.value;
+    }
+
+    // Check balance of the calling account (msg.sender)
+    function checkMyBalance() external view returns (uint256) {
+        return accounts[msg.sender].balance;
     }
 
     // Check remaining time for child account to reach adulthood
@@ -65,7 +73,7 @@ contract Transaction {
     }
 
     // Withdraw funds (added reentrancy protection)
-    function withdraw(uint256 _amount) external sufficientBalance(msg.sender, _amount) {
+    function withdraw(uint256 _amount) external sufficientBalance(msg.sender, _amount) onlyAdult(msg.sender) {
         // Effects first
         accounts[msg.sender].balance -= _amount;
 
@@ -76,20 +84,26 @@ contract Transaction {
     }
 
     // Schedule withdrawal (only for child over 18)
-    function addScheduleWithdraw(uint256 _amount, uint256 _timePeriod) 
+    function addScheduleWithdraw(uint256 _amount, uint256 _unlockTime) 
         external 
         onlyAdult(msg.sender) 
         sufficientBalance(msg.sender, _amount) 
     {
+        require(_unlockTime > block.timestamp, "Unlock time must be in the future");
+
+        // Deduct the amount from the account balance at the time of scheduling
+        accounts[msg.sender].balance -= _amount;
+
         scheduledWithdrawals[msg.sender].push(ScheduledWithdraw({
             recipient: msg.sender,
             amount: _amount,
-            unlockTime: block.timestamp + _timePeriod,
+            unlockTime: _unlockTime,
             active: true
         }));
 
-        emit ScheduledWithdrawCreated(msg.sender, _amount, block.timestamp + _timePeriod);
+        emit ScheduledWithdrawCreated(msg.sender, _amount, _unlockTime);
     }
+
 
     // Cancel scheduled withdrawal
     function cancelScheduleWithdraw(uint256 _index) external {
@@ -105,20 +119,17 @@ contract Transaction {
     }
 
     // Execute scheduled withdrawal with reentrancy protection
-    function executeScheduledWithdraw(uint256 _index) 
-        external 
-        onlyAdult(msg.sender) 
+    function executeScheduledWithdraw(uint256 _index) external 
     {
         require(_index < scheduledWithdrawals[msg.sender].length, "Invalid withdrawal index");
         ScheduledWithdraw storage scheduledTx = scheduledWithdrawals[msg.sender][_index];
         require(scheduledTx.active, "No active scheduled withdrawal");
         require(block.timestamp >= scheduledTx.unlockTime, "Unlock time has not been reached");
 
-        // Effects first
-        accounts[msg.sender].balance -= scheduledTx.amount;
+        // Mark the scheduled withdrawal as inactive
         scheduledTx.active = false;
 
-        // Interactions last
+        // Transfer the funds (no need to deduct the balance again)
         payable(scheduledTx.recipient).transfer(scheduledTx.amount);
 
         emit ScheduledWithdrawExecuted(msg.sender, scheduledTx.amount, _index);
@@ -129,7 +140,6 @@ contract Transaction {
         return scheduledWithdrawals[_account];
     }
 
-
     // Add a child account under a parent
     function addChildAccount(address _child) external {
         require(accounts[_child].parent == address(0), "Child account already exists");
@@ -137,12 +147,33 @@ contract Transaction {
 
         accounts[_child] = Account({
             balance: 0,
-            startTime: block.timestamp,
-            contractEndTime: block.timestamp + 18 * 365 days, // Set contract end time for 18 years
+            startTime: block.timestamp, 
+            contractEndTime: block.timestamp + 18 * 365 days, // need to change to follow yunshen code
             parent: msg.sender,
             isChild: true
         });
 
         emit ChildAccountAdded(msg.sender, _child);
+    }
+
+    // Schedule withdrawal for a child (only the parent can do this)
+    function addScheduleWithdrawForChild(address _child, uint256 _amountWithdraw, uint256 _unlockTime) 
+        external 
+        onlyParent(_child)
+        sufficientBalance(_child, _amountWithdraw)
+    {
+        require(_unlockTime > block.timestamp, "Unlock time must be in the future");
+
+        // Deduct the amount from the child's balance at the time of scheduling
+        accounts[_child].balance -= _amountWithdraw;
+
+        scheduledWithdrawals[_child].push(ScheduledWithdraw({
+            recipient: _child,
+            amount: _amountWithdraw,
+            unlockTime: _unlockTime,
+            active: true
+        }));
+
+        emit ScheduledWithdrawCreated(_child, _amountWithdraw, _unlockTime);
     }
 }
