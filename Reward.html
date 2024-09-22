@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Contract Interaction</title>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>Reward System</h1>
+    
+    <button id="loginBtn">Daily Login</button>
+    <button id="weeklyRewardBtn">Claim Weekly Transaction Reward</button>
+    <button id="checkRewardsBtn">Check Reward Points</button>
+    <button id="claimPrizeBtn">Claim Prize</button>
+
+    <p id="result"></p>
+
+    <script>
+        const contractABI = [ 
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_transactionAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address payable",
+				"name": "_interestModuleAddress",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "rewardPoints",
+				"type": "uint256"
+			}
+		],
+		"name": "CashbackReward",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "rewardPoints",
+				"type": "uint256"
+			}
+		],
+		"name": "DailyLoginReward",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "prize",
+				"type": "string"
+			}
+		],
+		"name": "PrizeClaimed",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "rewardPoints",
+				"type": "uint256"
+			}
+		],
+		"name": "WeeklyTransactionReward",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "DAILY_REWARD_POINTS",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "DEPOSIT_WITHDRAW_REWARD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ETHER_REWARD_THRESHOLD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "MAX_DEPOSIT_REWARD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ONE_DAY",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ONE_WEEK",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "WEEKLY_TRANSACTION_REWARD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "childAccount",
+				"type": "address"
+			}
+		],
+		"name": "addChildAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "cashbackRewardOnTransaction",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "childAccount",
+				"type": "address"
+			}
+		],
+		"name": "checkChildRewardPoints",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "prizeId",
+				"type": "uint256"
+			}
+		],
+		"name": "claimPrize",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "dailyLogin",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTotalRewardPoints",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "interestModule",
+		"outputs": [
+			{
+				"internalType": "contract InterestModule",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "parentChildAccounts",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "rewards",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "totalRewardPoints",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lastLogin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lastWeeklyTransaction",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lastWeeklyDepositReward",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "transactionContract",
+		"outputs": [
+			{
+				"internalType": "contract Transaction",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "weeklyTransactionReward",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+        const contractAddress = '0xYourContractAddressHere'; // Deployed contract address
+
+        let web3;
+        let contract;
+        let accounts;
+
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                await window.ethereum.enable();
+                accounts = await web3.eth.getAccounts();
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+
+                document.getElementById('loginBtn').onclick = async () => {
+                    await contract.methods.dailyLogin().send({ from: accounts[0] });
+                    document.getElementById('result').innerText = "Daily login reward claimed!";
+                };
+
+                document.getElementById('weeklyRewardBtn').onclick = async () => {
+                    await contract.methods.weeklyTransactionReward().send({ from: accounts[0] });
+                    document.getElementById('result').innerText = "Weekly reward claimed!";
+                };
+
+                document.getElementById('checkRewardsBtn').onclick = async () => {
+                    let points = await contract.methods.getTotalRewardPoints().call({ from: accounts[0] });
+                    document.getElementById('result').innerText = "Your total reward points: " + points;
+                };
+
+                document.getElementById('claimPrizeBtn').onclick = async () => {
+                    let prizeId = prompt("Enter Prize ID (1 for $10 Gift Card, 2 for $25 Gift Card, 3 for Bluetooth Speaker)");
+                    await contract.methods.claimPrize(prizeId).send({ from: accounts[0] });
+                    document.getElementById('result').innerText = "Prize claimed!";
+                };
+            } else {
+                document.getElementById('result').innerText = "Please install MetaMask!";
+            }
+        });
+    </script>
+</body>
+</html>
