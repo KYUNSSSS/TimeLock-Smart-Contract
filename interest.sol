@@ -35,14 +35,14 @@ contract InterestModule {
 
     //Modifier
     //Ensure the interest time is reach
-    modifier onlyReachInterval() {
-        require(block.timestamp >= lastInterestCalculationTime[msg.sender] + userAccrualIntervals[msg.sender], "Accrual interval has not been reached yet");
+    modifier onlyReachInterval(address account) {
+        require(block.timestamp >= lastInterestCalculationTime[account] + userAccrualIntervals[account], "Accrual interval has not been reached yet");
         _;
     }
 
     //Ensure user balance in contract is enough
-    modifier sufficientBalance(uint256 amount) {
-        require(accountBalances[msg.sender] >= amount, "Insufficient balance");
+    modifier sufficientBalance(uint256 amount,address account) {
+        require(accountBalances[account] >= amount, "Insufficient balance");
         _;
     }
 
@@ -64,10 +64,8 @@ contract InterestModule {
 
     // Calculator for interest, input amount, time, rate, show the interest for testing, month , year
     // timeElapsedInSeconds is how long you want to put your balance
-    function interestCalculator(uint256 amount, uint256 startEpoch, uint256 endEpoch, uint256 interestRate) public view returns (uint256 ,uint256 ,uint256) {
+    function interestCalculator(uint256 amount, uint256 startEpoch, uint256 endEpoch) public view returns (uint256 ,uint256 ,uint256) {
         require(amount > 0, "Amount must be greater than zero");
-        require(interestRate > 0, "Interest rate must be greater than zero");
-
 
         //For testing
         uint256 testingIntervalPassed = (endEpoch - startEpoch) / TESTING_INTERVAL; //Pass how many 30 seconds
@@ -90,28 +88,22 @@ contract InterestModule {
 
     //-----------------------------
     // Deposit ether into the contract  (Remove after combine, check before remove)
-    function deposit() public positiveAmount(msg.value) payable {
-        accountBalances[msg.sender] += msg.value;
+    function deposit(uint256 value,address acount) public positiveAmount(value) payable {
+        accountBalances[acount] += value;
 
         // If first deposit, set the last interest calculation time and default interval
-        if (lastInterestCalculationTime[msg.sender] == 0) {
-            lastInterestCalculationTime[msg.sender] = block.timestamp;
-            userAccrualIntervals[msg.sender] = TESTING_INTERVAL; // Default should be monthly but testing for test
-            accountInterestRates[msg.sender] = testingInterestRate;
+        if (lastInterestCalculationTime[acount] == 0) {
+            lastInterestCalculationTime[acount] = block.timestamp;
+            userAccrualIntervals[acount] = TESTING_INTERVAL; // Default should be monthly but testing for test
+            accountInterestRates[acount] = testingInterestRate;
         }
 
-        emit Deposit(msg.sender, msg.value);
+        emit Deposit(acount, value);
     }
 
-    // Withdraw ether from the contract (remove after combine)
-    function withdraw(uint256 amount) public positiveAmount(amount) sufficientBalance(amount) {
-        accountBalances[msg.sender] -= amount;
-        payable(msg.sender).transfer(amount);
-        emit Withdraw(msg.sender, amount);
-    }
 
     // Calculate interest for a specific account with a time lock
-    function calculateInterest(address account) public view onlyReachInterval returns (uint256){
+    function calculateInterest(address account) public view onlyReachInterval(account) returns (uint256){
         uint256 interest;
         uint256 balance = accountBalances[account];
         uint256 timeElapsed = block.timestamp - lastInterestCalculationTime[account]; //Second Passed correct
@@ -126,101 +118,111 @@ contract InterestModule {
         uint256 yearIntervalPassed = timeElapsed / YEARLY_INTERVAL;
 
         //Calculate Interest for testing 
-        if(userAccrualIntervals[msg.sender] == TESTING_INTERVAL){
-            interest = (balance * accountInterestRates[msg.sender] / 100 * testingIntervalPassed) / yearIn30Seconds; //pass 1 get 9,512,937,595 if 1 ether
-        }else if(userAccrualIntervals[msg.sender] == MONTHLY_INTERVAL){
-            interest = (balance * accountInterestRates[msg.sender] / 100 * monthIntervalPassed) / 12; //1 year = 12 months
-        }else if(userAccrualIntervals[msg.sender] == YEARLY_INTERVAL){
-            interest = (balance * accountInterestRates[msg.sender] / 100 * yearIntervalPassed); //in year no need
+        if(userAccrualIntervals[account] == TESTING_INTERVAL){
+            interest = (balance * accountInterestRates[account] / 100 * testingIntervalPassed) / yearIn30Seconds; //pass 1 get 9,512,937,595 if 1 ether
+        }else if(userAccrualIntervals[account] == MONTHLY_INTERVAL){
+            interest = (balance * accountInterestRates[account] / 100 * monthIntervalPassed) / 12; //1 year = 12 months
+        }else if(userAccrualIntervals[account] == YEARLY_INTERVAL){
+            interest = (balance * accountInterestRates[account] / 100 * yearIntervalPassed); //in year no need
         }
 
         return interest;
     }
 
     // Add interest to the balance
-    function addInterest() public onlyReachInterval {
-        uint256 interest = calculateInterest(msg.sender);
+    function addInterest(address account) public onlyReachInterval(account) {
+        uint256 interest = calculateInterest(account);
         require(interest > 0, "No interest to add");
 
-        accountBalances[msg.sender] += interest;
-        lastInterestCalculationTime[msg.sender] = block.timestamp; // Update the last calculation time for the specific account
+        accountBalances[account] += interest;
+        lastInterestCalculationTime[account] = block.timestamp; // Update the last calculation time for the specific account
         
         // Save addInterest history
-        addInterestHistory[msg.sender].push(
+        addInterestHistory[account].push(
             InterestHistory({
                 timestamp: block.timestamp,
                 interestAmount: interest,
-                recipient: msg.sender
-            })
-        );
-
-        emit InterestAdd(interest, msg.sender);
-    }
-
-    // Allow users to change their accrual interval (monthly or yearly or testing) 
-    function setUserAccrualInterval(uint256 newInterval) public validInterval(newInterval) {
-        userAccrualIntervals[msg.sender] = newInterval;//change rate also
-        if(newInterval == MONTHLY_INTERVAL){
-            accountInterestRates[msg.sender] = monthlyInterestRate;
-        }else if(newInterval == YEARLY_INTERVAL){
-            accountInterestRates[msg.sender] = yearlyInterestRate;
-        }else if(newInterval == TESTING_INTERVAL){
-            accountInterestRates[msg.sender] = testingInterestRate;
-        }
-        
-        emit AccrualIntervalChanged(msg.sender, newInterval);
-    }
-
-    // Withdraw accrued interest and reset interest calculation
-    function withdrawInterest() public onlyReachInterval {
-        uint256 interest = calculateInterest(msg.sender);
-        require(interest > 0, "No interest available to withdraw");
-
-        // Add to withdrawal history
-        withdrawalHistory[msg.sender].push(
-            InterestHistory({
-                timestamp: block.timestamp,
-                interestAmount: interest,
-                recipient: msg.sender
-            })
-        );
-
-        payable(msg.sender).transfer(interest);
-        emit InterestWithdrawn(interest, msg.sender);
-    }
-
-    // Distribute a percentage of interest to a specific account in a single transaction
-    function distributeInterest(uint256 percentage, address account) public onlyReachInterval {
-        require(percentage > 0 && percentage <= 100, "Invalid percentage value"); // Ensure percentage is between 0 and 100
-        require(account != address(0), "Invalid address"); // Ensure a valid account address
-
-        uint interest = calculateInterest(msg.sender);
-
-        uint256 interestDistributed = (interest * percentage) / 100; // Calculate interest to distribute
-        uint256 interestWithdraw = interest - interestDistributed; //Remain interest withdraw
-
-        accountBalances[msg.sender] -= interest; //Deduct the balance
-
-        payable(account).transfer(interestDistributed); // Transfer the calculated interest to the account
-        emit InterestWithdrawn(interestDistributed, account); // Emit the event for interest distribution
-
-        payable(msg.sender).transfer(interestWithdraw); // Withdraw the remain interest
-        emit InterestWithdrawn(interestWithdraw, msg.sender); // Emit the event for interest withdraw
-
-        // Add to distribution history for both sender and recipient
-        distributionHistory[msg.sender].push(
-            InterestHistory({
-                timestamp: block.timestamp,
-                interestAmount: interestDistributed,
                 recipient: account
             })
         );
 
-        withdrawalHistory[msg.sender].push(
+        emit InterestAdd(interest, account);
+    }
+
+    // Allow users to change their accrual interval (monthly or yearly or testing) 
+    function setUserAccrualInterval(uint256 newInterval , address account) public validInterval(newInterval) {
+        userAccrualIntervals[account] = newInterval;//change rate also
+        if(newInterval == MONTHLY_INTERVAL){
+            accountInterestRates[account] = monthlyInterestRate;
+        }else if(newInterval == YEARLY_INTERVAL){
+            accountInterestRates[account] = yearlyInterestRate;
+        }else if(newInterval == TESTING_INTERVAL){
+            accountInterestRates[account] = testingInterestRate;
+        }
+        
+        emit AccrualIntervalChanged(account, newInterval);
+    }
+
+    function getUserAccrualInterval(address account) public view returns (uint256) {
+        return userAccrualIntervals[account];
+    }
+
+    function getaccountInterestRates(address account) public view returns (uint256) {
+        return accountInterestRates[account];
+    }
+
+
+    // Withdraw accrued interest and reset interest calculation
+    function withdrawInterest(address account) public onlyReachInterval(account) returns (bool)  {
+        uint256 interest = calculateInterest(account);
+        require(interest > 0, "No interest available to withdraw");
+
+        // Add to withdrawal history
+        withdrawalHistory[account].push(
+            InterestHistory({
+                timestamp: block.timestamp,
+                interestAmount: interest,
+                recipient: account
+            })
+        );
+
+        //payable(account).transfer(10);//Remove
+        emit InterestWithdrawn(interest, account);
+        return true;
+    }
+
+    // Distribute a percentage of interest to a specific account in a single transaction
+    function distributeInterest(uint256 percentage, address toAccount, address fromAccount) public onlyReachInterval(fromAccount) {
+        require(percentage > 0 && percentage <= 100, "Invalid percentage value"); // Ensure percentage is between 0 and 100
+        require(toAccount != address(0), "Invalid address"); // Ensure a valid account address
+
+        uint interest = calculateInterest(fromAccount);
+
+        uint256 interestDistributed = (interest * percentage) / 100; // Calculate interest to distribute
+        uint256 interestWithdraw = interest - interestDistributed; //Remain interest withdraw
+
+        accountBalances[fromAccount] -= interest; //Deduct the balance
+
+        payable(toAccount).transfer(interestDistributed); // Transfer the calculated interest to the account
+        emit InterestWithdrawn(interestDistributed, toAccount); // Emit the event for interest distribution
+
+        payable(fromAccount).transfer(interestWithdraw); // Withdraw the remain interest
+        emit InterestWithdrawn(interestWithdraw, fromAccount); // Emit the event for interest withdraw
+
+        // Add to distribution history for both sender and recipient
+        distributionHistory[fromAccount].push(
+            InterestHistory({
+                timestamp: block.timestamp,
+                interestAmount: interestDistributed,
+                recipient: toAccount
+            })
+        );
+
+        withdrawalHistory[fromAccount].push(
             InterestHistory({
                 timestamp: block.timestamp,
                 interestAmount: interestWithdraw,
-                recipient: msg.sender
+                recipient: fromAccount
             })
         );
     }
@@ -256,6 +258,10 @@ contract InterestModule {
     // Function to get the balance of another contract
     function getOtherContractBalance(address contractAddress) public view returns (uint256) {
         return contractAddress.balance;
+    }
+
+    function testAccount(address account) public pure returns (address) {
+        return account;
     }
 
 
