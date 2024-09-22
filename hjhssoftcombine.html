@@ -244,7 +244,7 @@
 		Savings Account Management System
 	</header>
 	<nav class="side-bar">
-		<span onclick="showSection('checkAccount')">Account Details</span>
+		<span id="accountDetails" onclick="showSection('checkAccount')">Account Details</span>
 		<span onclick="toggleNavBar('DepositAndWithdraw')">Deposit And Withdrawals</span>
 		<ul id="DepositAndWithdraw" class="navBar">
 			<li onclick="showSection('addFundsSection')">Add Funds</li>
@@ -300,22 +300,22 @@
 			<div>
 				<h3>Account: <span id="account"></span></h3>
 				<!-- <h3>Connected Smart Contract: <span id="contractArea"></span></h3> -->
-				<button onclick="connectWallet()">Connect</button>
+				<!-- <button onclick="connectWallet()">Connect</button> -->
 			</div>
 			<!-- Check Balance Section -->
 			<div>
 				<h3>Check Balance: <span id="balanceResult"></span></h3>
-				<button id="checkBalanceBtn">Check My Balance</button>
+				<!-- <button id="checkBalanceBtn">Check My Balance</button> -->
 			</div>
 			<!-- Get Current Block Timestamp -->
 			<div class="blockTIme">
 				<h3>Current Block Timestamp: <span id="timestampResult"></span></h3>
-				<button id="getTimestampBtn">Get Block Timestamp</button>
+				<!-- <button id="getTimestampBtn">Get Block Timestamp</button> -->
 			</div>
 			<div>
 				<!-- Child Check time remaining -->
 				<h3>Time Remaining: <span id="timeRemainingResult"></span></h3>
-				<button id="checkTimeBtn">Check Time Remaining</button>
+				<!-- <button id="checkTimeBtn">Check Time Remaining</button> -->
 			</div>
 		</div>
 
@@ -2128,8 +2128,8 @@
 		}
 
 		// Checking the balance
-		const checkBalanceBtn = document.getElementById('checkBalanceBtn');
-		checkBalanceBtn.addEventListener('click', async () => {
+		const checkBalance = document.getElementById('accountDetails');
+		checkBalance.addEventListener('click', async () => {
 			const accounts = await web3.eth.getAccounts();
 			const sender = accounts[0];
 
@@ -2144,8 +2144,8 @@
 		});
 
 		// Fetch and display the current block timestamp
-		const getTimestampBtn = document.getElementById('getTimestampBtn');
-		getTimestampBtn.addEventListener('click', async () => {
+		const getTimestamp = document.getElementById('accountDetails');
+		getTimestamp.addEventListener('click', async () => {
 			try {
 				const timestamp = await contract.methods.getCurrentBlockTimestamp().call();
 				document.getElementById('timestampResult').innerText = `${timestamp}`;
@@ -2155,8 +2155,8 @@
 		});
 
 		// Handle checking time remaining
-		const checkTimeBtn = document.getElementById('checkTimeBtn');
-		checkTimeBtn.addEventListener('click', async () => {
+		const checkTime = document.getElementById('accountDetails');
+		checkTime.addEventListener('click', async () => {
 			const accounts = await web3.eth.getAccounts();
 			const sender = accounts[0];
 
