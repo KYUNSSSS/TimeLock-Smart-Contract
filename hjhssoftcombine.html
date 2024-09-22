@@ -22,8 +22,9 @@
 			width: 100vw;
 			margin: 0;
 			display: flex;
-			flex-direction: row;
+			flex-direction: column;
 			min-height: 100vh;
+			background-color: #f0f8ff;
 		}
 
 		.hidden-section h3 {
@@ -105,7 +106,7 @@
 		}
 
 		button:hover {
-			background: linear-gradient(to bottom right, rgb(29, 4, 90), #0d56a5);
+			background: linear-gradient(to bottom right, rgb(29, 4, 90), #0d7aa5);
 		}
 
 		#status {
@@ -120,13 +121,13 @@
 
 		.side-bar {
 			width: 250px;
-			background: #33bbff;
+			background: #b6f3fd;
 			height: 100vh; /* Full height of the viewport */
 			position: fixed;
-			top: 0;
+			top: 67px;
 			left: 0;
 			transition: width 0.5s ease;
-			padding: 20px 0;
+			padding: 50px 0;
 			overflow-y: auto; /* Enable vertical scrolling */
 		}
 
@@ -165,7 +166,7 @@
 		}
 
 		.side-bar ul li:hover {
-			background: #127b8e;
+			background: #2385e6;
 		}
 
 		.side-bar ul {
@@ -173,7 +174,7 @@
 			margin: 20px 0;
 			/* Add space between each section */
 			padding: 0;
-			background-color: #42b7f1;
+			background-color: #b6f3fd;
 			/* Background color for each section */
 			border-radius: 10px;
 			/* Rounded corners for sections */
@@ -185,7 +186,7 @@
 			display: block;
 			padding: 15px 20px;
 			font-weight: bold;
-			color: white;
+			color: Blue;
 			border-radius: 30px;
 			margin-bottom: 10px;
 			/* Separate header from the content */
@@ -193,7 +194,8 @@
 		}
 
 		.side-bar span:hover {
-			background-color: #1f7aa7;
+			background-color: #239ee6;
+			color: white;
 		}
 
 
@@ -221,12 +223,27 @@
 				margin-left: 200px; /* Adjust margin accordingly */
 			}
 		}
+		header {
+            background-color: #b6f3fd;
+            color: blue;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-grow: 1;
+        }
 	</style>
 </head>
 
 <body>
+	<header>
+		Savings Account Management System
+	</header>
 	<nav class="side-bar">
-		<h1>Saving Account</h1>
 		<span onclick="showSection('checkAccount')">Account Details</span>
 		<span onclick="toggleNavBar('DepositAndWithdraw')">Deposit And Withdrawals</span>
 		<ul id="DepositAndWithdraw" class="navBar">
@@ -242,13 +259,15 @@
 		<span onclick="toggleNavBar('Transaction')">Transaction</span>
 		<ul id="Transaction" class="navBar">
 			<li onclick="showSection('instantTransfer')">Instant Transfer</li>
-			<li onclick="showSection('getAllScheduledTransfers')">Get All Scheduled Transfers</li>
+			<li onclick="showSection('getAllScheduledTransfers')">All Scheduled Transfers</li>
 			<li onclick="showSection('cancelScheduleTransfer')">Cancel Schedule Transfer</li>
-			<li onclick="showSection('scheduleAutoExecutionTransfer')">Schedule Auto Execution Transfer</li>
-			<li onclick="showSection('getTransferHistory')">Get Transfer History</li>
-			<li onclick="showSection('getAllScheduledTransfers')">Get All Scheduled Transfers</li>
-			<li onclick="showSection('getTransferDetails')">Get Transfer Details</li>
-			<li onclick="showSection('getTotalTransactionAmount')">Get Total Transaction Amount</li>
+			<li onclick="showSection('scheduleAutoExecutionTransfer')">Schedule Transfer</li>
+			<li onclick="showSection('executeAutoScheduledTransfers')">Execute Scheduled Transfers</li>
+			<li onclick="showSection('getTransferHistory')"> Transfer History</li>
+			<li onclick="showSection('getAllTransferHistory')">All Transfer History</li>
+			<li onclick="showSection('getTransferDetails')">Transfer Details</li>
+			<li onclick="showSection('getTotalTransactionAmount')">Total Transaction Amount</li>
+
 		</ul>
 
 		<span onclick="toggleNavBar('Interest')">Interest</span>
@@ -279,9 +298,9 @@
 		<!-- Display account info -->
 		<div id="checkAccount" class="hidden-section" style="display: block;">
 			<div>
-				<h3>Connected Account: <span id="account"></span></h3>
-				<h3>Connected Smart Contract: <span id="contractArea"></span></h3>
-				<!-- <button onclick="connectWallet()">Connect</button> -->
+				<h3>Account: <span id="account"></span></h3>
+				<!-- <h3>Connected Smart Contract: <span id="contractArea"></span></h3> -->
+				<button onclick="connectWallet()">Connect</button>
 			</div>
 			<!-- Check Balance Section -->
 			<div>
@@ -388,7 +407,7 @@
 
 
 		<div id="getAllScheduledTransfers" class="hidden-section">
-			<h2>Get All Scheduled Transfers</h2>
+			<h2>List All Scheduled Transfers</h2>
 			<button onclick="getAllScheduledTransfers()">Get All Scheduled Transfers</button>
 		</div>
 
@@ -401,37 +420,37 @@
 
 
 		<div id="scheduleAutoExecutionTransfer" class="hidden-section"">
-			<h2>Schedule Auto Execution Transfer</h2>
+			<h2>Schedule Execution Transfer</h2>
 			<input type=" text" id="autoScheduleTransferTo" placeholder="To Address">
 			<input type="number" id="autoScheduleTransferAmount" placeholder="Amount in Ether">
 			<input type="datetime-local" id="autoScheduleTransferUnlockTime" placeholder="Unlock Time">
-			<button onclick="scheduleAutoExecution()">Schedule Auto Execution</button>
+			<button onclick="scheduleAutoExecution()">Schedule Execution</button>
 		</div>
 
 
 		<div id="executeAutoScheduledTransfers" class="hidden-section">
-			<h2>Execute Auto Scheduled Transfers</h2>
+			<h2>Execute Scheduled Transfers</h2>
 			<button onclick="executeAutoScheduledTransfers()">Execute Auto Scheduled Transfers</button>
 		</div>
 
 
 		<div id="getTransferHistory" class="hidden-section">
-			<h2>Get Transfer History</h2>
+			<h2>Transfer History</h2>
 			<input type="text" id="transferHistoryUser1" placeholder="User 1 Address">
 			<input type="text" id="transferHistoryUser2" placeholder="User 2 Address">
 			<button onclick="getTransferHistory()">Get History</button>
 		</div>
 
 
-		<div id="getAllScheduledTransfers" class="hidden-section">
-			<h2>Get All Transfer History</h2>
+		<div id="getAllTransferHistory" class="hidden-section">
+			<h2>All Transfer History</h2>
 			<input type="text" id="allTransferHistoryUser" placeholder="User Address">
 			<button onclick="getAllTransferHistory()">Get All History</button>
 		</div>
 
 
 		<div id="getTransferDetails" class="hidden-section">
-			<h2>Get Transfer Details</h2>
+			<h2>Transfer Details</h2>
 			<input type="text" id="transferDetailsUser" placeholder="User Address">
 			<input type="number" id="transferDetailsIndex" placeholder="Transfer Index">
 			<button onclick="getTransferDetails()">Get Details</button>
@@ -439,7 +458,7 @@
 
 
 		<div id="getTotalTransactionAmount" class="hidden-section">
-			<h2>Get Total Transaction Amount</h2>
+			<h2>Total Transaction Amount</h2>
 			<input type="text" id="totalAmountSender" placeholder="Sender Address">
 			<input type="text" id="totalAmountReceiver" placeholder="Receiver Address">
 			<button onclick="getTotalTransactionAmount()">Get Total Amount</button>
@@ -554,634 +573,724 @@
 
 		// Define the ABI and contract address globally
 		const ABI = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_child",
-						"type": "address"
-					}
-				],
-				"name": "addChildAccount",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			},
 			{
-				"inputs": [],
-				"name": "addFunds",
-				"outputs": [],
-				"stateMutability": "payable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "AccountArchived",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_unlockTime",
-						"type": "uint256"
-					}
-				],
-				"name": "addScheduleWithdraw",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "AccountReactivated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "parent",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_child",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_amountWithdraw",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_unlockTime",
-						"type": "uint256"
-					}
-				],
-				"name": "addScheduleWithdrawForChild",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "address",
+				"name": "child",
+				"type": "address"
+			}
+		],
+		"name": "ChildAccountAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_index",
-						"type": "uint256"
-					}
-				],
-				"name": "cancelScheduledTransfer",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "FundsAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "parent",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_index",
-						"type": "uint256"
-					}
-				],
-				"name": "cancelScheduleWithdraw",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": true,
+				"internalType": "address",
+				"name": "child",
+				"type": "address"
 			},
 			{
-				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "ModificationAccessGranted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "parent",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "parent",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "child",
-						"type": "address"
-					}
-				],
-				"name": "ChildAccountAdded",
-				"type": "event"
+				"indexed": true,
+				"internalType": "address",
+				"name": "child",
+				"type": "address"
 			},
 			{
-				"inputs": [],
-				"name": "executeAutoScheduledTransfers",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "ModificationAccessRevoked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [],
+		"name": "Paused",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_index",
-						"type": "uint256"
-					}
-				],
-				"name": "executeScheduledWithdraw",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "FundsAdded",
-				"type": "event"
+				"indexed": false,
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_amount",
-						"type": "uint256"
-					}
-				],
-				"name": "instantTransfer",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "age",
+				"type": "uint256"
 			},
 			{
-				"inputs": [],
-				"name": "pause",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "ProfileModified",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [],
-				"name": "Paused",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_unlockTime",
-						"type": "uint256"
-					}
-				],
-				"name": "scheduleAutoExecution",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledTransferCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "index",
-						"type": "uint256"
-					}
-				],
-				"name": "ScheduledTransferCancelled",
-				"type": "event"
+				"indexed": true,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "receiver",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "unlockTime",
-						"type": "uint256"
-					}
-				],
-				"name": "ScheduledTransferCreated",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "receiver",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "index",
-						"type": "uint256"
-					}
-				],
-				"name": "ScheduledTransferExecuted",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledTransferCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "index",
-						"type": "uint256"
-					}
-				],
-				"name": "ScheduledWithdrawCancelled",
-				"type": "event"
+				"indexed": true,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "unlockTime",
-						"type": "uint256"
-					}
-				],
-				"name": "ScheduledWithdrawCreated",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "index",
-						"type": "uint256"
-					}
-				],
-				"name": "ScheduledWithdrawExecuted",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledTransferExecuted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "receiver",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "TransferExecuted",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			},
 			{
-				"inputs": [],
-				"name": "unpause",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledWithdrawCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [],
-				"name": "Unpaused",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_amount",
-						"type": "uint256"
-					}
-				],
-				"name": "withdraw",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledWithdrawCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "WithdrawalMade",
-				"type": "event"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "accounts",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "balance",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "startTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "contractEndTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "parent",
-						"type": "address"
-					},
-					{
-						"internalType": "bool",
-						"name": "isChild",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledWithdrawExecuted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
 			},
 			{
-				"inputs": [],
-				"name": "checkMyBalance",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"indexed": true,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_child",
-						"type": "address"
-					}
-				],
-				"name": "checkTimeRemaining",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "TransferExecuted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [],
+		"name": "Unpaused",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			},
 			{
-				"inputs": [],
-				"name": "getAllScheduledTransfers",
-				"outputs": [
-					{
-						"internalType": "address[]",
-						"name": "receivers",
-						"type": "address[]"
-					},
-					{
-						"internalType": "uint256[]",
-						"name": "amounts",
-						"type": "uint256[]"
-					},
-					{
-						"internalType": "uint256[]",
-						"name": "unlockTimes",
-						"type": "uint256[]"
-					},
-					{
-						"internalType": "bool[]",
-						"name": "activeStatuses",
-						"type": "bool[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "UserLoggedIn",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					}
-				],
-				"name": "getAllTransferHistory",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "sender",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "receiver",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "timestamp",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct DepositAndWithdraw.TransferRecord[]",
-						"name": "",
-						"type": "tuple[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
 			},
 			{
-				"inputs": [],
-				"name": "getCurrentBlockTimestamp",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"indexed": false,
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_sender",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "_receiver",
-						"type": "address"
-					}
-				],
-				"name": "getTotalTransactionAmount",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "age",
+				"type": "uint256"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_user",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_index",
-						"type": "uint256"
-					}
-				],
-				"name": "getTransferDetails",
-				"outputs": [
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "UserRegistered",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "WithdrawalMade",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "SECONDS_IN_A_YEAR",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "accounts",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "contractEndTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "parent",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "isChild",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "addFunds",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "addScheduleWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountWithdraw",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "addScheduleWithdrawForChild",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "archiveAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelScheduleWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelScheduledTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkArchiveStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkMyBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "checkTimeRemaining",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "children",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "copyUserToAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deleteAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "executeAutoScheduledTransfers",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "executeScheduledWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllScheduledTransfers",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "receivers",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "unlockTimes",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "activeStatuses",
+				"type": "bool[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getAllTransferHistory",
+		"outputs": [
+			{
+				"components": [
 					{
 						"internalType": "address",
 						"name": "sender",
@@ -1203,137 +1312,280 @@
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
-			},
+				"internalType": "struct DepositAndWithdraw.TransferRecord[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{
-				"inputs": [
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "getArchiveTimestamp",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_parent",
+				"type": "address"
+			}
+		],
+		"name": "getChildren",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentBlockTimestamp",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "getParent",
+		"outputs": [
+			{
+				"components": [
 					{
 						"internalType": "address",
-						"name": "_user1",
+						"name": "account",
 						"type": "address"
 					},
 					{
-						"internalType": "address",
-						"name": "_user2",
-						"type": "address"
-					}
-				],
-				"name": "getTransferHistory",
-				"outputs": [
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
 					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "sender",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "receiver",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "timestamp",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct DepositAndWithdraw.TransferRecord[]",
-						"name": "",
-						"type": "tuple[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_account",
-						"type": "address"
-					}
-				],
-				"name": "listScheduledWithdrawals",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "recipient",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "unlockTime",
-								"type": "uint256"
-							},
-							{
-								"internalType": "bool",
-								"name": "active",
-								"type": "bool"
-							}
-						],
-						"internalType": "struct DepositAndWithdraw.ScheduledWithdraw[]",
-						"name": "",
-						"type": "tuple[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "paused",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
 					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "age",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum DepositAndWithdraw.AccountType",
+						"name": "accountType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "address",
+						"name": "parent",
+						"type": "address"
+					},
+					{
+						"internalType": "enum DepositAndWithdraw.AccountStatus",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "archiveTimestamp",
 						"type": "uint256"
 					}
 				],
-				"name": "scheduledTransfers",
-				"outputs": [
+				"internalType": "struct DepositAndWithdraw.User",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getProfile",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "age",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum DepositAndWithdraw.AccountType",
+						"name": "accountType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "address",
+						"name": "parent",
+						"type": "address"
+					},
+					{
+						"internalType": "enum DepositAndWithdraw.AccountStatus",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "archiveTimestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct DepositAndWithdraw.User",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getTimeUntilDeletion",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "getTotalTransactionAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getTransferDetails",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user1",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user2",
+				"type": "address"
+			}
+		],
+		"name": "getTransferHistory",
+		"outputs": [
+			{
+				"components": [
 					{
 						"internalType": "address",
 						"name": "sender",
@@ -1351,33 +1603,80 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "unlockTime",
+						"name": "timestamp",
 						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "active",
-						"type": "bool"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
+				"internalType": "struct DepositAndWithdraw.TransferRecord[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getUserStatus",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "grantModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "scheduledWithdrawals",
-				"outputs": [
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "instantTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "listScheduledWithdrawals",
+		"outputs": [
+			{
+				"components": [
 					{
 						"internalType": "address",
 						"name": "recipient",
@@ -1399,50 +1698,395 @@
 						"type": "bool"
 					}
 				],
-				"stateMutability": "view",
-				"type": "function"
+				"internalType": "struct DepositAndWithdraw.ScheduledWithdraw[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "login",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "migrateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "modificationAccessGranted",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "transferHistory",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "receiver",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
 			}
-		];
-		const Address = "0x8CEAEA90A8E42D826125560C6954acdd5a7eC217"; // Replace with your contract address
+		],
+		"name": "modifyProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "pause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "paused",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "reactivateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_parent",
+				"type": "address"
+			},
+			{
+				"internalType": "enum DepositAndWithdraw.AccountType",
+				"name": "_accountType",
+				"type": "uint8"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "revokeModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "scheduleAutoExecution",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "scheduledTransfers",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "scheduledWithdrawals",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "transferHistory",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "users",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum DepositAndWithdraw.AccountType",
+				"name": "accountType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "address",
+				"name": "parent",
+				"type": "address"
+			},
+			{
+				"internalType": "enum DepositAndWithdraw.AccountStatus",
+				"name": "status",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "archiveTimestamp",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+		const Address = "0x6a1b0050303c376f9a21Acb679232f6A9650D325"; // Replace with your contract address
 
 		// Function to show the correct section and hide others
 		function showSection(sectionId) {
