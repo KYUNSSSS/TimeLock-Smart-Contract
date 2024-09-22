@@ -252,16 +252,16 @@
 		</ul>
 
 		<span onclick="toggleNavBar('Interest')">Interest</span>
-		<ul id="Interest" class="navBar">
-			<li>Interest Calculation</li>
-			<li>Interest Withdrawal</li>
-			<li>Interest Rate Adjustment</li>
-			<li>Interest Distribution</li>
-			<li>Penalty</li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
+        <ul id="Interest" class="navBar">
+            <li onclick="showSection('interestAccountInfo')">Interest Account Information</li>
+            <li onclick="showSection('interestCalculator')">Interest Calculator</li>
+            <li onclick="showSection('addInterest')">Add Interest</li>
+            <li onclick="showSection('withdrawInterest')">Withdraw Interest</li>
+            <li onclick="showSection('distributeInterest')">Distribute Interest</li>
+            <li onclick="showSection('interestIntervalAdjustment')">Interest Interval Adjustment</li>
+            <li onclick="showSection('interestHistory')">Interest History</li>
+
+        </ul>
 
 		<span onclick="toggleNavBar('Reward')">Reward</span>
 		<ul id="Reward" class="navBar">
@@ -444,6 +444,106 @@
 			<input type="text" id="totalAmountReceiver" placeholder="Receiver Address">
 			<button onclick="getTotalTransactionAmount()">Get Total Amount</button>
 		</div>
+
+		<!-- WenKang Interest Module -->
+		<div id="interestAccountInfo" class="hidden-section">
+			<!-- <button onclick="connectWallet()">connectWallet</button> -->
+			<h3>Connected Account: <span id="account"></span></h3>
+			
+			<h2>Account Information</h2>
+			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
+			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+			<p>Interest Rate: <span id="interest-rate">0%</span></p>
+
+			<button id="refresh-account">Refresh Account Info</button>
+		</div>
+
+		<!-- Interest Calculator -->
+		<div id="interestCalculator" class="hidden-section">
+			<h3>Interest Calculator</h3>
+			<label for="calc-amount">Amount (ETH):</label>
+			<input type="number" id="calc-amount" placeholder="Amount in ETH">
+			<label for="calc-time">Time in Seconds:</label>
+			<input type="number" id="calc-time" placeholder="Enter time in seconds">
+			<label for="calc-rate">Interest Rate (%):</label>
+			<input type="number" id="calc-rate" placeholder="Interest rate">
+			<button id="calculate-interest">Calculate Interest</button>
+			<p>Interest (Testing): <span id="interest-test">0 ETH</span></p>
+			<p>Interest (Monthly): <span id="interest-month">0 ETH</span></p>
+			<p>Interest (Yearly): <span id="interest-year">0 ETH</span></p>
+		</div>
+
+		<!-- Add Interest -->
+		<div id="addInterest" class="hidden-section">
+			<h2>Account Information</h2>
+			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
+			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+			<p>Interest Rate: <span id="interest-rate">0%</span></p>
+			<button id="refresh-account">Refresh Account Info</button>
+
+			<h3>Add Interest</h3>
+			<button id="add-interest">Add Interest</button>
+			<p>Status: <span id="add-interest-status">Not added yet</span></p>
+		</div>
+
+		<!-- Withdraw Interest -->
+		<div id="withdrawInterest" class="hidden-section">
+			<h2>Account Information</h2>
+			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
+			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+			<p>Interest Rate: <span id="interest-rate">0%</span></p>
+			<button id="refresh-account">Refresh Account Info</button>
+
+			<h3>Withdraw Interest</h3>
+			<button id="withdraw-interest">Withdraw Interest</button>
+			<p>Status: <span id="withdraw-interest-status">Not withdrawn yet</span></p>
+		</div>
+
+		<!-- Distribute Interest -->
+		<div id="distributeInterest" class="hidden-section">
+			<h2>Account Information</h2>
+			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
+			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+			<p>Interest Rate: <span id="interest-rate">0%</span></p>
+			<button id="refresh-account">Refresh Account Info</button>
+
+			<h2>Distribute Interest</h2>
+			<label for="Recipient-Address">Recipient Address :</label>
+			<input type="text" id="Recipient-Address"  disabled value="Child / Parent Address">
+			<label for="distribute-Percentage">Distribute Percentage(%) :</label>
+			<input type="number" id="distribute-Percentage" min="1" max="100" placeholder="Percentage to distribute">
+
+			<button id="distributeInterest">Distribute Interest</button>
+			<p>Status: <span id="withdraw-interest-status">Not withdrawn yet</span></p>
+		</div>
+
+		<!-- Change Interval -->
+		<div id="interestIntervalAdjustment" class="hidden-section">
+			<h2>Change Accrual Interval</h2>
+			<label for="interval-select">Choose Interval:</label>
+			<select id="interval-select">
+				<option value="2592000">Monthly</option>
+				<option value="31536000">Yearly</option>
+				<option value="30">Testing (30s)</option>
+			</select>
+			<button id="change-interval">Change Interval</button>
+			<p>Status: <span id="change-interval-status">Interval not changed yet</span></p>
+		</div>
+
+		<!-- Interest Histories -->
+		<div id="interestHistory" class="hidden-section">
+			<h2>Interest Histories</h2>
+			<button id="fetch-history">Fetch History</button>
+			<h3>Withdrawal History</h3>
+			<ul id="withdrawal-history"></ul>
+
+			<h3>Add Interest History</h3>
+			<ul id="add-interest-history"></ul>
+
+			<h3>Distribution History</h3>
+			<ul id="distribution-history"></ul>
+		</div>
+		
 	</main>
 
 
