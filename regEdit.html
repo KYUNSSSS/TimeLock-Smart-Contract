@@ -26,6 +26,34 @@
 	#profileHistory {
     margin: 20px;
 }
+.deletion-timer {
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f0f8ff; /* Light blue background */
+    font-family: Arial, sans-serif;
+}
+
+.archived-message {
+	display:block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ff4d4d; /* Red color for warning */
+    margin-bottom: 10px;
+}
+
+.time-message {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.time-remaining {
+    font-size: 1.5rem;
+    color: #007acc; /* Dark blue color */
+    font-weight: bold;
+}
 
 table {
     width: 100%;
@@ -50,10 +78,10 @@ tr:hover {
 
 
 
-	h1,
+	
 	h2,
 	h3 {
-		color: #0066cc;
+		color: white;
 	}
 
 	/* Button Styling */
@@ -98,7 +126,7 @@ tr:hover {
 		display: flex;
 		justify-content: space-between;
 
-		margin-top: 20px;
+		padding-top: 100px;
 
 	}
 
@@ -175,6 +203,8 @@ tr:hover {
 	}
 
 	#connectButton {
+	position: absolute;
+	margin-top: 30%;
 	margin-left: 43.5%;
 	display: flex;
     justify-content: center; /* Horizontally center the text */
@@ -237,30 +267,27 @@ tr:hover {
 	#navbar{
 		background-color: #b6f3fd;
 	}
-	h1{
-		margin: 0;
-		padding: 21px;
-		background-color: #b6f3fd;
-	}
+	
 	#accountArea{
 		background-color: #b6f3fd;
 	}
 	#navAddress{
 		position:absolute;
     right: 20px; /* Distance from the right edge of the screen */
-    top: 30px; /* Adjust the top position if necessary */
-    background-color: #b6f3fd; /* Consistent background color */
+    top: 0px; /* Adjust the top position if necessary */
+     /* Consistent background color */
     padding: 10px;
     border-radius: 20px;
-    color: #004d99;
+    color: white;
     font-weight: bold;
-	width: 5%;
+	width: 6%;
 	}
 	#connecLogo{
 		position:absolute;
-    right: 117px; /* Distance from the right edge of the screen */
-    top: 34px; /* Adjust the top position if necessary */
+    right: 110px; /* Distance from the right edge of the screen */
+    top:4px;/* Adjust the top position if necessary */
 	}
+	
 	
 
 </style>
@@ -279,7 +306,7 @@ tr:hover {
   
                 <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
                   <li class="active"><a href="main.html"><span>Home</span></a></li>
-                  <li><a href="regEdit.html"><span>Account Info</span></a></li>
+                  <li><a href="regEdit.html" onclick="displayProfile()"><span>Account Info</span></a></li>
                   <li class="has-children">
                     <a href="DepositAndWithdraw.html"><span>Deposit And Withdrawals</span></a>
                     <ul class="dropdown arrow-top">
@@ -300,7 +327,7 @@ tr:hover {
                   <li><a href="about.html"><span>Interest</span></a></li>
                   <li><a href="blog.html"><span>Reward</span></a></li>
                 </ul>
-                <input type="text" name="address" id="navAddress" disabled>
+               
               </nav>
             </div>
   
@@ -311,10 +338,17 @@ tr:hover {
   
           </div>
         </div>
-        
+		<img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
+		<input type="text" name="address" id="navAddress" disabled>
       </header>
+
+	<div id="intro" style="position: absolute; top: 30%;left: 20%; ">
+		<h2 style="font-size:3em;color: #333333;font-weight: 500 ;font-family: sans-serif;">THE BEST PLACE TO SAVE YOUR MONEY</h2>
+		<h2 style="color: #333333;">Plan for your child future. Made Safe and Easy by industry leading automation tools.</h2>
+		
+	</div>
 	<!-- Button to connect to MetaMask -->
-	<button id="connectButton"><img src="metalogo.png" alt="logo" id="connectLogo" height="40px" width="40px">Connect to
+	<button id="connectButton"><img src="images/metalogo.png" alt="logo" id="connectLogo" height="40px" width="40px">Connect to
 		MetaMask</button>
 	<div id="accountArea" style="display: none;"></div>
 
@@ -339,14 +373,14 @@ tr:hover {
 
 	<!-- Profile Section -->
 	<div id="profileSection" style="display: none;">
-		<div id="navbar">
+		<!-- <div id="navbar">
 			<a href="http://127.0.0.1:5000/Transaction">Transaction</a>
 			<a href="http://127.0.0.1:5000/Transaction">Withdraw and Deposit</a>
 			<a href="http://127.0.0.1:5000/Transaction">Interest</a>
 			<a href="http://127.0.0.1:5000/Transaction">Reward</a>
-			<img src="metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
+			<img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
 			<input type="text" name="address" id="navAddress" disabled>
-		</div>
+		</div> -->
 		<div id="mainprofile">
 			<div id="profileSectionLeft">
 				<h2>Profile Information</h2>
@@ -368,6 +402,7 @@ tr:hover {
 					<label>Age &nbsp;&nbsp;: </label><input type="number" disabled id="modAge" required><br>
 					<button type="submit" id="modifyProfileBtn">Modify Profile</button>
 				</form>
+				<br><br>
 				<h2>Grant Child Modification Access</h2>
 
 				<form id="accessForm" style="display:none;">
@@ -401,8 +436,9 @@ tr:hover {
 				<input type="text" id="newAddress" placeholder="Enter new address..." required>
 				<button type="submit">Migrate Account</button>
 			</form>
-			<p id="resultMessage"></p>
+			<p id="resultMessage"  ></p>
 			<div id="out">
+			
 				<button id="archiveBtn" onclick="archiveAccount()">Archive Account</button>
 				<button onclick="window.location.reload()">Disconnect Account</button>
 			</div>
@@ -411,12 +447,12 @@ tr:hover {
 
 
 	</div>
-	<div id="archiveInfo" style="display: none;">
+	<div id="archiveInfo" style="display: none;position: absolute;top:35%;left:27%">
 		<div id="timeToDeletion"></div>
 		<button id="reactivateButton" style="display: none;" onclick="reactivateAccount()">Reactivate
 			Account</button>
 			<button id="deleteAccountBtn">Delete Account</button>
-		<button onclick="window.location.reload()">Logout</button>
+		<button onclick="window.location.reload()">  Logout  </button>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
@@ -1054,6 +1090,7 @@ tr:hover {
 				const isRegistered = await accountContract.methods.login(account).call();
 				if (isRegistered) {
 					document.getElementById('connectButton').style.display = 'none';
+					document.getElementById('intro').style.display = 'none';
 					checkIfParent();
 					checkModificationAccess();
 
@@ -1473,9 +1510,15 @@ linkedAccountsInfo.innerHTML += '</tbody></table>';
 						 await accountContract.methods.deleteAccount(currentAccount).send({ from: currentAccount });
 						alert("Account Deleted Permanently.")
 					} else {
-
+						timeToDeletion.innerHTML = `
+    <div class="deletion-timer">
+        <span class="archived-message">Oh No! Account Archived.</span>
+        <span class="time-message">Time until account deletion:</span>
+        <span class="time-remaining">${daysRemaining} days, ${hoursRemaining} hours, ${minutesRemaining} minutes, ${secondsRemaining} seconds</span>
+    </div>
+`;
 						// Display the formatted time remaining
-						timeToDeletion.innerHTML = `Account Archived. Time until account deletion: ${daysRemaining} days, ${hoursRemaining} hours, ${minutesRemaining} minutes, ${secondsRemaining} seconds`;
+						// timeToDeletion.innerHTML = `Account Archived. Time until account deletion: ${daysRemaining} days, ${hoursRemaining} hours, ${minutesRemaining} minutes, ${secondsRemaining} seconds`;
 					}
 					reactivateButton.style.display = "block";
 				} else {
