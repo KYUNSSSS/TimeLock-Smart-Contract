@@ -334,7 +334,7 @@ tr:hover {
           <nav class="site-navigation position-relative text-right" role="navigation">
             <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
               <li class="active"><a href="main.html"><span>Home</span></a></li>
-              <li onclick="showSection('accountInfo')" id="accountDetails"><a href="AccountInfo.html"><span>Account Info</span></a></li>
+              <li onclick="showSection('accountInfo'),refreshAccountInfo()" id="accountDetails"><a href="AccountInfo.html"><span>Account Info</span></a></li>
                     <li class="has-children">
                       <a href="#"><span>Deposit And Withdrawals</span></a>
                       <ul class="dropdown arrow-top">
@@ -358,23 +358,23 @@ tr:hover {
                   <li class="has-children">
                     <a href="#"><span>Transaction</span></a>
                     <ul class="dropdown arrow-top">
-                      <li onclick="showSection('instantTransferSection')"><a href="trackmoduleUI.html">Instant Transfer</a></li>
-                      <li class="has-children">
+                      <li onclick="showSection('instantTransferSection')"><a href="Transaction.html">Instant Transfer</a></li>
+                      <li class="has-children"> 
                         <a href="#">Scheduled Transfers</a>
                         <ul class="dropdown">
-                          <li onclick="showSection('scheduleAutoExecution')"><a href="trackmoduleUI.html">Schedule Auto Execution</a></li>
-                          <li onclick="showSection('executeAutoScheduledTransfers')"><a href="trackmoduleUI.html">Execute Auto Scheduled Transfers</a></li>
-                          <li onclick="showSection('getAllScheduledTransfers')"><a href="trackmoduleUI.html">Get All Scheduled Transfers</a></li>
-                          <li onclick="showSection('cancelScheduledTransfer')"><a href="trackmoduleUI.html">Cancel Scheduled Transfer</a></li>
+                          <li onclick="showSection('scheduleAutoExecution')"><a href="Transaction.html">Schedule Auto Execution</a></li>
+                          <li onclick="showSection('executeAutoScheduledTransfers')"><a href="Transaction.html">Execute Auto Scheduled Transfers</a></li>
+                          <li onclick="showSection('getAllScheduledTransfers')"><a href="Transaction.html">Get All Scheduled Transfers</a></li>
+                          <li onclick="showSection('cancelScheduledTransfer')"><a href="Transaction.html">Cancel Scheduled Transfer</a></li>
                         </ul>
                       </li>
                       <li class="has-children">
                         <a href="#">Transfer History</a>
                         <ul class="dropdown">
-                          <li onclick="showSection('transferHistory')"><a href="trackmoduleUI.html">Transfer History</a></li>
-                          <li onclick="showSection('getAllTransferHistory')"><a href="trackmoduleUI.html">All Transfer History</a></li>
-                          <li onclick="showSection('transferDetails')"><a href="trackmoduleUI.html">Transfer Details</a></li>
-                          <li onclick="showSection('getTotalTransactionAmount')"><a href="trackmoduleUI.html">Total Transaction Amount</a></li>
+                          <li onclick="showSection('transferHistory')"><a href="Transaction.html">Transfer History</a></li>
+                          <li onclick="showSection('getAllTransferHistory')"><a href="Transaction.html">All Transfer History</a></li>
+                          <li onclick="showSection('transferDetails')"><a href="Transaction.html">Transfer Details</a></li>
+                          <li onclick="showSection('getTotalTransactionAmount')"><a href="Transaction.html">Total Transaction Amount</a></li>
                         </ul>
                       </li>
                     </ul>
@@ -543,8 +543,13 @@ tr:hover {
   <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
   <script>
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-    const contractAddress = "0x3652FD3932c3cFEf42DD9398C8fD875A8f2E515c";  // Replace with deployed contract address
+    const contractAddress = "0x6259E6F4c1B94f18F18ca46bC2CdB8A7b5Bd475F";  // Replace with deployed contract address
 		const contractABI = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
 	{
 		"anonymous": false,
 		"inputs": [
@@ -584,70 +589,42 @@ tr:hover {
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "archiveAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "checkArchiveStatus",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "deleteAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "_child",
+				"name": "parent",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "child",
 				"type": "address"
 			}
 		],
-		"name": "grantModificationAccess",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "ChildAccountAdded",
+		"type": "event"
 	},
 	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "_account",
+				"name": "account",
 				"type": "address"
-			}
-		],
-		"name": "login",
-		"outputs": [
+			},
 			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_newAddress",
-				"type": "address"
-			}
-		],
-		"name": "migrateAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "FundsAdded",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -700,27 +677,10 @@ tr:hover {
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_email",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_age",
-				"type": "uint256"
-			}
-		],
-		"name": "modifyProfile",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"anonymous": false,
+		"inputs": [],
+		"name": "Paused",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -760,57 +720,197 @@ tr:hover {
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "reactivateAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
+		"anonymous": false,
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
 			},
 			{
-				"internalType": "string",
-				"name": "_email",
-				"type": "string"
-			},
-			{
+				"indexed": false,
 				"internalType": "uint256",
-				"name": "_age",
+				"name": "amount",
 				"type": "uint256"
 			},
 			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledTransferCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "_parent",
+				"name": "sender",
 				"type": "address"
 			},
 			{
-				"internalType": "enum Account.AccountType",
-				"name": "_accountType",
-				"type": "uint8"
+				"indexed": true,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
 			}
 		],
-		"name": "register",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "ScheduledTransferCreated",
+		"type": "event"
 	},
 	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "_child",
+				"name": "sender",
 				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
 			}
 		],
-		"name": "revokeModificationAccess",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "ScheduledTransferExecuted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledWithdrawCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledWithdrawCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "ScheduledWithdrawExecuted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "TransferExecuted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [],
+		"name": "Unpaused",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -869,6 +969,215 @@ tr:hover {
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "WithdrawalMade",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "SECONDS_IN_A_YEAR",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "accounts",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "contractEndTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "parent",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "isChild",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "addFunds",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "addAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "addInterestBalance",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "addScheduleWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountWithdraw",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "addScheduleWithdrawForChild",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "archiveAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelScheduleWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelScheduledTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkArchiveStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkMyBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "checkTimeRemaining",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -887,6 +1196,133 @@ tr:hover {
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "copyUserToAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deductAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "deductInterestBalance",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deleteAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "executeAutoScheduledTransfers",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "executeScheduledWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllScheduledTransfers",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "receivers",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "unlockTimes",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "activeStatuses",
+				"type": "bool[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getAllTransferHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct DepositAndWithdraw.TransferRecord[]",
+				"name": "",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -931,6 +1367,19 @@ tr:hover {
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getCurrentBlockTimestamp",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -963,7 +1412,7 @@ tr:hover {
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum Account.AccountType",
+						"internalType": "enum DepositAndWithdraw.AccountType",
 						"name": "accountType",
 						"type": "uint8"
 					},
@@ -973,7 +1422,7 @@ tr:hover {
 						"type": "address"
 					},
 					{
-						"internalType": "enum Account.AccountStatus",
+						"internalType": "enum DepositAndWithdraw.AccountStatus",
 						"name": "status",
 						"type": "uint8"
 					},
@@ -983,7 +1432,7 @@ tr:hover {
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct Account.User",
+				"internalType": "struct DepositAndWithdraw.User",
 				"name": "",
 				"type": "tuple"
 			}
@@ -1018,7 +1467,7 @@ tr:hover {
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum Account.AccountType",
+						"internalType": "enum DepositAndWithdraw.AccountType",
 						"name": "accountType",
 						"type": "uint8"
 					},
@@ -1028,7 +1477,7 @@ tr:hover {
 						"type": "address"
 					},
 					{
-						"internalType": "enum Account.AccountStatus",
+						"internalType": "enum DepositAndWithdraw.AccountStatus",
 						"name": "status",
 						"type": "uint8"
 					},
@@ -1038,7 +1487,7 @@ tr:hover {
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct Account.User",
+				"internalType": "struct DepositAndWithdraw.User",
 				"name": "",
 				"type": "tuple"
 			}
@@ -1069,6 +1518,115 @@ tr:hover {
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "_sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "getTotalTransactionAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getTransferDetails",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user1",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user2",
+				"type": "address"
+			}
+		],
+		"name": "getTransferHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct DepositAndWithdraw.TransferRecord[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "_user",
 				"type": "address"
 			}
@@ -1088,6 +1646,146 @@ tr:hover {
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "grantModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "instantTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "listScheduledWithdrawals",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "unlockTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct DepositAndWithdraw.ScheduledWithdraw[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "listWithdrawals",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isScheduled",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct DepositAndWithdraw.Withdrawal[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "login",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "migrateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
@@ -1101,6 +1799,267 @@ tr:hover {
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			}
+		],
+		"name": "modifyProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "pause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "paused",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "reactivateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_parent",
+				"type": "address"
+			},
+			{
+				"internalType": "enum DepositAndWithdraw.AccountType",
+				"name": "_accountType",
+				"type": "uint8"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "revokeModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "scheduleAutoExecution",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "scheduledTransfers",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "scheduledWithdrawals",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "unlockTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "transferHistory",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1134,7 +2093,7 @@ tr:hover {
 				"type": "uint256"
 			},
 			{
-				"internalType": "enum Account.AccountType",
+				"internalType": "enum DepositAndWithdraw.AccountType",
 				"name": "accountType",
 				"type": "uint8"
 			},
@@ -1144,7 +2103,7 @@ tr:hover {
 				"type": "address"
 			},
 			{
-				"internalType": "enum Account.AccountStatus",
+				"internalType": "enum DepositAndWithdraw.AccountStatus",
 				"name": "status",
 				"type": "uint8"
 			},
@@ -1152,6 +2111,53 @@ tr:hover {
 				"internalType": "uint256",
 				"name": "archiveTimestamp",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawalHistory",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isScheduled",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -1424,7 +2430,7 @@ linkedAccountsInfo.innerHTML = htmlContent;
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         const currentAccount = accounts[0];
         const newAddress = document.getElementById('newAddress').value;
-        confirm("Confirm Migrate To: " + newAddress + " ?");
+        confirm("Confirm Migrate To: " + newAddress + " ? Account Balance will NOT be transfer!");
         // Estimate gas for the migration function
         const gasEstimate = await accountContract.methods.migrateAccount(newAddress).estimateGas({ from: currentAccount });
 

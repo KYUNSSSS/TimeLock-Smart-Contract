@@ -208,7 +208,7 @@ contract DepositAndWithdraw {
     }
 
     //hanshen
-    function instantTransfer(address _to, uint256 _amount) external whenNotPaused sufficientBalance(msg.sender, _amount) onlyAdult(msg.sender){
+    function instantTransfer(address _to, uint256 _amount) external whenNotPaused sufficientBalance(msg.sender, _amount) {
         require(_to != address(0), "Invalid receiver address");
         require(_to != msg.sender, "Cannot transfer to yourself");
 

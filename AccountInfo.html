@@ -57,7 +57,7 @@
                     <nav class="site-navigation position-relative text-right" role="navigation">
                         <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
                             <li><a href="main.html"><span>Home</span></a></li>
-                            <li onclick="showSection('accountInfo')" class="active"><a href="AccountInfo.html"><span>Account Info</span></a></li>
+                            <li onclick="showSection('accountInfo'),refreshAccountInfo()" class="active"><a href="AccountInfo.html"><span>Account Info</span></a></li>
                             <li class="has-children">
                                 <a href="#"><span>Deposit And Withdrawals</span></a>
                                 <ul class="dropdown arrow-top">
@@ -81,23 +81,22 @@
                             <li class="has-children">
 								<a href="#"><span>Transaction</span></a>
 								<ul class="dropdown arrow-top">
-									<li onclick="showSection('instantTransferSection')"><a href="trackmoduleUI.html">Instant Transfer</a></li>
+									<li onclick="showSection('instantTransferSection')"><a href="Transaction.html">Instant Transfer</a></li>
 									<li class="has-children">
 										<a href="#">Scheduled Transfers</a>
 										<ul class="dropdown">
-											<li onclick="showSection('scheduleAutoExecution')"><a href="trackmoduleUI.html">Schedule Auto Execution</a></li>
-											<li onclick="showSection('executeAutoScheduledTransfers')"><a href="trackmoduleUI.html">Execute Auto Scheduled Transfers</a></li>
-											<li onclick="showSection('getAllScheduledTransfers')"><a href="trackmoduleUI.html">Get All Scheduled Transfers</a></li>
-											<li onclick="showSection('cancelScheduledTransfer')"><a href="trackmoduleUI.html">Cancel Scheduled Transfer</a></li>
+											<li onclick="showSection('scheduleAutoExecution')"><a href="Transaction.html">Schedule Auto Execution</a></li>
+											<li onclick="showSection('getAllScheduledTransfers')"><a href="Transaction.html">Get All Scheduled Transfers</a></li>
+											<li onclick="showSection('cancelScheduledTransfer')"><a href="Transaction.html">Cancel Scheduled Transfer</a></li>
 										</ul>
 									</li>
 									<li class="has-children">
 										<a href="#">Transfer History</a>
 										<ul class="dropdown">
-											<li onclick="showSection('transferHistory')"><a href="trackmoduleUI.html">Transfer History</a></li>
-											<li onclick="showSection('getAllTransferHistory')"><a href="trackmoduleUI.html">All Transfer History</a></li>
-											<li onclick="showSection('transferDetails')"><a href="trackmoduleUI.html">Transfer Details</a></li>
-											<li onclick="showSection('getTotalTransactionAmount')"><a href="trackmoduleUI.html">Total Transaction Amount</a></li>
+											<li onclick="showSection('transferHistory')"><a href="Transaction.html">Transfer History</a></li>
+											<li onclick="showSection('getAllTransferHistory')"><a href="Transaction.html">All Transfer History</a></li>
+											<li onclick="showSection('transferDetails')"><a href="Transaction.html">Transfer Details</a></li>
+											<li onclick="showSection('getTotalTransactionAmount')"><a href="Transaction.html">Total Transaction Amount</a></li>
 										</ul>
 									</li>
 								</ul>
@@ -138,20 +137,33 @@
             </div>
             <div style="text-align: center;">
                 <h1 style="font-size: 100px;"><span class="balanceResult">0</span> ETH</h1>
-            </div>            
-            <div>
-                <!-- Child Check time remaining -->
-                <h2>Time Remaining: <span id="timeRemainingResult"></span></h2>
-            </div>
+            </div>         
+            <div id="timeRemainingDiv">
+                <div>
+                    <!-- Child Check time remaining -->
+                    <h2>Time Remaining: <span id="timeRemainingResult"></span></h2>
+                </div>
+            </div>   
+            <div id="timeRemainingChild"></div>
+
 
             <div id="interestAccountInfo" class="hidden-section">
-            <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval" style="font-weight: normal; margin: 0; font-size: smaller;">N/A</span></p>
-            <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate" style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
-    
-            <!-- <button id="refresh-account-info" onclick="refreshAccountInfo()">Refresh Account Info</button> -->
-            <!-- Changed from refreshAccountInfo -->
-        </div>
+                <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval" style="font-weight: normal; margin: 0; font-size: smaller;">N/A</span></p>
+                <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate" style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
+        
+                <!-- <button id="refresh-account-info" onclick="refreshAccountInfo()">Refresh Account Info</button> -->
+                <!-- Changed from refreshAccountInfo -->
+            </div>
 
+        </div>
+        <div style="display: none;">
+            <p id="account2"></p>
+            <p id="account3"></p>
+            <form id="addFundsForm">
+                <input type="text" id="amount" placeholder="Enter amount in ETH" required />
+                <button type="submit">Add Funds</button>
+            </form>
+            <div id="fundsResponse"></div>
         </div>
 
     </main>

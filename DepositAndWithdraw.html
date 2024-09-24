@@ -146,11 +146,11 @@
                                 <ul class="dropdown arrow-top">
                                     <li onclick="showSection('addFundsSection')"><a href="#">Deposit</a></li>
                                     <li onclick="showSection('instantWithdrawSection')"><a href="#">Instant Withdrawals</a></li>
-                                    <li onclick="showSection('listWithdrawalsSection')"><a href="#">List Withdrawals</a></li>
+                                    <li onclick="showSection('listWithdrawalsSection'),getWithdrawals()"><a href="#">List Withdrawals</a></li>
                                     <li class="has-children">
                                         <a href="#">Schedule</a>
                                         <ul class="dropdown">
-                                            <li onclick="showSection('listScheduledSection')"><a href="#">List Scheduled Withdrawals</a></li>
+                                            <li onclick="showSection('listScheduledSection'),listScheduledWithdrawals()"><a href="#">List Scheduled Withdrawals</a></li>
                                             <li onclick="showSection('scheduleWithdrawSection')"><a href="#">Schedule Withdraw</a></li>
                                             <li onclick="showSection('executeWithdrawSection')"><a href="#">Execute Withdrawals</a></li>
                                             <li onclick="showSection('cancelWithdrawal')"><a href="#">Cancel Withdrawals</a></li>
@@ -162,23 +162,22 @@
                             <li class="has-children">
 								<a href="#"><span>Transaction</span></a>
 								<ul class="dropdown arrow-top">
-									<li onclick="showSection('instantTransferSection')"><a href="trackmoduleUI.html">Instant Transfer</a></li>
+									<li onclick="showSection('instantTransferSection')"><a href="Transaction.html">Instant Transfer</a></li>
 									<li class="has-children">
 										<a href="#">Scheduled Transfers</a>
 										<ul class="dropdown">
-											<li onclick="showSection('scheduleAutoExecution')"><a href="trackmoduleUI.html">Schedule Auto Execution</a></li>
-											<li onclick="showSection('executeAutoScheduledTransfers')"><a href="trackmoduleUI.html">Execute Auto Scheduled Transfers</a></li>
-											<li onclick="showSection('getAllScheduledTransfers')"><a href="trackmoduleUI.html">Get All Scheduled Transfers</a></li>
-											<li onclick="showSection('cancelScheduledTransfer')"><a href="trackmoduleUI.html">Cancel Scheduled Transfer</a></li>
+											<li onclick="showSection('scheduleAutoExecution')"><a href="Transaction.html">Schedule Auto Execution</a></li>
+											<li onclick="showSection('getAllScheduledTransfers')"><a href="Transaction.html">Get All Scheduled Transfers</a></li>
+											<li onclick="showSection('cancelScheduledTransfer')"><a href="Transaction.html">Cancel Scheduled Transfer</a></li>
 										</ul>
 									</li>
 									<li class="has-children">
 										<a href="#">Transfer History</a>
 										<ul class="dropdown">
-											<li onclick="showSection('transferHistory')"><a href="trackmoduleUI.html">Transfer History</a></li>
-											<li onclick="showSection('getAllTransferHistory')"><a href="trackmoduleUI.html">All Transfer History</a></li>
-											<li onclick="showSection('transferDetails')"><a href="trackmoduleUI.html">Transfer Details</a></li>
-											<li onclick="showSection('getTotalTransactionAmount')"><a href="trackmoduleUI.html">Total Transaction Amount</a></li>
+											<li onclick="showSection('transferHistory')"><a href="Transaction.html">Transfer History</a></li>
+											<li onclick="showSection('getAllTransferHistory')"><a href="Transaction.html">All Transfer History</a></li>
+											<li onclick="showSection('transferDetails')"><a href="Transaction.html">Transfer Details</a></li>
+											<li onclick="showSection('getTotalTransactionAmount')"><a href="Transaction.html">Total Transaction Amount</a></li>
 										</ul>
 									</li>
 								</ul>
@@ -243,8 +242,7 @@
         </div>
 
         <!-- List Withdrawal History Section -->
-        <div id="listWithdrawalsSection" class="hidden-section"
-            style="text-align: center; margin-left: 2.5%;margin-right: 2.5%; width: 95%;">
+        <div id="listWithdrawalsSection" class="hidden-section" style="text-align: center; margin-left: 2.5%;margin-right: 2.5%; width: 95%;">
             <h3>Withdrawal History</h3>
             <table id="withdrawalHistoryTable" border="1">
                 <thead>
@@ -285,10 +283,10 @@
             <div>
                 <h2>Balance: <span class="balanceResult">0</span> ETH</h2>
             </div>
-            <div id="timeRemainingSection">
-                <h2>Time Remaining: <span id="timeRemaining"></span></h2>
+            <div id="timeRemainingDiv">
+                <h2>Time Remaining: <span id="timeRemainingResult"></span></h2>
             </div>
-            <form>
+            <form id="timeRemainingChild">
                 <p style="font-weight: bold; margin: 0; font-size: larger;">Input Withdraw Amount</p>
                 <input type="number" id="instantWithdrawAmount" placeholder="Enter Amount in ETH" style="width: 100%;" /> <br>
                 <div style="width: 100%;" class="AmountBtn">

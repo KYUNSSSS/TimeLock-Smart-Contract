@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interest</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
   <style>
     .hidden-section h3 {
       font-size: 2.5em;
@@ -13,8 +14,9 @@
 
     .hidden-section {
       display: none;
-      opacity: 0; 
-      transition: opacity 0.5s ease;/* Smooth transition */
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      /* Smooth transition */
       background-color: rgb(255, 255, 255, 0.2);
     }
 
@@ -143,30 +145,39 @@
     }
 
     /* History Table Format --End */
-    #interestAccountInfo{
+    /* Showing first item */
+    #interestAccountInfo {
       display: block;
       opacity: 1;
-      transition: opacity 0.5s ease;/* Smooth transition */
+      transition: opacity 0.5s ease;
+      /* Smooth transition */
       background-color: rgb(255, 255, 255, 0.2);
     }
 
     select {
-    width: 30%;  /* Increase width */
-    height: 50px;  /* Increase height */
-    padding: 10px 15px; /* Adjust padding for better aesthetics */
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px; /* Optional: Adjust border radius */
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-    font-size: larger; /* Increase font size if needed */
-  }
-
-
+      width: 30%;
+      /* Increase width */
+      height: 50px;
+      /* Increase height */
+      padding: 10px 15px;
+      /* Adjust padding for better aesthetics */
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      /* Optional: Adjust border radius */
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+      font-size: larger;
+      /* Increase font size if needed */
+    }
+    #account2,#account3{
+      display: none;
+    }
   </style>
 </head>
 
-<body>
+<body onload="connectWallet()">
   <header class="site-navbar" role="banner">
+    <div id="account2" , id="account3"></div>
 
     <div class="container">
       <div class="row align-items-center">
@@ -185,8 +196,10 @@
                 <a href="#"><span>Deposit And Withdrawals</span></a>
                 <ul class="dropdown arrow-top">
                   <li onclick="showSection('addFundsSection')"><a href="DepositAndWithdraw.html">Deposit</a></li>
-                  <li onclick="showSection('instantWithdrawSection')"><a href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
-                  <li onclick="showSection('listWithdrawalsSection')"><a href="DepositAndWithdraw.html">List Withdrawals</a></li>
+                  <li onclick="showSection('instantWithdrawSection')"><a href="DepositAndWithdraw.html">Instant
+                      Withdrawals</a></li>
+                  <li onclick="showSection('listWithdrawalsSection')"><a href="DepositAndWithdraw.html">List
+                      Withdrawals</a></li>
                   <li class="has-children">
                     <a href="#">Withdrawals</a>
                     <ul class="dropdown">
@@ -195,9 +208,12 @@
                       </li>
                       <li onclick="showSection('scheduleWithdrawSection')"><a href="DepositAndWithdraw.html">Schedule
                           Withdrawals</a></li>
-                      <li onclick="showSection('executeWithdrawSection')"><a href="DepositAndWithdraw.html">Execute Withdrawals</a></li>
-                      <li onclick="showSection('cancelWithdrawal')"><a href="DepositAndWithdraw.html">Cancel Withdrawals</a></li>
-                      <li onclick="showSection('childScheduleWithdraw')"><a href="DepositAndWithdraw.html">Schedule Withdrawals For Child</a></li>
+                      <li onclick="showSection('executeWithdrawSection')"><a href="DepositAndWithdraw.html">Execute
+                          Withdrawals</a></li>
+                      <li onclick="showSection('cancelWithdrawal')"><a href="DepositAndWithdraw.html">Cancel
+                          Withdrawals</a></li>
+                      <li onclick="showSection('childScheduleWithdraw')"><a href="DepositAndWithdraw.html">Schedule
+                          Withdrawals For Child</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -205,33 +221,39 @@
               <li class="has-children">
                 <a href="#"><span>Transaction</span></a>
                 <ul class="dropdown arrow-top">
-                    <li onclick="showSection('instantTransferSection')"><a href="trackmoduleUI.html">Instant Transfer</a></li>
-                    <li class="has-children">
-                        <a href="#">Scheduled Transfers</a>
-                        <ul class="dropdown">
-                            <li onclick="showSection('scheduleAutoExecution')"><a href="trackmoduleUI.html">Schedule Auto Execution</a></li>
-                            <li onclick="showSection('executeAutoScheduledTransfers')"><a href="trackmoduleUI.html">Execute Auto Scheduled Transfers</a></li>
-                            <li onclick="showSection('getAllScheduledTransfers')"><a href="trackmoduleUI.html">Get All Scheduled Transfers</a></li>
-                            <li onclick="showSection('cancelScheduledTransfer')"><a href="trackmoduleUI.html">Cancel Scheduled Transfer</a></li>
-                        </ul>
-                    </li>
-                    <li class="has-children">
-                        <a href="#">Transfer History</a>
-                        <ul class="dropdown">
-                            <li onclick="showSection('transferHistory')"><a href="trackmoduleUI.html">Transfer History</a></li>
-                            <li onclick="showSection('getAllTransferHistory')"><a href="trackmoduleUI.html">All Transfer History</a></li>
-                            <li onclick="showSection('transferDetails')"><a href="trackmoduleUI.html">Transfer Details</a></li>
-                            <li onclick="showSection('getTotalTransactionAmount')"><a href="trackmoduleUI.html">Total Transaction Amount</a></li>
-                        </ul>
-                    </li>
+                  <li onclick="showSection('instantTransferSection')"><a href="Transaction.html">Instant Transfer</a>
+                  </li>
+                  <li class="has-children">
+                    <a href="#">Scheduled Transfers</a>
+                    <ul class="dropdown">
+                      <li onclick="showSection('scheduleAutoExecution')"><a href="Transaction.html">Schedule Auto
+                          Execution</a></li>
+                      <li onclick="showSection('getAllScheduledTransfers')"><a href="Transaction.html">Get All Scheduled
+                          Transfers</a></li>
+                      <li onclick="showSection('cancelScheduledTransfer')"><a href="Transaction.html">Cancel Scheduled
+                          Transfer</a></li>
+                    </ul>
+                  </li>
+                  <li class="has-children">
+                    <a href="#">Transfer History</a>
+                    <ul class="dropdown">
+                      <li onclick="showSection('transferHistory')"><a href="Transaction.html">Transfer History</a></li>
+                      <li onclick="showSection('getAllTransferHistory')"><a href="Transaction.html">All Transfer
+                          History</a></li>
+                      <li onclick="showSection('transferDetails')"><a href="Transaction.html">Transfer Details</a></li>
+                      <li onclick="showSection('getTotalTransactionAmount')"><a href="Transaction.html">Total
+                          Transaction Amount</a></li>
+                    </ul>
+                  </li>
                 </ul>
-            </li>
+              </li>
               <li class="has-children active">
-                
+
                 <a href="#"><span>Interest</span></a>
                 <ul class="dropdown arrow-top">
                   <li onclick="showSection('interestAccountInfo')"><a href="#">Interest Account</a></li>
-                  <li onclick="showSection('interestIntervalAdjustment')"><a href="#">Interest Interval Adjustment</a></li>
+                  <li onclick="showSection('interestIntervalAdjustment')"><a href="#">Interest Interval Adjustment</a>
+                  </li>
                   <li class="has-children">
                     <a href="#">Interest Withdrawal</a>
                     <ul class="dropdown">
@@ -261,13 +283,19 @@
   </header>
   <main>
     <div id="interestAccountInfo" class="hidden-section">
+      <button onclick="defaultSetInterval()">Testing Default Set Interval to Testing</button>
 
       <h2>Account Information</h2>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Connected Account: <span id="account" style="font-weight: normal; margin: 0; font-size: smaller;" >N/A</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Connected Account: <span id="account"
+          style="font-weight: normal; margin: 0; font-size: smaller;">N/A</span></p>
 
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance" style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p> <!-- Changed from account-balances -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval" style="font-weight: normal; margin: 0; font-size: smaller;">N/A</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate" style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
+          style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
+      <!-- Changed from account-balances -->
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+          style="font-weight: normal; margin: 0; font-size: smaller;">N/A</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+          style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
 
       <button id="refresh-account-info" onclick="refreshAccountInfo()">Refresh Account Info</button>
       <!-- Changed from refreshAccountInfo -->
@@ -282,55 +310,75 @@
       <input type="datetime-local" id="startTime" name="startTime">
       <label for="endTime" style="font-weight: bold; margin: 0; font-size: larger;">End Date:</label>
       <input type="datetime-local" id="endTime" name="endTime">
-      <button id="calculate-interest">Calculate Interest</button>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest (Testing): <span id="interest-test" style="font-weight: normal; margin: 0; font-size: smaller;">0 ETH</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest (Monthly): <span id="interest-month" style="font-weight: normal; margin: 0; font-size: smaller;">0 ETH</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest (Yearly): <span id="interest-year" style="font-weight: normal; margin: 0; font-size: smaller;">0 ETH</span></p>
+      <button id="calculate-interest" onclick="calculateInterest()">Calculate Interest</button>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest (Testing): <span id="interest-test"
+          style="font-weight: normal; margin: 0; font-size: smaller;">0 ETH</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest (Monthly): <span id="interest-month"
+          style="font-weight: normal; margin: 0; font-size: smaller;">0 ETH</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest (Yearly): <span id="interest-year"
+          style="font-weight: normal; margin: 0; font-size: smaller;">0 ETH</span></p>
     </div>
 
     <!-- Add Interest -->
     <div id="addInterest" class="hidden-section">
       <h2>Account Information</h2>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance" style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p> <!-- Keep same id as above -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval" style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate" style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
-      <button id="refresh-account">Refresh Account Info</button>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
+          style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
+      <!-- Keep same id as above -->
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+          style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+          style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
+      <button id="refresh-account" onclick="refreshAccountInfo()"">Refresh Account Info</button>
 
       <h3>Add Interest</h3>
-      <button id="add-interest">Add Interest</button>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="add-interest-status" style="font-weight: normal; margin: 0; font-size: smaller;">Not added yet</span></p>
+      <button id="add-interest" onclick="addInterest()">Add Interest</button>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="add-interest-status"
+          style="font-weight: normal; margin: 0; font-size: smaller;">Not added yet</span></p>
     </div>
 
     <!-- Withdraw Interest -->
     <div id="withdrawInterest" class="hidden-section">
       <h2>Account Information</h2>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance" style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p> <!-- Keep same id as above -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval" style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate" style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
-      <button id="refresh-account">Refresh Account Info</button>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
+          style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
+      <!-- Keep same id as above -->
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+          style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+          style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
+      <button id="refresh-account" onclick="refreshAccountInfo()">Refresh Account Info</button>
 
       <h3>Withdraw Interest</h3>
-      <button id="withdraw-interest">Withdraw Interest</button>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="withdraw-interest-status" style="font-weight: normal; margin: 0; font-size: smaller;">Not withdrawn yet</span></p>
+      <button id="withdraw-interest" onclick="withdrawInterest()">Withdraw Interest</button>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="withdraw-interest-status"
+          style="font-weight: normal; margin: 0; font-size: smaller;">Not withdrawn yet</span></p>
     </div>
 
     <!-- Distribute Interest -->
     <div id="distributeInterest" class="hidden-section">
       <h2>Account Information</h2>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance" style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p> <!-- Keep same id as above -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval" style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate" style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
-      <button id="refresh-account">Refresh Account Info</button>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
+          style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
+      <!-- Keep same id as above -->
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+          style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+          style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
+      <button id="refresh-account" onclick="refreshAccountInfo()">Refresh Account Info</button>
 
       <h2>Distribute Interest</h2>
-      <label for="Recipient-Address" style="font-weight: bold; margin: 0; font-size: larger;">Recipient Address :</label>
+      <label for="Recipient-Address" style="font-weight: bold; margin: 0; font-size: larger;">Recipient Address
+        :</label>
       <input type="text" id="Recipient-Address" placeholder="Distribute To Address">
-      <label for="distribute-Percentage" style="font-weight: bold; margin: 0; font-size: larger;">Distribute Percentage(%) :</label>
+      <label for="distribute-Percentage" style="font-weight: bold; margin: 0; font-size: larger;">Distribute
+        Percentage(%) :</label>
       <input type="number" id="distribute-percentage" min="1" max="100" placeholder="Percentage to distribute">
       <!-- Changed distribute-Percentage to distribute-percentage -->
 
-      <button id="distribute-interest">Distribute Interest</button> <!-- Changed from distributeInterest -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="distribute-interest-status" style="font-weight: normal; margin: 0; font-size: smaller;">Not distributed yet</span></p>
+      <button id="distribute-interest" onclick="distributeInterest()">Distribute Interest</button> <!-- Changed from distributeInterest -->
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="distribute-interest-status"
+          style="font-weight: normal; margin: 0; font-size: smaller;">Not distributed yet</span></p>
       <!-- Changed from withdraw-interest-status -->
     </div>
 
@@ -343,8 +391,9 @@
         <option value="31536000">Yearly</option>
         <option value="30">Testing (30s)</option>
       </select>
-      <button id="change-interval">Change Interval</button>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="change-interval-status" style="font-weight: normal; margin: 0; font-size: smaller;">Interval not changed yet</span></p>
+      <button id="change-interval" onclick="changeAccrualInterval()">Change Interval</button>
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Status: <span id="change-interval-status"
+          style="font-weight: normal; margin: 0; font-size: smaller;">Interval not changed yet</span></p>
     </div>
 
     <!-- Interest Histories -->
@@ -393,210 +442,9 @@
     </div>
 
   </main>
-  <script>
 
-    // Contract Setting -- Start
-
-
-    // let contractInterest;
-    // const ABIInterest = [];
-    // const AddressInterest = "";
-    // contractInterest = new web3.eth.Contract(ABIInterest, AddressInterest);
-    // Contract Setting -- End
-
-
-    // Interest Module -- Start
-    // Refresh account information
-    async function refreshAccountInfo() {
-      const accounts = await web3.eth.getAccounts();
-      const sender = accounts[0];
-      const balance = await contractInterest.methods.getAccountBalances(sender).call({ from: sender }); // Fixed accounts[0]
-      document.getElementById("account-balance").innerText = web3.utils.fromWei(balance, "ether") + " ETH";
-      // await contractInterest.methods.setFirstDeposit(sender).send({from: sender});//Check is it first time deposit
-      accrualInterval = await contractInterest.methods.getUserAccrualInterval(sender).call({ from: sender });
-      if (accrualInterval == 31536000) {
-        accrualInterval = "Yearly";
-      } else if (accrualInterval == 2592000) {
-        accrualInterval = "Monthly";
-      } else if (accrualInterval == 30) {
-        accrualInterval = "Testing (30 seconds)";
-      }
-      document.getElementById("accrual-interval").innerText = accrualInterval;
-
-      const interestRate = await contractInterest.methods.getAccountInterestRates(sender).call({ from: sender });
-      document.getElementById("interest-rate").innerText = interestRate + "%";
-    }
-
-    // Calculate interest
-    document.getElementById("calculate-interest").addEventListener('click', async () => {
-      const calcAmount = document.getElementById("calc-amount").value;
-      const amount = web3.utils.toWei(calcAmount, "ether");
-      console.log(amount);
-      const startTimes = document.getElementById("startTime").value;
-      const endTimes = document.getElementById("endTime").value;
-
-      // Convert to Date objects
-      const startDate = new Date(startTimes);
-      const endDate = new Date(endTimes);
-
-      // Convert to epoch time in seconds
-      const startEpoch = Math.floor(startDate.getTime() / 1000);
-      const endEpoch = Math.floor(endDate.getTime() / 1000);
-      console.log(startEpoch);
-      console.log(endEpoch);
-
-      try {
-        const result = await contractInterest.methods.interestCalculator(amount, startEpoch, endEpoch).call(); // Adjust start and end epochs
-        document.getElementById("interest-test").innerText = web3.utils.fromWei(result[0], "ether") + " ETH";
-        document.getElementById("interest-month").innerText = web3.utils.fromWei(result[1], "ether") + " ETH";
-        document.getElementById("interest-year").innerText = web3.utils.fromWei(result[2], "ether") + " ETH";
-      } catch (error) {
-        console.error("Error calculating interest:", error);
-      }
-    });
-
-    //
-
-
-    document.getElementById("add-interest").addEventListener('click', async () => {
-      const accounts = await web3.eth.getAccounts();
-      const sender = accounts[0];
-
-      try {
-        // Call the contract to add interest
-        const receipt = await contractInterest.methods.addInterest(sender).send({ from: sender });
-
-        // Extract the interest amount from the emitted event
-        const interestEvent = receipt.events.InterestAdd;
-        const interestAmount = interestEvent.returnValues.interestAmount; // Extract the interest amount
-
-        // Display success message
-        document.getElementById("add-interest-status").innerText = "Interest added successfully!";
-
-        // Call the main contract to update the interest balance with the extracted amount
-        await contract.methods.addInterestBalance(sender, interestAmount).send({ from: sender });
-
-      } catch (error) {
-        document.getElementById("add-interest-status").innerText = "Error adding interest.";
-        console.error(error);
-      }
-    });
-
-
-    // Withdraw interest
-    document.getElementById("withdraw-interest").addEventListener('click', async () => {
-      const accounts = await web3.eth.getAccounts();
-      const sender = accounts[0];
-      try {
-        interestDeduct = await contractInterest.methods.withdrawInterest(sender).send({ from: sender });
-        if (interestDeduct > 0) {
-          contract.methods.deductInterestBalance(sender, interestDeduct);
-        }
-        document.getElementById("withdraw-interest-status").innerText = "Interest withdrawn successfully!";
-      } catch (error) {
-        document.getElementById("withdraw-interest-status").innerText = "Error withdrawing interest.";
-        console.error(error);
-      }
-    });
-
-    // Distribute interest
-    document.getElementById("distribute-interest").addEventListener('click', async () => {
-      const accounts = await web3.eth.getAccounts();
-      const sender = accounts[0];
-      const percentage = document.getElementById("distribute-percentage").value; // Corrected ID
-      const recipientAddress = document.getElementById("Recipient-Address").value;
-
-      try {
-        result = await contractInterest.methods.distributeInterest(percentage, recipientAddress, sender).send({ from: sender });
-        const interestDistributed = result[0];
-        const interestWithdraw = result[1];
-        if (result[0] > 0) {
-          contract.methods.deductInterestBalance(recipientAddress, interestDeduct);
-        }
-        if (result[1] > 0) {
-          contract.methods.deductInterestBalance(sender, interestDeduct);
-        }
-        document.getElementById("distribute-interest-status").innerText = "Interest distributed successfully!"; // Corrected ID
-      } catch (error) {
-        document.getElementById("distribute-interest-status").innerText = "Error distributing interest."; // Corrected ID
-        console.error(error);
-      }
-    });
-
-    // Change accrual interval
-    document.getElementById("change-interval").addEventListener('click', async () => {
-      const accounts = await web3.eth.getAccounts();
-      const sender = accounts[0];
-      const selectedInterval = document.getElementById("interval-select").value;
-
-      try {
-        await contractInterest.methods.setUserAccrualInterval(selectedInterval, sender).send({ from: sender });
-        document.getElementById("change-interval-status").innerText = "Interval changed successfully!";
-      } catch (error) {
-        document.getElementById("change-interval-status").innerText = "Error changing interval.";
-        console.error(error);
-      }
-    });
-
-    // Get Interest History
-    async function getInterestHistory() {
-      const accounts = await web3.eth.getAccounts();
-      const sender = accounts[0];
-      console.log(sender);
-
-      // Clear previous history display
-      document.getElementById("withdrawal-history").innerHTML = '';
-      document.getElementById("distribution-history").innerHTML = '';
-      document.getElementById("add-interest-history").innerHTML = '';
-
-      // Helper function to create table rows
-      function createRow(item) {
-        const row = document.createElement("tr");
-        const interestInEther = web3.utils.fromWei(item.interestAmount.toString(), 'ether'); // Convert Wei to Ether
-
-        row.innerHTML = `
-            <td>${new Date(item.timestamp * 1000).toLocaleString()}</td>
-            <td>${interestInEther} ETH</td>
-            <td>${item.recipient}</td>
-        `;
-        return row;
-      }
-
-      // Get withdrawal history
-      try {
-        const withdrawalHistory = await contractInterest.methods.getWithdrawalHistory(sender).call({ from: sender });
-        withdrawalHistory.forEach(item => {
-          document.getElementById("withdrawal-history").appendChild(createRow(item));
-        });
-      } catch (error) {
-        console.error("Error fetching withdrawal history:", error);
-      }
-
-      // Get distribution history
-      try {
-        const distributionHistory = await contractInterest.methods.getDistributionHistory(sender).call({ from: sender });
-        distributionHistory.forEach(item => {
-          document.getElementById("distribution-history").appendChild(createRow(item));
-        });
-      } catch (error) {
-        console.error("Error fetching distribution history:", error);
-      }
-
-      // Get Add Interest history
-      try {
-        const addInterestHistory = await contractInterest.methods.getAddInterestHistory(sender).call({ from: sender });
-        addInterestHistory.forEach(item => {
-          document.getElementById("add-interest-history").appendChild(createRow(item));
-        });
-      } catch (error) {
-        console.error("Error fetching add interest history:", error);
-      }
-    }
-
-    // Interest Module -- End 
-
-  </script>
-  <script src="script.js"></script>
+<script src="script.js"></script>
+  
 </body>
 
 </html>

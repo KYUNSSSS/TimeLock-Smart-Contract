@@ -90,15 +90,6 @@ contract DepositAndWithdraw {
     }
 
     //hanshen code
-        modifier onlyOwner() {
-        require(msg.sender == owner, "Not authorized");
-        _;
-    }
-
-    modifier whenNotPaused() {
-        require(!paused, "Contract is paused");
-        _;
-    }
 
     constructor() {
         owner = msg.sender;
@@ -226,7 +217,7 @@ contract DepositAndWithdraw {
     }
 
     //hanshen
-    function instantTransfer(address _to, uint256 _amount) external whenNotPaused sufficientBalance(msg.sender, _amount) onlyAdult(msg.sender){
+    function instantTransfer(address _to, uint256 _amount) external sufficientBalance(msg.sender, _amount) onlyAdult(msg.sender){
         require(_to != address(0), "Invalid receiver address");
         require(_to != msg.sender, "Cannot transfer to yourself");
 
@@ -376,15 +367,6 @@ contract DepositAndWithdraw {
         return totalAmount;
     }
 
-        function pause() external onlyOwner {
-        paused = true;
-        emit Paused();
-    }
-
-    function unpause() external onlyOwner {
-        paused = false;
-        emit Unpaused();
-    }
     enum AccountType { PARENT, CHILD }
     enum AccountStatus { ACTIVE, ARCHIVED }
 

@@ -2,14 +2,7 @@ let account;
 let web3;
 let contract;
 let contractInterest;
-const ABI = [
-	{
-		"inputs": [],
-		"name": "executeAutoScheduledTransfers",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
+const ABI =[
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -54,112 +47,6 @@ const ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "addFunds",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "addAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "addInterestBalance",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_unlockTime",
-				"type": "uint256"
-			}
-		],
-		"name": "addScheduleWithdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_child",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amountWithdraw",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_unlockTime",
-				"type": "uint256"
-			}
-		],
-		"name": "addScheduleWithdrawForChild",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "archiveAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			}
-		],
-		"name": "cancelScheduledTransfer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			}
-		],
-		"name": "cancelScheduleWithdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "checkArchiveStatus",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -179,57 +66,6 @@ const ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "userAddress",
-				"type": "address"
-			}
-		],
-		"name": "copyUserToAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "deductAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "deductInterestBalance",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "deleteAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			}
-		],
-		"name": "executeScheduledWithdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -247,69 +83,6 @@ const ABI = [
 		],
 		"name": "FundsAdded",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_child",
-				"type": "address"
-			}
-		],
-		"name": "grantModificationAccess",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			}
-		],
-		"name": "instantTransfer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_account",
-				"type": "address"
-			}
-		],
-		"name": "login",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_newAddress",
-				"type": "address"
-			}
-		],
-		"name": "migrateAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -362,36 +135,6 @@ const ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_email",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_age",
-				"type": "uint256"
-			}
-		],
-		"name": "modifyProfile",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "pause",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [],
 		"name": "Paused",
@@ -433,82 +176,6 @@ const ABI = [
 		],
 		"name": "ProfileModified",
 		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "reactivateAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_email",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_age",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "_parent",
-				"type": "address"
-			},
-			{
-				"internalType": "enum DepositAndWithdraw.AccountType",
-				"name": "_accountType",
-				"type": "uint8"
-			}
-		],
-		"name": "register",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_child",
-				"type": "address"
-			}
-		],
-		"name": "revokeModificationAccess",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_unlockTime",
-				"type": "uint256"
-			}
-		],
-		"name": "scheduleAutoExecution",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -698,13 +365,6 @@ const ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "unpause",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [],
 		"name": "Unpaused",
@@ -767,19 +427,6 @@ const ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			}
-		],
-		"name": "withdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -797,6 +444,19 @@ const ABI = [
 		],
 		"name": "WithdrawalMade",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "SECONDS_IN_A_YEAR",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -835,6 +495,112 @@ const ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "addFunds",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "addAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "addInterestBalance",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "addScheduleWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountWithdraw",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "addScheduleWithdrawForChild",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "archiveAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelScheduleWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelScheduledTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkArchiveStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -891,6 +657,64 @@ const ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "copyUserToAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deductAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "deductInterestBalance",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deleteAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "executeAutoScheduledTransfers",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "executeScheduledWithdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1280,6 +1104,37 @@ const ABI = [
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "grantModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "instantTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "_account",
 				"type": "address"
 			}
@@ -1357,6 +1212,38 @@ const ABI = [
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "login",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "migrateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
@@ -1370,6 +1257,29 @@ const ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			}
+		],
+		"name": "modifyProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1387,6 +1297,13 @@ const ABI = [
 	},
 	{
 		"inputs": [],
+		"name": "pause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "paused",
 		"outputs": [
 			{
@@ -1396,6 +1313,82 @@ const ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "reactivateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_parent",
+				"type": "address"
+			},
+			{
+				"internalType": "enum DepositAndWithdraw.AccountType",
+				"name": "_accountType",
+				"type": "uint8"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "revokeModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_unlockTime",
+				"type": "uint256"
+			}
+		],
+		"name": "scheduleAutoExecution",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1482,19 +1475,6 @@ const ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "SECONDS_IN_A_YEAR",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1531,6 +1511,13 @@ const ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1585,6 +1572,19 @@ const ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -2464,7 +2464,7 @@ const ABIInterest = [
 
 
 // Define the ABI and contract address globally
-const Address = "0x2633b8b64f09CC9bEf817f1a47E55B3Abb1f485f";
+const Address = "0x6259E6F4c1B94f18F18ca46bC2CdB8A7b5Bd475F";
 const AddressInterest = "0x4ea147Bc6F6EED52aD5129bCfcFe35a5f1885FAe"; //Interest Module Addres
 
 function showSection(sectionId) {
@@ -2583,20 +2583,24 @@ async function loadAccountTime() {
             const profile = await contract.methods.getProfile().call({ from: sender });
             const age = profile.age;
 
-            const yearsRemaining = 18 - age;
-            let timeRemaining = yearsRemaining > 0 ? yearsRemaining * 365 * 24 * 3600 : 0;
-
-            if (timeRemaining === 0) {
-                document.getElementById('timeRemainingResult').innerText = "No time remaining (already 18 or older).";
-            } else {
-                const days = Math.floor(timeRemaining / (3600 * 24));
-                const hours = Math.floor((timeRemaining % (3600 * 24)) / 3600);
-                const minutes = Math.floor((timeRemaining % 3600) / 60);
-                const seconds = timeRemaining % 60;
-
-                document.getElementById('timeRemainingResult').innerText =
-                    `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds until turning 18.`;
+            // Check if the user is 18 or older
+            if (age >= 18) {
+                document.getElementById('timeRemainingResult').innerText = "You Are Adult Now";
+                document.getElementById('timeRemainingDiv').style.display = "none";
+                document.getElementById('timeRemainingChild').style.display = "block";
+                return; // Exit the function early if the user is 18 or older
+            }else{
+                document.getElementById('timeRemainingDiv').style.display = "block";
+                document.getElementById('timeRemainingChild').style.display = "none";
             }
+
+            // Calculate the time remaining until the user turns 18
+            const yearsRemaining = 18 - age;
+            const timeRemaining = yearsRemaining * 365 * 24 * 3600; // Convert years to seconds
+
+            const days = Math.floor(timeRemaining / (3600 * 24)); // Convert seconds to days
+            
+            document.getElementById('timeRemainingResult').innerText = `${days} days until turning 18 years old.`;
         } else {
             alert("Please install MetaMask!");
         }
@@ -2616,8 +2620,9 @@ const addFundsForm = document.getElementById('addFundsForm');
 addFundsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const amount = document.getElementById('amount').value;
-    const accounts = await web3.eth.getAccounts();
-    const sender = accounts[0];
+	const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+	sender = accounts[0];
+	
 
     contract.methods.addFunds().send({
         from: sender,
@@ -2663,55 +2668,66 @@ async function instantWithdraw() {
     }
 }
 
-// List all withdrawals for the connected account and display them in a table
-async function listWithdrawalHistory() {
+
+async function getWithdrawals() {
+    // Get the current account from Web3
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    const accountAddress = accounts[0]; // Use the first account
+
+    const withdrawalHistoryBody = document.getElementById('withdrawalHistoryBody');
+    withdrawalHistoryBody.innerHTML = ""; // Clear previous results
+
     try {
-        // Fetch the withdrawal history from the contract
-        const withdrawals = await contract.methods.listWithdrawals(account).call();
+        // Call the contract method to get withdrawals for the current account
+        const withdrawals = await contract.methods.listWithdrawals(accountAddress).call();
+        
+        withdrawals.forEach((withdrawal, index) => {
+            const row = withdrawalHistoryBody.insertRow();
+            const indexCell = row.insertCell(0);
+            const amountCell = row.insertCell(1);
+            const dateCell = row.insertCell(2);
+            
+            indexCell.textContent = index + 1; // Index starts from 1
+            amountCell.textContent = Web3.utils.fromWei(withdrawal.amount, 'ether'); // Convert from Wei to ETH and append " ETH"
+            dateCell.textContent = new Date(withdrawal.timestamp * 1000).toLocaleString(); // Format timestamp
+        });
+    } catch (error) {
+        console.error("Error fetching withdrawals:", error);
+    }
+}
+
+
+async function listScheduledWithdrawals() {
+    try {
+        // Fetch the scheduled withdrawals from the contract
+        const scheduledWithdrawals = await contract.methods.listScheduledWithdrawals(account).call();
 
         // Get the table body where the rows will be populated
-        const tableBody = document.getElementById('withdrawalHistoryBody');
+        const tableBody = document.getElementById('withdrawalsBody');
 
         // Clear previous rows
         tableBody.innerHTML = '';
 
-        // Loop through the withdrawals and populate the table
-        withdrawals.forEach((withdrawal, index) => {
+        // Loop through the scheduled withdrawals and populate the table
+        scheduledWithdrawals.forEach((withdrawal, index) => {
             const amount = web3.utils.fromWei(withdrawal.amount, 'ether');  // Convert amount from Wei to ETH
-            const timestamp = new Date(withdrawal.timestamp * 1000).toLocaleString();  // Convert UNIX timestamp to readable date
+            const unlockTime = new Date(withdrawal.unlockTime * 1000).toLocaleString();  // Convert UNIX timestamp to readable date
+            const isActive = withdrawal.active ? 'Yes' : 'No';  // Check if withdrawal is still active
 
-            // Create a new row for each withdrawal
+            // Create a new row for each scheduled withdrawal
             const row = document.createElement('tr');
             row.innerHTML = `
-                        <td>${index}</td>
-                        <td>${amount}</td>
-                        <td>${timestamp}</td>
-                    `;
+                <td>${index}</td>
+                <td>${amount}</td>
+                <td>${unlockTime}</td>
+                <td>${isActive}</td>
+            `;
 
             // Append the new row to the table body
             tableBody.appendChild(row);
         });
     } catch (error) {
-        console.error("Error listing withdrawal history:", error);
-    }
-}
-
-// Call listWithdrawalHistory initially to display withdrawals when the page loads
-window.onload = listWithdrawalHistory;
-
-// Add a child account
-async function addChildAccount() {
-    const childAddress = document.getElementById('childAddress').value;
-    if (web3.utils.isAddress(childAddress)) {
-        try {
-            await contract.methods.addChildAccount(childAddress).send({ from: account });
-            alert("Child account added successfully!");
-        } catch (error) {
-            console.error("Error adding child account:", error);
-            alert("Error adding child account. Check console for details.");
-        }
-    } else {
-        alert("Please enter a valid child address.");
+        console.error("Error listing scheduled withdrawals:", error);
     }
 }
 
@@ -2794,9 +2810,15 @@ document.getElementById('withdrawForm').addEventListener('submit', async functio
     const weiAmount = web3.utils.toWei(amount.toString(), 'ether');
 
     // Get the parent (the current connected account) from MetaMask
-    const accounts = await web3.eth.getAccounts();
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const parentAccount = accounts[0];
-
+    const childAccounts = await contract.methods.getChildren(parentAccount).call();
+    alert(childAccounts);
+    const childprofile = await contract.methods.getProfile().call({ from: childAccounts });
+    console.log(childprofile);
+    const myparent =childprofile.parent;
+    
+    if(parentAccount==myparent){
     // Call the addScheduleWithdrawForChild function
     try {
         await contract.methods.addScheduleWithdrawForChild(childAddress, weiAmount, unlockTimestamp)
@@ -2806,82 +2828,78 @@ document.getElementById('withdrawForm').addEventListener('submit', async functio
     } catch (error) {
         console.error(error);
         alert('Error scheduling withdrawal. See console for details.');
+    }}else{
+        alert("NOT YOUR CHILD!");
     }
 });
 
 window.addEventListener('load', connectWallet);
 
-//-----------------------------------------------------------------------------------------------
-// Function to calculate and display time remaining for a child account
-async function displayTimeRemaining() {
-    const account = await ethereum.request({ method: "eth_requestAccounts" });
-    const currentAccount = account[0];
-
-    document.getElementById('account2').textContent = currentAccount;
-
-    try {
-        // Fetch if the account is a child account and unlock time
-        const isChildAccount = await contract.methods.isChild(currentAccount).call();
-        const unlockTime = await contract.methods.getUnlockTime(currentAccount).call();
-
-        const timeRemainingSection = document.getElementById('timeRemainingSection');
-
-        if (isChildAccount) {
-            const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
-            const timeDiff = unlockTime - currentTime;
-
-            if (timeDiff > 0) {
-                // Calculate remaining time
-                const years = Math.floor(timeDiff / (60 * 60 * 24 * 365));
-                const months = Math.floor((timeDiff % (60 * 60 * 24 * 365)) / (60 * 60 * 24 * 30));
-                const days = Math.floor((timeDiff % (60 * 60 * 24 * 30)) / (60 * 60 * 24));
-                const hours = Math.floor((timeDiff % (60 * 60 * 24)) / (60 * 60));
-                const minutes = Math.floor((timeDiff % (60 * 60)) / 60);
-
-                // Display the time remaining
-                document.getElementById('timeRemaining').textContent = 
-                    `${years} Years ${months} Months ${days} Days ${hours} Hours ${minutes} Minutes`;
-
-                timeRemainingSection.style.display = 'block'; // Show the time remaining section
-            } else {
-                document.getElementById('timeRemaining').textContent = 'No time remaining. Withdrawal available.';
-                timeRemainingSection.style.display = 'block';
-            }
-        } else {
-            // If it's not a child account, hide the "Time Remaining" section
-            timeRemainingSection.style.display = 'none';
-        }
-    } catch (error) {
-        console.error("Error fetching account info:", error);
-        document.getElementById('timeRemaining').textContent = 'Error fetching time remaining.';
-        timeRemainingSection.style.display = 'block';
-    }
-}
-
     // Interest Module -- Start
     // Refresh account information
-    async function refreshAccountInfo() {
-		const account = await ethereum.request({ method: "eth_requestAccounts" });
-        const sender = account[0];
-		const balance = await contract.methods.checkMyBalance(sender).call({ from: sender }); // Fixed accounts[0]
-		document.getElementById("account-balance").innerText = web3.utils.fromWei(balance, "ether") + " ETH";
-		// await contractInterest.methods.setFirstDeposit(sender).send({from: sender});//Check is it first time deposit
-		accrualInterval = await contractInterest.methods.getUserAccrualInterval(sender).call({ from: sender });
-		if (accrualInterval == 31536000) {
-		  accrualInterval = "Yearly";
-		} else if (accrualInterval == 2592000) {
-		  accrualInterval = "Monthly";
-		} else if (accrualInterval == 30) {
-		  accrualInterval = "Testing (30 seconds)";
-		}
-		document.getElementById("accrual-interval").innerText = accrualInterval;
+    // async function refreshAccountInfo() {
+	// 	const accounts = await web3.eth.getAccounts();
+	// 	const sender = accounts[0];
+	// 	const balance = await contractInterest.methods.getAccountBalances(sender).call({ from: sender }); // Fixed accounts[0]
+	// 	document.getElementById("account-balance").innerText = web3.utils.fromWei(balance, "ether") + " ETH";
+	// 	// await contractInterest.methods.setFirstDeposit(sender).send({from: sender});//Check is it first time deposit
+	// 	accrualInterval = await contractInterest.methods.getUserAccrualInterval(sender).call({ from: sender });
+	// 	if (accrualInterval == 31536000) {
+	// 	  accrualInterval = "Yearly";
+	// 	} else if (accrualInterval == 2592000) {
+	// 	  accrualInterval = "Monthly";
+	// 	} else if (accrualInterval == 30) {
+	// 	  accrualInterval = "Testing (30 seconds)";
+	// 	}
+	// 	document.getElementById("accrual-interval").innerText = accrualInterval;
   
-		const interestRate = await contractInterest.methods.getAccountInterestRates(sender).call({ from: sender });
-		document.getElementById("interest-rate").innerText = interestRate + "%";
-	  }
+	// 	const interestRate = await contractInterest.methods.getAccountInterestRates(sender).call({ from: sender });
+	// 	document.getElementById("interest-rate").innerText = interestRate + "%";
+	//   }
+
+	async function refreshAccountInfo() {
+		const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+		const sender = accounts[0];
+	
+		try {
+			// Fetch balance
+			const balance = await contractInterest.methods.getAccountBalances(sender).call({ from: sender });
+			const balanceElements = document.getElementsByClassName("account-balance");
+			for (let element of balanceElements) {
+				element.innerText = web3.utils.fromWei(balance, "ether") + " ETH";
+			}
+	
+			// Fetch accrual interval
+			let accrualInterval = await contractInterest.methods.getUserAccrualInterval(sender).call({ from: sender });
+			if (accrualInterval == 31536000) {
+				accrualInterval = "Yearly";
+			} else if (accrualInterval == 2592000) {
+				accrualInterval = "Monthly";
+			} else if (accrualInterval == 30) {
+				accrualInterval = "Testing (30 seconds)";
+			}
+			const intervalElements = document.getElementsByClassName("accrual-interval");
+			for (let element of intervalElements) {
+				element.innerText = accrualInterval;
+			}
+	
+			// Fetch interest rate
+			const interestRate = await contractInterest.methods.getAccountInterestRates(sender).call({ from: sender });
+			const interestRateElements = document.getElementsByClassName("interest-rate");
+			for (let element of interestRateElements) {
+				element.innerText = interestRate + "%";
+			}
+	
+		} catch (error) {
+			console.error("Error refreshing account info:", error);
+		}
+	}
+	
   
 	  // Calculate interest
-	  document.getElementById("calculate-interest").addEventListener('click', async () => {
+  
+	  function calculateInterest() {
+		console.log("test");
 		const calcAmount = document.getElementById("calc-amount").value;
 		const amount = web3.utils.toWei(calcAmount, "ether");
 		console.log(amount);
@@ -2899,103 +2917,146 @@ async function displayTimeRemaining() {
 		console.log(endEpoch);
   
 		try {
-		  const result = await contractInterest.methods.interestCalculator(amount, startEpoch, endEpoch).call(); // Adjust start and end epochs
-		  document.getElementById("interest-test").innerText = web3.utils.fromWei(result[0], "ether") + " ETH";
-		  document.getElementById("interest-month").innerText = web3.utils.fromWei(result[1], "ether") + " ETH";
-		  document.getElementById("interest-year").innerText = web3.utils.fromWei(result[2], "ether") + " ETH";
+		  contractInterest.methods.interestCalculator(amount, startEpoch, endEpoch).call()
+			.then((result) => {
+			  document.getElementById("interest-test").innerText = web3.utils.fromWei(result[0], "ether") + " ETH";
+			  document.getElementById("interest-month").innerText = web3.utils.fromWei(result[1], "ether") + " ETH";
+			  document.getElementById("interest-year").innerText = web3.utils.fromWei(result[2], "ether") + " ETH";
+			})
+			.catch((error) => {
+			  console.error("Error calculating interest:", error);
+			});
 		} catch (error) {
-		  console.error("Error calculating interest:", error);
+		  console.error("Error:", error);
 		}
-	  });
-  
-	  //
+	  }
   
   
-	  document.getElementById("add-interest").addEventListener('click', async () => {
-		const accounts = await web3.eth.getAccounts();
-		const sender = accounts[0];
+	  //Add Interest
+	  function addInterest() {
+		ethereum.request({ method: 'eth_requestAccounts' }).then(async (accounts) => {
+		  const sender = accounts[0];
   
-		try {
-		  // Call the contract to add interest
-		  const receipt = await contractInterest.methods.addInterest(sender).send({ from: sender });
+		  try {
+			// Call the contract to add interest
+			const receipt = await contractInterest.methods.addInterest(sender).send({ from: sender });
   
-		  // Extract the interest amount from the emitted event
-		  const interestEvent = receipt.events.InterestAdd;
-		  const interestAmount = interestEvent.returnValues.interestAmount; // Extract the interest amount
+			// Extract the interest amount from the emitted event
+			const interestEvent = receipt.events.InterestAdd;
+			const interestAmount = interestEvent.returnValues.interestAmount; // Extract the interest amount
   
-		  // Display success message
-		  document.getElementById("add-interest-status").innerText = "Interest added successfully!";
+			// Display success message
+			document.getElementById("add-interest-status").innerText = "Interest added successfully!";
   
-		  // Call the main contract to update the interest balance with the extracted amount
-		  await contract.methods.addInterestBalance(sender, interestAmount).send({ from: sender });
+			// Call the main contract to update the interest balance with the extracted amount
+			await contract.methods.addInterestBalance(sender, interestAmount).send({ from: sender });
   
-		} catch (error) {
-		  document.getElementById("add-interest-status").innerText = "Error adding interest.";
-		  console.error(error);
-		}
-	  });
-  
-  
-	  // Withdraw interest
-	  document.getElementById("withdraw-interest").addEventListener('click', async () => {
-		const accounts = await web3.eth.getAccounts();
-		const sender = accounts[0];
-		try {
-		  interestDeduct = await contractInterest.methods.withdrawInterest(sender).send({ from: sender });
-		  if (interestDeduct > 0) {
-			contract.methods.deductInterestBalance(sender, interestDeduct);
+		  } catch (error) {
+			document.getElementById("add-interest-status").innerText = "Error adding interest.";
+			console.error(error);
 		  }
-		  document.getElementById("withdraw-interest-status").innerText = "Interest withdrawn successfully!";
-		} catch (error) {
-		  document.getElementById("withdraw-interest-status").innerText = "Error withdrawing interest.";
-		  console.error(error);
-		}
-	  });
+		}).catch((error) => {
+		  console.error("Error requesting accounts:", error);
+		});
+	  }
   
-	  // Distribute interest
-	  document.getElementById("distribute-interest").addEventListener('click', async () => {
-		const accounts = await web3.eth.getAccounts();
-		const sender = accounts[0];
-		const percentage = document.getElementById("distribute-percentage").value; // Corrected ID
-		const recipientAddress = document.getElementById("Recipient-Address").value;
   
-		try {
-		  result = await contractInterest.methods.distributeInterest(percentage, recipientAddress, sender).send({ from: sender });
-		  const interestDistributed = result[0];
-		  const interestWithdraw = result[1];
-		  if (result[0] > 0) {
-			contract.methods.deductInterestBalance(recipientAddress, interestDeduct);
+  
+  
+  
+	  function withdrawInterest() {
+		ethereum.request({ method: 'eth_requestAccounts' }).then(async (accounts) => {
+		  const sender = accounts[0];
+  
+		  try {
+			// Call the contract to withdraw interest
+			const interestDeduct = await contractInterest.methods.withdrawInterest(sender).send({ from: sender });
+  
+			// Check if interest has been successfully deducted and update the balance
+			if (interestDeduct > 0) {
+			  await contract.methods.deductInterestBalance(sender, interestDeduct).send({ from: sender });
+			}
+  
+			// Display success message
+			document.getElementById("withdraw-interest-status").innerText = "Interest withdrawn successfully!";
+		  } catch (error) {
+			// Display error message
+			document.getElementById("withdraw-interest-status").innerText = "Error withdrawing interest.";
+			console.error(error);
 		  }
-		  if (result[1] > 0) {
-			contract.methods.deductInterestBalance(sender, interestDeduct);
+		}).catch((error) => {
+		  console.error("Error requesting accounts:", error);
+		});
+	  }
+  
+  
+	  function distributeInterest() {
+		ethereum.request({ method: 'eth_requestAccounts' }).then(async (accounts) => {
+		  const sender = accounts[0];
+		  const percentage = document.getElementById("distribute-percentage").value;
+		  const recipientAddress = document.getElementById("Recipient-Address").value;
+  
+		  try {
+			// Call the contract to distribute interest
+			const result = await contractInterest.methods.distributeInterest(percentage, recipientAddress, sender).send({ from: sender });
+  
+			const interestDistributed = result[0];
+			const interestWithdraw = result[1];
+  
+			// Deduct interest from the recipient's balance if applicable
+			if (interestDistributed > 0) {
+			  await contract.methods.deductInterestBalance(recipientAddress, interestDistributed).send({ from: sender });
+			}
+  
+			// Deduct interest from the sender's balance if applicable
+			if (interestWithdraw > 0) {
+			  await contract.methods.deductInterestBalance(sender, interestWithdraw).send({ from: sender });
+			}
+  
+			// Display success message
+			document.getElementById("distribute-interest-status").innerText = "Interest distributed successfully!";
+		  } catch (error) {
+			// Display error message
+			document.getElementById("distribute-interest-status").innerText = "Error distributing interest.";
+			console.error(error);
 		  }
-		  document.getElementById("distribute-interest-status").innerText = "Interest distributed successfully!"; // Corrected ID
-		} catch (error) {
-		  document.getElementById("distribute-interest-status").innerText = "Error distributing interest."; // Corrected ID
-		  console.error(error);
-		}
-	  });
+		}).catch((error) => {
+		  console.error("Error requesting accounts:", error);
+		});
+	  }
   
-	  // Change accrual interval
-	  document.getElementById("change-interval").addEventListener('click', async () => {
-		const accounts = await web3.eth.getAccounts();
-		const sender = accounts[0];
-		const selectedInterval = document.getElementById("interval-select").value;
   
-		try {
-		  await contractInterest.methods.setUserAccrualInterval(selectedInterval, sender).send({ from: sender });
-		  document.getElementById("change-interval-status").innerText = "Interval changed successfully!";
-		} catch (error) {
-		  document.getElementById("change-interval-status").innerText = "Error changing interval.";
-		  console.error(error);
-		}
-	  });
+  
+	  function changeAccrualInterval() {
+		ethereum.request({ method: 'eth_requestAccounts' }).then(async (accounts) => {
+		  const sender = accounts[0];
+		  const selectedInterval = document.getElementById("interval-select").value;
+  
+		  try {
+			console.log(test1);
+			// Call the contract to set the user's accrual interval
+			await contractInterest.methods.setUserAccrualInterval(selectedInterval, sender).send({ from: sender });
+  
+			// Display success message
+			document.getElementById("change-interval-status").innerText = "Interval changed successfully!";
+		  } catch (error) {
+			// Display error message
+			document.getElementById("change-interval-status").innerText = "Error changing interval.";
+			console.error(error);
+		  }
+		}).catch((error) => {
+		  console.error("Error requesting accounts:", error);
+		});
+	  }
+  
+  
+  
   
 	  // Get Interest History
 	  async function getInterestHistory() {
 		const accounts = await web3.eth.getAccounts();
 		const sender = accounts[0];
-		console.log(sender);
+		// console.log(sender);
   
 		// Clear previous history display
 		document.getElementById("withdrawal-history").innerHTML = '';
@@ -3008,10 +3069,10 @@ async function displayTimeRemaining() {
 		  const interestInEther = web3.utils.fromWei(item.interestAmount.toString(), 'ether'); // Convert Wei to Ether
   
 		  row.innerHTML = `
-			  <td>${new Date(item.timestamp * 1000).toLocaleString()}</td>
-			  <td>${interestInEther} ETH</td>
-			  <td>${item.recipient}</td>
-		  `;
+				  <td>${new Date(item.timestamp * 1000).toLocaleString()}</td>
+				  <td>${interestInEther} ETH</td>
+				  <td>${item.recipient}</td>
+			  `;
 		  return row;
 		}
   
@@ -3045,9 +3106,17 @@ async function displayTimeRemaining() {
 		  console.error("Error fetching add interest history:", error);
 		}
 	  }
+
+	  function def() {
+		const accounts =  web3.eth.getAccounts();
+		const sender = accounts[0];
+		contractInterest.methods.setFirstDeposit(sender).send({ from: sender });
+	  }
+
+
   
 	  // Interest Module -- End 
-  
+	
 
 // Call this function when loading the page
 window.addEventListener('load', displayTimeRemaining);

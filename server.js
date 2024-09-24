@@ -6,26 +6,28 @@ const app = express();
 app.use(bodyParser.json()); // Parse JSON request bodies
 // Serve static files from the current directory (for images, CSS, JS)
 app.use(express.static(path.join(__dirname+"/images")));
-// Route for profile.html
-
 // Route for index2.html
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname + "/Main.html"));
 });
-app.get("/", (req, res) => {
+app.get("/interest", (req, res) => {
     res.sendFile(path.join(__dirname + "/interest.html"));
 });
 
-app.get("/", (req, res) => {
+app.get("/DepositAndWithdraw", (req, res) => {
     res.sendFile(path.join(__dirname + "/DepositAndWithdraw.html"));
 });
 
-app.get("/", (req, res) => {
+app.get("/Transaction", (req, res) => {
     res.sendFile(path.join(__dirname + "/Transaction.html"));
 });
-app.get("/", (req, res) => {
+app.get("/Reward", (req, res) => {
     res.sendFile(path.join(__dirname + "/Reward.html"));
 });
+app.get("/AccountInfo", (req, res) => {
+    res.sendFile(path.join(__dirname + "/AccountInfo.html"));
+});
+
 
 
 
@@ -83,6 +85,6 @@ app.post('/verify-otp', (req, res) => {
 });
 
 
-const server = app.listen(5000, () => {
+const server = app.listen(5001, () => {
     console.log(`Server is running on port ${server.address().port}`);
 });
