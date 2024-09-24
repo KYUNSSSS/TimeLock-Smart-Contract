@@ -8,12 +8,6 @@ contract Main {
     DepositAndWithdraw public combine; // Instance of the DepositAndWithdraw contract
     InterestModule public interestModule; // Instance of InterestModule
 
-    struct InterestHistory {
-        uint256 timestamp;   // When the interest action happened
-        uint256 interestAmount; // The amount of interest withdrawn or distributed or add
-        address recipient;   // The account that received the interest (for distribution)
-    }
-
     constructor(address _combineAddress, address payable _interestModuleAddress) payable{
         combine = DepositAndWithdraw(_combineAddress); // Initialize the DepositAndWithdraw contract
         interestModule = InterestModule(_interestModuleAddress); // Initialize the InterestModule
@@ -61,12 +55,20 @@ contract Main {
         return interestModule.getUserAccrualInterval(msg.sender);
     }
 
-    function getaccountInterestRates() public view returns (uint256){
-        return interestModule.getaccountInterestRates(msg.sender);
+    function getAccountInterestRates() public view returns (uint256){
+        return interestModule.getAccountInterestRates(msg.sender);
     }
 
     function distributeInterest(uint256 percentage, address toAccount) public  {
-        interestModule.distributeInterest(percentage,toAccount,msg.sender);
+        if(interestModule.distributeInterest(percentage, toAccount, msg.sender)){
+            payable(toAccount).transfer(interestModule.calculateInterest(msg.sender) * percentage / 100);
+            payable(msg.sender).transfer(interestModule.calculateInterest(msg.sender) * (100 - percentage) / 100);
+        }
+        
+    }
+
+    function getAccountBalances() public view returns (uint256) {
+        return interestModule.getAccountBalances(msg.sender);
     }
 
     //Interest Module --- End

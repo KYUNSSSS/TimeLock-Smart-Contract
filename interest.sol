@@ -11,7 +11,7 @@ contract InterestModule {
     uint256 public constant MONTHLY_INTERVAL = 30 * 24 * 60 * 60; // 30 days in seconds 2,592,000 2592000
     uint256 public constant YEARLY_INTERVAL = 365 * 24 * 60 * 60; // 365 days in seconds 31,536,000 31536000
     uint256 public constant TESTING_INTERVAL = 30; // Set the interval to 30 seconds for testing
-    uint256 public constant yearIn30Seconds = YEARLY_INTERVAL / TESTING_INTERVAL;
+    uint256 public constant yearIn30Seconds = YEARLY_INTERVAL / TESTING_INTERVAL; //1,051,200 1051200
 
     struct InterestHistory {
         uint256 timestamp;   // When the interest action happened
@@ -41,10 +41,10 @@ contract InterestModule {
     }
 
     //Ensure user balance in contract is enough
-    modifier sufficientBalance(uint256 amount,address account) {
-        require(accountBalances[account] >= amount, "Insufficient balance");
-        _;
-    }
+    // modifier sufficientBalance(uint256 amount,address account) {
+    //     require(accountBalances[account] >= amount, "Insufficient balance");
+    //     _;
+    // }
 
     //Ensure amount is positive
     modifier positiveAmount(uint256 amount) {
@@ -167,7 +167,7 @@ contract InterestModule {
         return userAccrualIntervals[account];
     }
 
-    function getaccountInterestRates(address account) public view returns (uint256) {
+    function getAccountInterestRates(address account) public view returns (uint256) {
         return accountInterestRates[account];
     }
 
@@ -192,7 +192,7 @@ contract InterestModule {
     }
 
     // Distribute a percentage of interest to a specific account in a single transaction
-    function distributeInterest(uint256 percentage, address toAccount, address fromAccount) public onlyReachInterval(fromAccount) {
+    function distributeInterest(uint256 percentage, address toAccount, address fromAccount) public onlyReachInterval(fromAccount) returns (bool) {
         require(percentage > 0 && percentage <= 100, "Invalid percentage value"); // Ensure percentage is between 0 and 100
         require(toAccount != address(0), "Invalid address"); // Ensure a valid account address
 
@@ -201,12 +201,12 @@ contract InterestModule {
         uint256 interestDistributed = (interest * percentage) / 100; // Calculate interest to distribute
         uint256 interestWithdraw = interest - interestDistributed; //Remain interest withdraw
 
-        accountBalances[fromAccount] -= interest; //Deduct the balance
+        //accountBalances[fromAccount] -= interest; //Deduct the balance
 
-        payable(toAccount).transfer(interestDistributed); // Transfer the calculated interest to the account
+        //payable(toAccount).transfer(interestDistributed); // Transfer the calculated interest to the account
         emit InterestWithdrawn(interestDistributed, toAccount); // Emit the event for interest distribution
 
-        payable(fromAccount).transfer(interestWithdraw); // Withdraw the remain interest
+        //payable(fromAccount).transfer(interestWithdraw); // Withdraw the remain interest
         emit InterestWithdrawn(interestWithdraw, fromAccount); // Emit the event for interest withdraw
 
         // Add to distribution history for both sender and recipient
@@ -225,6 +225,7 @@ contract InterestModule {
                 recipient: fromAccount
             })
         );
+        return true;
     }
 
     // Fallback function to accept Ether into the contract
@@ -263,6 +264,11 @@ contract InterestModule {
     function testAccount(address account) public pure returns (address) {
         return account;
     }
+
+    function getAccountBalances(address account) public view returns (uint256) {
+        return accountBalances[account];
+    }
+
 
 
 }
