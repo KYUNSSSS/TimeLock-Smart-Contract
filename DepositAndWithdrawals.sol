@@ -18,8 +18,15 @@ contract DepositAndWithdraw {
         bool active;
     }
 
+    struct Withdrawal {
+        uint256 amount;
+        uint256 timestamp;
+        bool isScheduled; // To track if the withdrawal was scheduled or immediate
+    }
+
     mapping(address => Account) public accounts;
     mapping(address => ScheduledWithdraw[]) public scheduledWithdrawals;
+    mapping(address => Withdrawal[]) public withdrawalHistory;
 
     // Events
     event FundsAdded(address indexed account, uint256 amount);
@@ -76,6 +83,13 @@ contract DepositAndWithdraw {
     function withdraw(uint256 _amount) external sufficientBalance(msg.sender, _amount) onlyAdult(msg.sender) {
         // Effects first
         accounts[msg.sender].balance -= _amount;
+
+        // Log withdrawal into history
+        withdrawalHistory[msg.sender].push(Withdrawal({
+            amount: _amount,
+            timestamp: block.timestamp,
+            isScheduled: false
+        }));
 
         // Interactions last
         payable(msg.sender).transfer(_amount);
@@ -154,6 +168,10 @@ contract DepositAndWithdraw {
         });
 
         emit ChildAccountAdded(msg.sender, _child);
+    }
+
+    function listWithdrawals(address _account) external view returns (Withdrawal[] memory) {
+        return withdrawalHistory[_account];
     }
 
     // Schedule withdrawal for a child (only the parent can do this)
