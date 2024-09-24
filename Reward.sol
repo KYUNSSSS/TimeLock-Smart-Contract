@@ -1,125 +1,159 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./hjhsyscombine.sol";  // Import the main contract
+import "./account.sol"; // Importing Account contract
+import "./Trackmodule2.0.sol"; // Importing Transaction contract
+import "./DepositAndWithdrawals.sol"; // Importing DepositAndWithdraw contract
 
-contract Reward {
+contract RewardSystem {
+    Account public accountContract; // Link to Account contract
+    Transaction public transactionContract; // Link to Transaction contract
+    DepositAndWithdraw public depositContract; // Link to Deposit/Withdraw contract
 
-    DepositAndWithdraw public depositContract;
-
-    struct RewardInfo {
-        uint256 points;
-        uint256 lastDailyLogin;
-        uint256 lastWeeklyReward;
-        uint256 lastDepositReward;
+    struct UserRewards {
+        uint256 totalPoints;
+        uint256 lastDailyLogin; // timestamp for the last daily login reward
+        uint256 lastWeeklyReward; // timestamp for the last weekly reward from deposit/withdraw
     }
 
-    mapping(address => RewardInfo) public rewards;
+    mapping(address => UserRewards) public userRewards;
+    uint256 constant DAILY_REWARD = 1; // 1 point for daily login
+    uint256 constant WEEKLY_REWARD_BASE = 3; // 3 points for deposit/withdraw
+    uint256 constant MAX_ETH_REWARD = 10 ether; // Max 10 points for 10 Ether
+    uint256 constant ONE_WEEK = 7 days;
+    uint256 constant ONE_DAY = 1 days;
 
-    event DailyLoginReward(address indexed user, uint256 points, uint256 timestamp);
-    event WeeklyBalanceReward(address indexed user, uint256 points, uint256 timestamp);
-    event CashbackReward(address indexed user, uint256 points, uint256 amount);
-    event RewardReminder(address indexed user, string message);
-    event PrizesPurchased(address indexed user, string prize, uint256 cost);
+    // Events
+    event DailyRewardClaimed(
+        address indexed user,
+        uint256 points,
+        uint256 timestamp
+    );
+    event WeeklyRewardClaimed(
+        address indexed user,
+        uint256 points,
+        uint256 timestamp
+    );
+    event PrizePurchased(
+        address indexed user,
+        string prize,
+        uint256 pointsSpent,
+        uint256 timestamp
+    );
+    event RewardReminder(
+        address indexed user,
+        string message,
+        uint256 timestamp
+    );
 
-    // Rewards settings
-    uint256 public constant DAILY_REWARD = 1;
-    uint256 public constant DEPOSIT_WITHDRAW_REWARD = 3;
-    uint256 public constant MAX_DEPOSIT_REWARD = 10;
-    uint256 public constant WEEKLY_BALANCE_REWARD = 5;
-    uint256 public constant ETHER_THRESHOLD = 1 ether;
-
-    constructor(address depositAddress) {
-        depositContract = DepositAndWithdraw(depositAddress); // Link the main contract
+    constructor(
+        address _accountAddress,
+        address _transactionAddress,
+        address _depositAddress,
+        address _accountContractAddress
+    ) {
+        accountContract = Account(_accountAddress);
+        transactionContract = Transaction(_transactionAddress);
+        depositContract = DepositAndWithdraw(_depositAddress);
+        accountContract = Account(_accountContractAddress);
     }
 
-    // Modifier to prevent multiple logins within the same day
-    modifier dailyLoginEligible() {
-        require(block.timestamp >= rewards[msg.sender].lastDailyLogin + 1 days, "Already claimed daily login reward");
+    modifier userExists() {
+        // Fetch the user details from the Account contract
+        (address account, , , , , , , ) = accountContract.getUser(msg.sender);
+        require(account != address(0), "User does not exist");
         _;
     }
 
-    // Modifier to ensure deposit rewards only happen once a week
-    modifier weeklyDepositRewardEligible() {
-        require(block.timestamp >= rewards[msg.sender].lastDepositReward + 7 days, "Weekly deposit reward already claimed");
+    // Modifier to ensure enough reward points
+    modifier hasSufficientPoints(uint256 _points) {
+        require(
+            userRewards[msg.sender].totalPoints >= _points,
+            "Insufficient reward points"
+        );
         _;
     }
 
-    // Function to login and claim daily reward
-    function dailyLogin() public dailyLoginEligible {
-        rewards[msg.sender].points += DAILY_REWARD;
-        rewards[msg.sender].lastDailyLogin = block.timestamp;
-        emit DailyLoginReward(msg.sender, DAILY_REWARD, block.timestamp);
+    // 1. Daily Check-in Reward
+    function checkInDaily() external userExists {
+        UserRewards storage rewards = userRewards[msg.sender];
+        require(
+            block.timestamp >= rewards.lastDailyLogin + ONE_DAY,
+            "Daily reward already claimed"
+        );
+
+        rewards.totalPoints += DAILY_REWARD;
+        rewards.lastDailyLogin = block.timestamp;
+
+        emit DailyRewardClaimed(msg.sender, DAILY_REWARD, block.timestamp);
     }
-/*
-    // Check if user has earned their weekly reward based on their balance
-    function checkWeeklyBalanceReward() public {
-        // Fetch the account struct from the DepositAndWithdraw contract
-        DepositAndWithdraw.Account memory account = depositContract.accounts(msg.sender);
 
-        // Access the balance field from the struct
-        uint256 accountBalance = account.balance;
-        uint256 etherAmount = accountBalance / 1 ether;
-        uint256 rewardPoints = etherAmount / 10;
+    // 2. Weekly Reward on Deposit/Withdrawal
+    function processWeeklyReward(address _user, uint256 _amount) internal {
+        UserRewards storage rewards = userRewards[_user];
+        require(
+            block.timestamp >= rewards.lastWeeklyReward + ONE_WEEK,
+            "Weekly reward already claimed"
+        );
 
-        if (rewardPoints > WEEKLY_BALANCE_REWARD) {
-            rewardPoints = WEEKLY_BALANCE_REWARD; // Cap the weekly points
+        // Base weekly reward of 3 points for a deposit or withdrawal
+        uint256 points = WEEKLY_REWARD_BASE;
+
+        // Additional points based on the amount deposited/withdrawn
+        uint256 extraPoints = _amount / 1 ether; // 1 point per Ether
+        if (extraPoints > 10) {
+            extraPoints = 10; // Maximum of 10 points
         }
 
-        // Ensure the user has not already claimed this week
-        require(block.timestamp >= rewards[msg.sender].lastWeeklyReward + 7 days, "Weekly balance reward already claimed");
+        points += extraPoints;
 
-        // Add points and update the timestamp
-        rewards[msg.sender].points += rewardPoints;
-        rewards[msg.sender].lastWeeklyReward = block.timestamp;
-        
-        emit WeeklyBalanceReward(msg.sender, rewardPoints, block.timestamp);
-    }
-*/
-    // Cashback reward for deposits and withdrawals
-    function depositWithdrawCashback(uint256 amount) public weeklyDepositRewardEligible {
-        uint256 rewardPoints = DEPOSIT_WITHDRAW_REWARD;
-        
-        if (amount >= ETHER_THRESHOLD) {
-            uint256 extraPoints = amount / 1 ether;  // 1 point per 1 ether
-            if (extraPoints > MAX_DEPOSIT_REWARD) {
-                extraPoints = MAX_DEPOSIT_REWARD;  // Max 10 points
-            }
-            rewardPoints += extraPoints;
-        }
+        rewards.totalPoints += points;
+        rewards.lastWeeklyReward = block.timestamp;
 
-        // Update rewards and timestamp for weekly deposit
-        rewards[msg.sender].points += rewardPoints;
-        rewards[msg.sender].lastDepositReward = block.timestamp;
-
-        emit CashbackReward(msg.sender, rewardPoints, amount);
+        emit WeeklyRewardClaimed(_user, points, block.timestamp);
     }
 
-    // Check if a user has received daily and weekly rewards and notify
-    function rewardReminder() public {
-        if (block.timestamp >= rewards[msg.sender].lastDailyLogin + 1 days) {
-            emit RewardReminder(msg.sender, "You have not claimed your daily reward.");
-        } else {
-            emit RewardReminder(msg.sender, "Daily reward already claimed.");
-        }
-
-        if (block.timestamp >= rewards[msg.sender].lastWeeklyReward + 7 days) {
-            emit RewardReminder(msg.sender, "You have not claimed your weekly reward.");
-        } else {
-            emit RewardReminder(msg.sender, "Weekly reward already claimed.");
-        }
+    // Function to track deposits and withdrawals and trigger rewards
+    function onFundsDeposit(address _user, uint256 _amount) external {
+        processWeeklyReward(_user, _amount);
     }
 
-    // Users can use their points to purchase prizes
-    function purchasePrize(string memory prize, uint256 cost) public {
-        require(rewards[msg.sender].points >= cost, "Insufficient reward points");
-        rewards[msg.sender].points -= cost;
-        emit PrizesPurchased(msg.sender, prize, cost);
+    function onFundsWithdrawal(address _user, uint256 _amount) external {
+        processWeeklyReward(_user, _amount);
     }
 
-    // Function to get available prizes
-    function getAvailablePrizes() public pure returns (string[3] memory) {
-        string[3] memory prizes = ["Gift Card - 50 Points", "Crypto Token - 100 Points", "Free Subscription - 150 Points"];
-        return prizes;
+    // 3. Reminder if daily or weekly reward is claimed
+    function checkRewardStatus() external userExists {
+        string memory dailyMsg = block.timestamp >=
+            userRewards[msg.sender].lastDailyLogin + ONE_DAY
+            ? "You can claim your daily reward!"
+            : "Daily reward already claimed!";
+
+        string memory weeklyMsg = block.timestamp >=
+            userRewards[msg.sender].lastWeeklyReward + ONE_WEEK
+            ? "You can claim your weekly reward!"
+            : "Weekly reward already claimed!";
+
+        emit RewardReminder(
+            msg.sender,
+            string(abi.encodePacked(dailyMsg, " ", weeklyMsg)),
+            block.timestamp
+        );
+    }
+
+    // 4. Redeem rewards for prizes
+    function redeemPrize(uint256 _points, string calldata _prize)
+        external
+        userExists
+        hasSufficientPoints(_points)
+    {
+        userRewards[msg.sender].totalPoints -= _points;
+
+        emit PrizePurchased(msg.sender, _prize, _points, block.timestamp);
+    }
+
+    // Helper function to check accumulated reward points
+    function checkPoints() external view returns (uint256) {
+        return userRewards[msg.sender].totalPoints;
     }
 }
