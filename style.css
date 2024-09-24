@@ -1,7 +1,7 @@
 body {
     font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     background-image: url(images/BeeWalletBGI.webp);
-    height: 200vh;
+    /* height: 200vh; */
     position: relative;
 }
 
@@ -21,10 +21,11 @@ body:before {
     z-index: 1;
 }
 
-h1,
-.h3 {
-    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+.site-menu li a.active {
+    font-weight: bold;
+    color: #f39c12;
 }
+
 
 a {
     -webkit-transition: .3s all ease;
@@ -398,7 +399,7 @@ h1 {
     position: relative;
     width: 100%;
     padding-right: 15px;
-    padding-left: 15px;
+    /* padding-left: 15px; */
 }
 
 .col-11 {
@@ -791,4 +792,21 @@ h1 {
 
 .icon-menu:before {
     content: "\e5d2";
+}
+
+#navAddress{
+    position:absolute;
+right: 20px; /* Distance from the right edge of the screen */
+top: 0px; /* Adjust the top position if necessary */
+ /* Consistent background color */
+padding: 10px;
+border-radius: 20px;
+color: white;
+font-weight: bold;
+width: 6%;
+}
+#connecLogo{
+    position:absolute;
+right: 110px; /* Distance from the right edge of the screen */
+top:4px;/* Adjust the top position if necessary */
 }

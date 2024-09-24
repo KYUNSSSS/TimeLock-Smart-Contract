@@ -1,4 +1,7 @@
-<html lang="en"></html>
+<html lang="en">
+
+</html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,71 +14,36 @@
             font-size: 2.5em;
         }
 
-        .Account {
+        /* .Account {
             margin-left: 100px;
-        }
+        } */
 
-        #scheduledWithdrawalsTable {
-            margin: 20px auto;
-            width: 50%;
-            table-layout: fixed;
-            border-collapse: collapse;
-        }
-
-        #scheduledWithdrawalsTable th,
-        #scheduledWithdrawalsTable td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-            width: 20%;
-        }
-
-        input {
-            width: 50%;
-            height: 30px;
-            padding: 10px 20px;
-            margin-top: 30px;
-            border: 1px solid #ccc;
-            border-radius: 30px;
-            background: #fafcff;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+        main {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            overflow: hidden;
-
-            &::-webkit-file-upload-button {
-                padding: 6px;
-                border-radius: 20px;
-                border: 1px solid #ccc;
-                background: linear-gradient(to bottom right, #f7fbff, #ccd1d8);
-                cursor: pointer;
-            }
+            justify-content: center;
+            padding-top: 100px;
         }
 
-        #scheduledWithdrawalsTable th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        button {
-            font-size: 1em;
-            padding: 15px 30px;
-            background: linear-gradient(to bottom right, #42b7f1, #2385e6);
-            color: white;
-            border: none;
+        .Account {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #f2f2f2;
             border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease-in-out;
-            margin: 5px;
+            width: 60%;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
         }
 
-        button:hover {
-            background: linear-gradient(to bottom right, rgb(29, 4, 90), #0d56a5);
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
     </style>
 </head>
+
 <body>
     <header class="site-navbar" role="banner">
 
@@ -91,7 +59,8 @@
 
                         <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
                             <li><a href="main.html"><span>Home</span></a></li>
-                            <li onclick="showSection('accountInfo')" class="active"><a href="AccountInfo.html"><span>Account Info</span></a></li>
+                            <li onclick="showSection('accountInfo')" class="active"><a
+                                    href="AccountInfo.html"><span>Account Info</span></a></li>
                             <li class="has-children">
                                 <a href="#"><span>Deposit And Withdrawals</span></a>
                                 <ul class="dropdown arrow-top">
@@ -102,18 +71,13 @@
                                     <li class="has-children">
                                         <a href="#">Withdrawals</a>
                                         <ul class="dropdown">
-                                            <li
-                                                onclick="showSection('listScheduledSection')">
-                                                <a href="DepositAndWithdraw.html">List Scheduled Withdrawals</a></li>
-                                            <li onclick="showSection('scheduleWithdrawSection')"><a
-                                                    href="DepositAndWithdraw.html">Schedule Withdrawals</a></li>
-                                            <li onclick="showSection('executeWithdrawSection')"><a
-                                                    href="DepositAndWithdraw.html">Execute Withdrawals</a></li>
-                                            <li onclick="showSection('cancelWithdrawal')"><a
-                                                    href="DepositAndWithdraw.html">Cancel Withdrawals</a></li>
-                                            <li onclick="showSection('childScheduleWithdraw')"><a
-                                                    href="DepositAndWithdraw.html">Schedule Withdrawals For Child</a>
+                                            <li onclick="showSection('listScheduledSection')">
+                                                <a href="DepositAndWithdraw.html">List Scheduled Withdrawals</a>
                                             </li>
+                                            <li onclick="showSection('scheduleWithdrawSection')"><a href="DepositAndWithdraw.html">Schedule Withdrawals</a></li>
+                                            <li onclick="showSection('executeWithdrawSection')"><a href="DepositAndWithdraw.html">Execute Withdrawals</a></li>
+                                            <li onclick="showSection('cancelWithdrawal')"><a href="DepositAndWithdraw.html">Cancel Withdrawals</a></li>
+                                            <li onclick="showSection('childScheduleWithdraw')"><a href="DepositAndWithdraw.html">Schedule Withdrawals For Child</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -125,40 +89,34 @@
                     </nav>
                 </div>
 
-
-                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a
-                        href="#" class="site-menu-toggle js-menu-toggle text-white"><span
-                            class="icon-menu h3"></span></a></div>
-
+                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
+                    <a href="#" class="site-menu-toggle js-menu-toggle text-white">
+                        <span class="icon-menu h3"></span>
+                    </a>
+                </div>
             </div>
-
         </div>
-        </div>
-
     </header>
 
     <main>
         <!-- Display account info -->
-		<div id="checkAccount" class="Account" style="display: block;">
-			<div>
-				<h3>Account: <span id="account"></span></h3>
-			</div>
-			<!-- Check Balance Section -->
-			<div>
-				<h3>Check Balance: <span id="balanceResult"></span></h3>
-			</div>
-			<!-- Get Current Block Timestamp -->
-			<!-- <div class="blockTIme">
-				<h3>Current Block Timestamp: <span id="timestampResult"></span></h3>
-			</div> -->
-			<div>
-				<!-- Child Check time remaining -->
-				<h3>Time Remaining: <span id="timeRemainingResult"></span></h3>
-			</div>
-		</div>
+        <div id="checkAccount" class="Account" style="display: block;">
+            <div>
+                <h2>Account: <span id="account"></span></h2>
+            </div>
+            <!-- Check Balance Section -->
+            <div>
+                <h2>Check Balance: <span id="balanceResult">0</span> ETH</h2>
+            </div>
+            <div>
+                <!-- Child Check time remaining -->
+                <h2>Time Remaining: <span id="timeRemainingResult"></span></h2>
+            </div>
+        </div>
 
     </main>
 
     <script src="script.js"></script>
 </body>
+
 </html>

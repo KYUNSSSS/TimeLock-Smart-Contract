@@ -7,109 +7,352 @@
 	<title>Trackmodule 2.0</title>
 	<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
 	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 20px;
-		}
+body {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f0f2f5;
+    }
 
-		h1,
-		h2 {
-			color: #333;
-		}
+	.container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
 
-		input,
-		button {
-			margin: 5px 0;
-			padding: 5px;
-		}
+    .section {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
 
-		button {
-			cursor: pointer;
-		}
+    .section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
 
-		#status {
-			margin-top: 20px;
-			font-weight: bold;
-		}
+    .section h2 {
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+
+    .section input,
+    .section button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .section button {
+        margin-top: 10px;
+    }
+
+	.section:hover {
+        transform: translateY(-5px);
+    }
+
+	.btn-primary { background-color: #3498db; }
+.btn-danger { background-color: #e74c3c; }
+.btn-success { background-color: #2ecc71; }
+.btn-warning { background-color: #f39c12; }
+.btn-info { background-color: #3498db; }
+
+.btn-primary:hover { background-color: #2980b9; }
+.btn-danger:hover { background-color: #c0392b; }
+.btn-success:hover { background-color: #27ae60; }
+.btn-warning:hover { background-color: #e67e22; }
+.btn-info:hover { background-color: #2980b9; }
+
+	h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+
+	h2 {
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        margin-top: 0;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    input[type="datetime-local"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+
+    button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.1s;
+        font-size: 14px;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+	button:active {
+        transform: scale(0.98);
+    }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+		.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+		.metamask-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .metamask-title {
+    color: #343a40;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .metamask-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f6851b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .metamask-button:hover {
+    background-color: #e2761b;
+  }
+
+  .metamask-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+
+
+  #scheduledTransfersContent table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#scheduledTransfersContent th, #scheduledTransfersContent td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#scheduledTransfersContent th {
+    background-color: #f2f2f2;
+}
 	</style>
 </head>
 
 <body>
 	<h1>Trackmodule 2.0</h1>
-	<div id="status"></div>
 
-	<h2>Connect to MetaMask</h2>
-	<button onclick="connectMetaMask()">Connect MetaMask</button>
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalContent"></p>
+        </div>
+    </div>
 
-	<h2>Contract Control</h2>
+	<div id="transferHistoryModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<div id="transferHistoryContent"></div>
+		</div>
+	</div>
+
+	<div id="scheduledTransfersModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<div id="scheduledTransfersContent"></div>
+		</div>
+	</div>
+
+	<div id="transferHistoryModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="transferHistoryContent"></div>
+    </div>
+</div>
+
+<div id="transferDetailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="transferDetailsContent"></div>
+    </div>
+</div>
+
+<div id="totalAmountModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="totalAmountContent"></div>
+    </div>
+</div>
+
+	<div class="metamask-container">
+		<h2 class="metamask-title">Connect to MetaMask</h2>
+		<button class="metamask-button" onclick="connectMetaMask()">
+		  <img src="https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png" alt="MetaMask Logo" class="metamask-logo">
+		  Connect MetaMask
+		</button>
+	  </div>
+
+	<!-- <h2>Contract Control</h2>
 	<button onclick="pauseContract()">Pause Contract</button>
-	<button onclick="unpauseContract()">Unpause Contract</button>
+	<button onclick="unpauseContract()">Unpause Contract</button> -->
 
-	<h2>Add Funds</h2>
-	<input type="number" id="addFundsAmount" placeholder="Amount in Ether">
-	<button onclick="addFunds()">Add Funds</button>
+	<div class="section">
+		<h2>Add Funds</h2>
+		<input type="number" id="addFundsAmount" placeholder="Amount in Ether">
+		<button onclick="addFunds()">Add Funds</button>
+	</div>
 
-	<h2>Check Balance</h2>
-	<input type="text" id="checkBalanceAddress" placeholder="Address">
-	<button onclick="checkBalance()">Check Balance</button>
+	<div class="container">
+		<div class="section">
+			<h2>Check Balance</h2>
+			<input type="text" id="checkBalanceAddress" placeholder="Address">
+			<button onclick="checkBalance()">Check Balance</button>
+		</div>
+	
+		<div class="section">
+			<h2>Instant Transfer</h2>
+			<input type="text" id="instantTransferTo" placeholder="To Address">
+			<input type="number" id="instantTransferAmount" placeholder="Amount in Ether">
+			<button onclick="instantTransfer()">Transfer</button>
+		</div>
 
-	<h2>Instant Transfer</h2>
-	<input type="text" id="instantTransferTo" placeholder="To Address">
-	<input type="number" id="instantTransferAmount" placeholder="Amount in Ether">
-	<button onclick="instantTransfer()">Transfer</button>
-
-
-	<!-- <h2>Schedule Transfer</h2>
-	<input type="text" id="scheduleTransferTo" placeholder="To Address">
-	<input type="number" id="scheduleTransferAmount" placeholder="Amount in Ether">
-	<input type="number" id="scheduleTransferPeriod" placeholder="Time Period (seconds)">
-	<button onclick="scheduleTransfer()">Schedule Transfer</button>
-
-	<h2>Execute Scheduled Transfer</h2>
-	<input type="number" id="executeTransferIndex" placeholder="Transfer Index">
-	<button onclick="executeScheduledTransfer()">Execute Transfer</button> -->
-
-
-	<h2>Get All Scheduled Transfers</h2>
-	<button onclick="getAllScheduledTransfers()">Get All Scheduled Transfers</button>
-
-	<h2>Cancel Scheduled Transfer</h2>
-	<input type="number" id="cancelTransferIndex" placeholder="Transfer Index">
-	<button onclick="cancelScheduledTransfer()">Cancel Transfer</button>
-
-	<h2>Schedule Auto Execution Transfer</h2>
-	<input type="text" id="autoScheduleTransferTo" placeholder="To Address">
-	<input type="number" id="autoScheduleTransferAmount" placeholder="Amount in Ether">
-	<input type="datetime-local" id="autoScheduleTransferUnlockTime" placeholder="Unlock Time">
-	<button onclick="scheduleAutoExecution()">Schedule Auto Execution</button>
-
-	<h2>Execute Auto Scheduled Transfers</h2>
-	<button onclick="executeAutoScheduledTransfers()">Execute Auto Scheduled Transfers</button>
-
-	<h2>Get Transfer History</h2>
-	<input type="text" id="transferHistoryUser1" placeholder="User 1 Address">
-	<input type="text" id="transferHistoryUser2" placeholder="User 2 Address">
-	<button onclick="getTransferHistory()">Get History</button>
-
-	<h2>Get All Transfer History</h2>
-	<input type="text" id="allTransferHistoryUser" placeholder="User Address">
-	<button onclick="getAllTransferHistory()">Get All History</button>
-
-	<h2>Get Transfer Details</h2>
-	<input type="text" id="transferDetailsUser" placeholder="User Address">
-	<input type="number" id="transferDetailsIndex" placeholder="Transfer Index">
-	<button onclick="getTransferDetails()">Get Details</button>
-
-	<h2>Get Total Transaction Amount</h2>
-	<input type="text" id="totalAmountSender" placeholder="Sender Address">
-	<input type="text" id="totalAmountReceiver" placeholder="Receiver Address">
-	<button onclick="getTotalTransactionAmount()">Get Total Amount</button>
+		<div class="section">
+			<h2>Scheduled Transfers</h2>
+			<button onclick="getAllScheduledTransfers()" class="btn-primary">Get All Scheduled Transfers</button>
+		</div>
+	
+		<div class="section">
+			<h2>Cancel Transfer</h2>
+			<input type="number" id="cancelTransferIndex" placeholder="Transfer Index">
+			<button onclick="cancelScheduledTransfer()" class="btn-danger">Cancel Transfer</button>
+		</div>
+	
+		<div class="section">
+			<h2>Schedule Auto Execution</h2>
+			<input type="text" id="autoScheduleTransferTo" placeholder="To Address">
+			<input type="number" id="autoScheduleTransferAmount" placeholder="Amount in Ether">
+			<input type="datetime-local" id="autoScheduleTransferUnlockTime">
+			<button onclick="scheduleAutoExecution()" class="btn-success">Schedule Auto Execution</button>
+		</div>
+	
+		<div class="section">
+			<h2>Auto Scheduled Transfers</h2>
+			<button onclick="executeAutoScheduledTransfers()" class="btn-warning">Execute Auto Scheduled Transfers</button>
+		</div>
+	
+		<div class="section">
+			<h2>Transfer History</h2>
+			<input type="text" id="transferHistoryUser1" placeholder="User 1 Address">
+			<input type="text" id="transferHistoryUser2" placeholder="User 2 Address">
+			<button onclick="getTransferHistory()" class="btn-info">Get History</button>
+		</div>
+	
+		<div class="section">
+			<h2>All Transfer History</h2>
+			<input type="text" id="allTransferHistoryUser" placeholder="User Address">
+			<button onclick="getAllTransferHistory()" class="btn-info">Get All History</button>
+		</div>
+	
+		<div class="section">
+			<h2>Transfer Details</h2>
+			<input type="text" id="transferDetailsUser" placeholder="User Address">
+			<input type="number" id="transferDetailsIndex" placeholder="Transfer Index">
+			<button onclick="getTransferDetails()" class="btn-info">Get Details</button>
+		</div>
+	
+		<div class="section">
+			<h2>Total Transaction Amount</h2>
+			<input type="text" id="totalAmountSender" placeholder="Sender Address">
+			<input type="text" id="totalAmountReceiver" placeholder="Receiver Address">
+			<button onclick="getTotalTransactionAmount()" class="btn-info">Get Total Amount</button>
+		</div>
+        </div>
 
 	<script>
 		let web3;
 		let contract;
-		const contractAddress = "0x158DD0d91C7b45F6CDDD9750A6f47D3B77621621";
+		const contractAddress = "0x2adb2a881893917147c89bCBFAE4a262502F48Cb";
 		const contractABI = [
 	{
 		"inputs": [],
@@ -690,6 +933,25 @@
 			}
 		}
 
+
+		function showStatus(message) {
+            document.getElementById('modalContent').innerHTML = message;
+            document.getElementById('statusModal').style.display = 'block';
+        }
+
+		document.querySelectorAll('.close').forEach(closeBtn => {
+    closeBtn.onclick = function() {
+        this.closest('.modal').style.display = 'none';
+    }
+});
+
+// Close the modals when clicking outside of them
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+}
+
 		async function addFunds() {
 			const amount = document.getElementById('addFundsAmount').value;
 			const accounts = await web3.eth.getAccounts();
@@ -773,14 +1035,13 @@
 				const result = await contract.methods.cancelScheduledTransfer(index).send({ from: accounts[0] });
 				console.log('Transaction result:', result);
 				document.getElementById('status').innerText = 'Scheduled transfer cancelled successfully';
-				// Refresh the pending transfers display
-				await displayPendingTransfers();
+				// Refresh the scheduled transfers display
+				await getAllScheduledTransfers();
 			} catch (error) {
 				console.error('Error details:', error);
 				document.getElementById('status').innerText = 'Failed to cancel scheduled transfer: ' + error.message;
 			}
 		}
-
 
 		// async function getScheduledTransfers() {
 		// 	const user = document.getElementById('scheduledTransfersUser').value;
@@ -874,38 +1135,84 @@
 			}
 		}
 
+		// async function getAllScheduledTransfers() {
+		// 	const accounts = await web3.eth.getAccounts();
+		// 	try {
+		// 		const result = await contract.methods.getAllScheduledTransfers().call({ from: accounts[0] });
+		// 		const { receivers, amounts, unlockTimes, activeStatuses } = result;
+
+		// 		let html = '<h3>All Scheduled Transfers:</h3>';
+		// 		for (let i = 0; i < receivers.length; i++) {
+		// 			const status = activeStatuses[i] ? 'Active' : 'Inactive';
+		// 			const unlockDate = new Date(unlockTimes[i] * 1000);
+		// 			const now = new Date();
+		// 			const timeRemaining = unlockDate > now ? 
+		// 				`(${formatTimeRemaining(unlockDate - now)} remaining)` : 
+		// 				'(Ready for execution)';
+
+		// 			html += `
+        //         <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        //             <strong>Transfer #${i + 1}</strong><br>
+        //             Recipient: ${receivers[i]}<br>
+        //             Amount: ${parseFloat(web3.utils.fromWei(amounts[i], 'ether')).toFixed(4)} ETH<br>
+        //             Unlock Time: ${unlockDate.toLocaleString()} ${timeRemaining}<br>
+        //             Status: ${status}
+        //         </div>
+        //     `;
+		// 		}
+
+		// 		document.getElementById('status').innerHTML = html;
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 		document.getElementById('status').innerText = 'Failed to get all scheduled transfers: ' + error.message;
+		// 	}
+		// }
+
 		async function getAllScheduledTransfers() {
-			const accounts = await web3.eth.getAccounts();
-			try {
-				const result = await contract.methods.getAllScheduledTransfers().call({ from: accounts[0] });
-				const { receivers, amounts, unlockTimes, activeStatuses } = result;
+    const accounts = await web3.eth.getAccounts();
+    try {
+        const result = await contract.methods.getAllScheduledTransfers().call({ from: accounts[0] });
+        const { receivers, amounts, unlockTimes, activeStatuses } = result;
 
-				let html = '<h3>All Scheduled Transfers:</h3>';
-				for (let i = 0; i < receivers.length; i++) {
-					const status = activeStatuses[i] ? 'Active' : 'Inactive';
-					const unlockDate = new Date(unlockTimes[i] * 1000);
-					const now = new Date();
-					const timeRemaining = unlockDate > now ? 
-						`(${formatTimeRemaining(unlockDate - now)} remaining)` : 
-						'(Ready for execution)';
+        let html = `
+            <h3>All Scheduled Transfers:</h3>
+            <table border="1" cellpadding="5" cellspacing="0">
+                <tr>
+                    <th>Transfer #</th>
+                    <th>Recipient</th>
+                    <th>Amount (ETH)</th>
+                    <th>Unlock Time</th>
+                    <th>Status</th>
+                </tr>
+        `;
 
-					html += `
-                <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                    <strong>Transfer #${i + 1}</strong><br>
-                    Recipient: ${receivers[i]}<br>
-                    Amount: ${parseFloat(web3.utils.fromWei(amounts[i], 'ether')).toFixed(4)} ETH<br>
-                    Unlock Time: ${unlockDate.toLocaleString()} ${timeRemaining}<br>
-                    Status: ${status}
-                </div>
+        for (let i = 0; i < receivers.length; i++) {
+            const status = activeStatuses[i] ? 'Active' : 'Inactive';
+            const unlockDate = new Date(unlockTimes[i] * 1000);
+            const now = new Date();
+            const timeRemaining = unlockDate > now ? 
+                `(${formatTimeRemaining(unlockDate - now)} remaining)` : 
+                '(Ready for execution)';
+
+            html += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${receivers[i]}</td>
+                    <td>${parseFloat(web3.utils.fromWei(amounts[i], 'ether')).toFixed(4)}</td>
+                    <td>${unlockDate.toLocaleString()} ${timeRemaining}</td>
+                    <td>${status}</td>
+                </tr>
             `;
-				}
+        }
 
-				document.getElementById('status').innerHTML = html;
-			} catch (error) {
-				console.error(error);
-				document.getElementById('status').innerText = 'Failed to get all scheduled transfers: ' + error.message;
-			}
-		}
+        html += '</table>';
+        document.getElementById('scheduledTransfersContent').innerHTML = html;
+        document.getElementById('scheduledTransfersModal').style.display = 'block';
+    } catch (error) {
+        console.error(error);
+        showStatus('Failed to get all scheduled transfers: ' + error.message);
+    }
+}
 
 		function formatTimeRemaining(ms) {
 			const seconds = Math.floor(ms / 1000);
@@ -922,75 +1229,230 @@
 
 
 
-		async function getTransferHistory() {
-			const user1 = document.getElementById('transferHistoryUser1').value;
-			const user2 = document.getElementById('transferHistoryUser2').value;
-			try {
-				const history = await contract.methods.getTransferHistory(user1, user2).call();
-				const formattedHistory = history.map(transfer => ({
-					sender: transfer.sender,
-					receiver: transfer.receiver,
-					amount: web3.utils.fromWei(transfer.amount, 'ether'),
-					timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
-				}));
-				document.getElementById('status').innerHTML = '<h3>Transfer History:</h3>' +
-					formattedHistory.map(t => `<p>From: ${t.sender}<br>To: ${t.receiver}<br>Amount: ${t.amount} ETH<br>Date: ${t.timestamp}</p>`).join('<hr>');
-			} catch (error) {
-				console.error(error);
-				document.getElementById('status').innerText = 'Failed to get transfer history';
-			}
-		}
+		// async function getTransferHistory() {
+		// 	const user1 = document.getElementById('transferHistoryUser1').value;
+		// 	const user2 = document.getElementById('transferHistoryUser2').value;
+		// 	try {
+		// 		const history = await contract.methods.getTransferHistory(user1, user2).call();
+		// 		const formattedHistory = history.map(transfer => ({
+		// 			sender: transfer.sender,
+		// 			receiver: transfer.receiver,
+		// 			amount: web3.utils.fromWei(transfer.amount, 'ether'),
+		// 			timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
+		// 		}));
+		// 		document.getElementById('status').innerHTML = '<h3>Transfer History:</h3>' +
+		// 			formattedHistory.map(t => `<p>From: ${t.sender}<br>To: ${t.receiver}<br>Amount: ${t.amount} ETH<br>Date: ${t.timestamp}</p>`).join('<hr>');
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 		document.getElementById('status').innerText = 'Failed to get transfer history';
+		// 	}
+		// }
 
-		async function getAllTransferHistory() {
-			const user = document.getElementById('allTransferHistoryUser').value;
-			try {
-				const history = await contract.methods.getAllTransferHistory(user).call();
-				const formattedHistory = history.map(transfer => ({
-					sender: transfer.sender,
-					receiver: transfer.receiver,
-					amount: web3.utils.fromWei(transfer.amount, 'ether'),
-					timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
-				}));
-				document.getElementById('status').innerHTML = '<h3>All Transfer History:</h3>' +
-					formattedHistory.map(t => `<p>From: ${t.sender}<br>To: ${t.receiver}<br>Amount: ${t.amount} ETH<br>Date: ${t.timestamp}</p>`).join('<hr>');
-			} catch (error) {
-				console.error(error);
-				document.getElementById('status').innerText = 'Failed to get all transfer history';
-			}
+		async function getTransferHistory() {
+    const user1 = document.getElementById('transferHistoryUser1').value;
+    const user2 = document.getElementById('transferHistoryUser2').value;
+
+    try {
+        const history = await contract.methods.getTransferHistory(user1, user2).call();
+        const formattedHistory = history.map(transfer => ({
+            sender: transfer.sender,
+            receiver: transfer.receiver,
+            amount: web3.utils.fromWei(transfer.amount, 'ether'),
+            timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
+        }));
+
+        let html = `
+            <h3>Transfer History:</h3>
+            <table border="1" cellpadding="5" cellspacing="0">
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Amount (ETH)</th>
+                    <th>Date</th>
+                </tr>
+        `;
+        html += formattedHistory.map(t => `
+            <tr>
+                <td>${t.sender}</td>
+                <td>${t.receiver}</td>
+                <td>${t.amount}</td>
+                <td>${t.timestamp}</td>
+            </tr>
+        `).join('');
+        html += '</table>';
+
+        document.getElementById('transferHistoryContent').innerHTML = html;
+        document.getElementById('transferHistoryModal').style.display = 'block';
+    } catch (error) {
+        console.error(error);
+        showStatus('Failed to get transfer history: ' + error.message);
+    }
+}
+
+		// async function getAllTransferHistory() {
+		// 	const user = document.getElementById('allTransferHistoryUser').value;
+		// 	try {
+		// 		const history = await contract.methods.getAllTransferHistory(user).call();
+		// 		const formattedHistory = history.map(transfer => ({
+		// 			sender: transfer.sender,
+		// 			receiver: transfer.receiver,
+		// 			amount: web3.utils.fromWei(transfer.amount, 'ether'),
+		// 			timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
+		// 		}));
+		// 		document.getElementById('status').innerHTML = '<h3>All Transfer History:</h3>' +
+		// 			formattedHistory.map(t => `<p>From: ${t.sender}<br>To: ${t.receiver}<br>Amount: ${t.amount} ETH<br>Date: ${t.timestamp}</p>`).join('<hr>');
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 		document.getElementById('status').innerText = 'Failed to get all transfer history';
+		// 	}
+		// }
+
+	async function getAllTransferHistory() {
+		const user = document.getElementById('allTransferHistoryUser').value;
+		try {
+			const history = await contract.methods.getAllTransferHistory(user).call();
+			const formattedHistory = history.map(transfer => ({
+				sender: transfer.sender,
+				receiver: transfer.receiver,
+				amount: web3.utils.fromWei(transfer.amount, 'ether'),
+				timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
+			}));
+
+			let html = `
+				<h3>All Transfer History:</h3>
+				<table border="1" cellpadding="5" cellspacing="0">
+					<tr>
+						<th>From</th>
+						<th>To</th>
+						<th>Amount (ETH)</th>
+						<th>Date</th>
+					</tr>
+			`;
+			html += formattedHistory.map(t => `
+				<tr>
+					<td>${t.sender}</td>
+					<td>${t.receiver}</td>
+					<td>${t.amount}</td>
+					<td>${t.timestamp}</td>
+				</tr>
+			`).join('');
+			html += '</table>';
+
+			document.getElementById('allTransferHistoryContent').innerHTML = html;
+			document.getElementById('allTransferHistoryModal').style.display = 'block';
+		} catch (error) {
+			console.error(error);
+			showStatus('Failed to get all transfer history: ' + error.message);
 		}
+	}
+
+		// async function getTransferDetails() {
+		// 	const user = document.getElementById('transferDetailsUser').value;
+		// 	const index = document.getElementById('transferDetailsIndex').value;
+		// 	try {
+		// 		const details = await contract.methods.getTransferDetails(user, index).call();
+		// 		const formattedDetails = {
+		// 			sender: details.sender,
+		// 			receiver: details.receiver,
+		// 			amount: web3.utils.fromWei(details.amount, 'ether'),
+		// 			timestamp: new Date(details.timestamp * 1000).toLocaleString()
+		// 		};
+		// 		document.getElementById('status').innerHTML = '<h3>Transfer Details:</h3>' +
+		// 			`<p>From: ${formattedDetails.sender}<br>To: ${formattedDetails.receiver}<br>Amount: ${formattedDetails.amount} ETH<br>Date: ${formattedDetails.timestamp}</p>`;
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 		document.getElementById('status').innerText = 'Failed to get transfer details';
+		// 	}
+		// }
 
 		async function getTransferDetails() {
-			const user = document.getElementById('transferDetailsUser').value;
-			const index = document.getElementById('transferDetailsIndex').value;
-			try {
-				const details = await contract.methods.getTransferDetails(user, index).call();
-				const formattedDetails = {
-					sender: details.sender,
-					receiver: details.receiver,
-					amount: web3.utils.fromWei(details.amount, 'ether'),
-					timestamp: new Date(details.timestamp * 1000).toLocaleString()
-				};
-				document.getElementById('status').innerHTML = '<h3>Transfer Details:</h3>' +
-					`<p>From: ${formattedDetails.sender}<br>To: ${formattedDetails.receiver}<br>Amount: ${formattedDetails.amount} ETH<br>Date: ${formattedDetails.timestamp}</p>`;
-			} catch (error) {
-				console.error(error);
-				document.getElementById('status').innerText = 'Failed to get transfer details';
-			}
-		}
+    const user = document.getElementById('transferDetailsUser').value;
+    const index = document.getElementById('transferDetailsIndex').value;
+    try {
+        const details = await contract.methods.getTransferDetails(user, index).call();
+        const formattedDetails = {
+            sender: details.sender,
+            receiver: details.receiver,
+            amount: web3.utils.fromWei(details.amount, 'ether'),
+            timestamp: new Date(details.timestamp * 1000).toLocaleString()
+        };
+        const html = `
+            <h3>Transfer Details:</h3>
+            <table border="1" cellpadding="5" cellspacing="0">
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>From</td>
+                    <td>${formattedDetails.sender}</td>
+                </tr>
+                <tr>
+                    <td>To</td>
+                    <td>${formattedDetails.receiver}</td>
+                </tr>
+                <tr>
+                    <td>Amount</td>
+                    <td>${formattedDetails.amount} ETH</td>
+                </tr>
+                <tr>
+                    <td>Date</td>
+                    <td>${formattedDetails.timestamp}</td>
+                </tr>
+            </table>
+        `;
+        document.getElementById('transferDetailsContent').innerHTML = html;
+        document.getElementById('transferDetailsModal').style.display = 'block';
+    } catch (error) {
+        console.error(error);
+        showStatus('Failed to get transfer details: ' + error.message);
+    }
+}
+
+		// async function getTotalTransactionAmount() {
+		// 	const sender = document.getElementById('totalAmountSender').value;
+		// 	const receiver = document.getElementById('totalAmountReceiver').value;
+		// 	try {
+		// 		const amount = await contract.methods.getTotalTransactionAmount(sender, receiver).call();
+		// 		const formattedAmount = web3.utils.fromWei(amount, 'ether');
+		// 		document.getElementById('status').innerHTML = '<h3>Total Transaction Amount:</h3>' +
+		// 			`<p>From: ${sender}<br>To: ${receiver}<br>Total Amount: ${formattedAmount} ETH</p>`;
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 		document.getElementById('status').innerText = 'Failed to get total transaction amount';
+		// 	}
+		// }
 
 		async function getTotalTransactionAmount() {
-			const sender = document.getElementById('totalAmountSender').value;
-			const receiver = document.getElementById('totalAmountReceiver').value;
-			try {
-				const amount = await contract.methods.getTotalTransactionAmount(sender, receiver).call();
-				const formattedAmount = web3.utils.fromWei(amount, 'ether');
-				document.getElementById('status').innerHTML = '<h3>Total Transaction Amount:</h3>' +
-					`<p>From: ${sender}<br>To: ${receiver}<br>Total Amount: ${formattedAmount} ETH</p>`;
-			} catch (error) {
-				console.error(error);
-				document.getElementById('status').innerText = 'Failed to get total transaction amount';
-			}
-		}
+    const sender = document.getElementById('totalAmountSender').value;
+    const receiver = document.getElementById('totalAmountReceiver').value;
+    try {
+        const amount = await contract.methods.getTotalTransactionAmount(sender, receiver).call();
+        const formattedAmount = web3.utils.fromWei(amount, 'ether');
+        const html = `
+            <h3>Total Transaction Amount:</h3>
+            <table border="1" cellpadding="5" cellspacing="0">
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Total Amount (ETH)</th>
+                </tr>
+                <tr>
+                    <td>${sender}</td>
+                    <td>${receiver}</td>
+                    <td>${formattedAmount}</td>
+                </tr>
+            </table>
+        `;
+        document.getElementById('totalAmountContent').innerHTML = html;
+        document.getElementById('totalAmountModal').style.display = 'block';
+    } catch (error) {
+        console.error(error);
+        showStatus('Failed to get total transaction amount: ' + error.message);
+    }
+}
+
+				
 		async function pauseContract() {
 			const accounts = await web3.eth.getAccounts();
 			try {

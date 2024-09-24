@@ -474,11 +474,49 @@ const ABI = [
 const Address = "0xEB3f419932CcE2cC43a012bC9239E10c0C4b03d1"; // Replace with your contract address
 
 // Function to show the correct section and hide others
+// function showSection(sectionId) {
+//     const sections = document.querySelectorAll('.hidden-section');
+//     sections.forEach(section => section.style.display = 'none');  // Hide all sections
+//     document.getElementById(sectionId).style.display = 'block';  // Show the selected section
+// }
+
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.hidden-section');
-    sections.forEach(section => section.style.display = 'none');  // Hide all sections
-    document.getElementById(sectionId).style.display = 'block';  // Show the selected section
+    
+    // Hide all sections
+    sections.forEach(section => {
+        section.style.opacity = 0;  // Set opacity to 0 for fade-out effect
+        setTimeout(() => {
+            section.style.display = 'none';  // Hide after fade-out
+        }, 500);  // Keep in sync with the transition duration
+    });
+
+    const targetSection = document.getElementById(sectionId);
+    
+    if (targetSection) {
+        // Show the selected section with fade-in effect
+        setTimeout(() => {
+            targetSection.style.display = 'block';  // First, make it visible
+            setTimeout(() => targetSection.style.opacity = 1, 10);  // Then apply fade-in effect
+        }, 500);  // Delay showing until all others are hidden
+    }
+
+    // Update the URL hash without reloading the page
+    window.history.pushState(null, null, `#${sectionId}`);
 }
+
+// Run when the page loads
+window.onload = function() {
+    // Check if there's a hash in the URL
+    const currentHash = window.location.hash;
+    if (currentHash) {
+        // Show the section based on the hash
+        showSection(currentHash.substring(1));  // Remove the '#' from the hash
+    } else {
+        // Show a default section if no hash is present
+        showSection('addFundsSection');  // For example, the deposit section
+    }
+};
 
 // Connect MetaMask Wallet
 async function connectWallet() {
@@ -487,17 +525,22 @@ async function connectWallet() {
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             account = accounts[0];
             document.getElementById('account').innerText = account;
+            document.getElementById('account2').innerText = account;
+            document.getElementById('account3').innerText = account;
+            document.getElementById('account4').innerText = account;
+            document.getElementById('account5').innerText = account;
             web3 = new Web3(window.ethereum); // Instantiate web3 with MetaMask provider
             contract = new web3.eth.Contract(ABI, Address); // Instantiate the contract
             document.getElementById('contractArea').innerText = "Transaction Smart Contract";
         } catch (error) {
             console.error("User denied account access", error);
-            alert("Error connecting wallet. Check console for details.");
+            //alert("Error connecting wallet. Check console for details.");
         }
     } else {
         alert("Please install MetaMask!");
     }
 }
+window.addEventListener('load', connectWallet);
 // Checking the balance
 const checkBalance = document.getElementById('accountDetails');
 checkBalance.addEventListener('click', async () => {
@@ -507,7 +550,7 @@ checkBalance.addEventListener('click', async () => {
     contract.methods.checkMyBalance().call({ from: sender })
         .then((balance) => {
             const etherBalance = web3.utils.fromWei(balance, 'ether');
-            document.getElementById('balanceResult').innerText = `${etherBalance} ETH`;
+            document.getElementById('balanceResult').innerText = `${etherBalance}`;
         })
         .catch((error) => {
             document.getElementById('balanceResult').innerText = `Please coonect to MetaMask`;
@@ -553,6 +596,11 @@ checkTime.addEventListener('click', async () => {
         });
 });
 
+// Function to set the amount when a button is clicked
+function setAmount(value) {
+    document.getElementById('amount').value = value;
+}
+
 // Add Funds to the contract
 const addFundsForm = document.getElementById('addFundsForm');
 addFundsForm.addEventListener('submit', async (e) => {
@@ -569,10 +617,16 @@ addFundsForm.addEventListener('submit', async (e) => {
             document.getElementById('fundsResponse').innerText = 'Funds added successfully!';
         })
         .catch((error) => {
-            document.getElementById('fundsResponse').innerText = `Error`;
+            document.getElementById('fundsResponse').innerText = `Error: ${error.message}`;
         });
 });
 
+// Function to set the amount when a button is clicked
+function setAmount(value) {
+    document.getElementById('instantWithdrawAmount').value = value;
+}
+
+window.addEventListener('load', connectWallet);
 // Function to withdraw instantly
 async function instantWithdraw() {
     const amount = document.getElementById('instantWithdrawAmount').value;
@@ -786,3 +840,55 @@ window.addEventListener('load', async () => {
         console.error("Error calling contract method:", error);
     }
 });
+
+
+
+//-----------------------------------------------------------------------------------------------
+// Function to calculate and display time remaining for a child account
+async function displayTimeRemaining() {
+    const account = await ethereum.request({ method: "eth_requestAccounts" });
+    const currentAccount = account[0];
+
+    document.getElementById('account2').textContent = currentAccount;
+
+    try {
+        // Fetch if the account is a child account and unlock time
+        const isChildAccount = await contract.methods.isChild(currentAccount).call();
+        const unlockTime = await contract.methods.getUnlockTime(currentAccount).call();
+
+        const timeRemainingSection = document.getElementById('timeRemainingSection');
+
+        if (isChildAccount) {
+            const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
+            const timeDiff = unlockTime - currentTime;
+
+            if (timeDiff > 0) {
+                // Calculate remaining time
+                const years = Math.floor(timeDiff / (60 * 60 * 24 * 365));
+                const months = Math.floor((timeDiff % (60 * 60 * 24 * 365)) / (60 * 60 * 24 * 30));
+                const days = Math.floor((timeDiff % (60 * 60 * 24 * 30)) / (60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (60 * 60 * 24)) / (60 * 60));
+                const minutes = Math.floor((timeDiff % (60 * 60)) / 60);
+
+                // Display the time remaining
+                document.getElementById('timeRemaining').textContent = 
+                    `${years} Years ${months} Months ${days} Days ${hours} Hours ${minutes} Minutes`;
+
+                timeRemainingSection.style.display = 'block'; // Show the time remaining section
+            } else {
+                document.getElementById('timeRemaining').textContent = 'No time remaining. Withdrawal available.';
+                timeRemainingSection.style.display = 'block';
+            }
+        } else {
+            // If it's not a child account, hide the "Time Remaining" section
+            timeRemainingSection.style.display = 'none';
+        }
+    } catch (error) {
+        console.error("Error fetching account info:", error);
+        document.getElementById('timeRemaining').textContent = 'Error fetching time remaining.';
+        timeRemainingSection.style.display = 'block';
+    }
+}
+
+// Call this function when loading the page
+window.addEventListener('load', displayTimeRemaining);
