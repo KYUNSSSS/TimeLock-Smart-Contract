@@ -281,7 +281,7 @@
             <li onclick="showSection('interestHistory')">Interest History</li>
 
         </ul>
-
+		
 		<span onclick="toggleNavBar('Reward')">Reward</span>
 		<ul id="Reward" class="navBar">
 			<li>Daily Reward</li>
@@ -464,104 +464,104 @@
 			<button onclick="getTotalTransactionAmount()">Get Total Amount</button>
 		</div>
 
-		<!-- WenKang Interest Module -->
-		<div id="interestAccountInfo" class="hidden-section">
-			<!-- <button onclick="connectWallet()">connectWallet</button> -->
-			<h3>Connected Account: <span id="account"></span></h3>
-			
-			<h2>Account Information</h2>
-			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
-			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
-			<p>Interest Rate: <span id="interest-rate">0%</span></p>
+        <!-- WenKang Interest Module -->
+        <div id="interestAccountInfo" class="hidden-section">
+            <button onclick="connectWallet()">connectWallet</button>
+            <h3>Connected Account: <span id="account"></span></h3>
 
-			<button id="refresh-account">Refresh Account Info</button>
-		</div>
+            <h2>Account Information</h2>
+            <p>Account Balance: <span id="account-balance">0 ETH</span></p> <!-- Changed from account-balances -->
+            <p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+            <p>Interest Rate: <span id="interest-rate">0%</span></p>
 
-		<!-- Interest Calculator -->
-		<div id="interestCalculator" class="hidden-section">
-			<h3>Interest Calculator</h3>
-			<label for="calc-amount">Amount (ETH):</label>
-			<input type="number" id="calc-amount" placeholder="Amount in ETH">
-			<label for="calc-time">Time in Seconds:</label>
-			<input type="number" id="calc-time" placeholder="Enter time in seconds">
-			<label for="calc-rate">Interest Rate (%):</label>
-			<input type="number" id="calc-rate" placeholder="Interest rate">
-			<button id="calculate-interest">Calculate Interest</button>
-			<p>Interest (Testing): <span id="interest-test">0 ETH</span></p>
-			<p>Interest (Monthly): <span id="interest-month">0 ETH</span></p>
-			<p>Interest (Yearly): <span id="interest-year">0 ETH</span></p>
-		</div>
+            <button id="refresh-account-info" onclick="refreshAccountInfo()">Refresh Account Info</button> <!-- Changed from refreshAccountInfo -->
+        </div>
 
-		<!-- Add Interest -->
-		<div id="addInterest" class="hidden-section">
-			<h2>Account Information</h2>
-			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
-			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
-			<p>Interest Rate: <span id="interest-rate">0%</span></p>
-			<button id="refresh-account">Refresh Account Info</button>
+        <!-- Interest Calculator -->
+        <div id="interestCalculator" class="hidden-section">
+            <h3>Interest Calculator</h3>
+            <label for="calc-amount">Amount (ETH):</label>
+            <input type="number" id="calc-amount" placeholder="Amount in ETH">
+            <label for="startTime">Start Date:</label>
+            <input type="datetime-local" id="startTime" name="startTime">
+            <label for="endTime">End Date:</label>
+            <input type="datetime-local" id="endTime" name="endTime">
+            <button id="calculate-interest">Calculate Interest</button>
+            <p>Interest (Testing): <span id="interest-test">0 ETH</span></p>
+            <p>Interest (Monthly): <span id="interest-month">0 ETH</span></p>
+            <p>Interest (Yearly): <span id="interest-year">0 ETH</span></p>
+        </div>
 
-			<h3>Add Interest</h3>
-			<button id="add-interest">Add Interest</button>
-			<p>Status: <span id="add-interest-status">Not added yet</span></p>
-		</div>
+        <!-- Add Interest -->
+        <div id="addInterest" class="hidden-section">
+            <h2>Account Information</h2>
+            <p>Account Balance: <span id="account-balance">0 ETH</span></p> <!-- Keep same id as above -->
+            <p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+            <p>Interest Rate: <span id="interest-rate">0%</span></p>
+            <button id="refresh-account">Refresh Account Info</button>
 
-		<!-- Withdraw Interest -->
-		<div id="withdrawInterest" class="hidden-section">
-			<h2>Account Information</h2>
-			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
-			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
-			<p>Interest Rate: <span id="interest-rate">0%</span></p>
-			<button id="refresh-account">Refresh Account Info</button>
+            <h3>Add Interest</h3>
+            <button id="add-interest">Add Interest</button>
+            <p>Status: <span id="add-interest-status">Not added yet</span></p>
+        </div>
 
-			<h3>Withdraw Interest</h3>
-			<button id="withdraw-interest">Withdraw Interest</button>
-			<p>Status: <span id="withdraw-interest-status">Not withdrawn yet</span></p>
-		</div>
+        <!-- Withdraw Interest -->
+        <div id="withdrawInterest" class="hidden-section">
+            <h2>Account Information</h2>
+            <p>Account Balance: <span id="account-balance">0 ETH</span></p> <!-- Keep same id as above -->
+            <p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+            <p>Interest Rate: <span id="interest-rate">0%</span></p>
+            <button id="refresh-account">Refresh Account Info</button>
 
-		<!-- Distribute Interest -->
-		<div id="distributeInterest" class="hidden-section">
-			<h2>Account Information</h2>
-			<p>Account Balance: <span id="account-balance">0 ETH</span></p>
-			<p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
-			<p>Interest Rate: <span id="interest-rate">0%</span></p>
-			<button id="refresh-account">Refresh Account Info</button>
+            <h3>Withdraw Interest</h3>
+            <button id="withdraw-interest">Withdraw Interest</button>
+            <p>Status: <span id="withdraw-interest-status">Not withdrawn yet</span></p>
+        </div>
 
-			<h2>Distribute Interest</h2>
-			<label for="Recipient-Address">Recipient Address :</label>
-			<input type="text" id="Recipient-Address"  disabled value="Child / Parent Address">
-			<label for="distribute-Percentage">Distribute Percentage(%) :</label>
-			<input type="number" id="distribute-Percentage" min="1" max="100" placeholder="Percentage to distribute">
+        <!-- Distribute Interest -->
+        <div id="distributeInterest" class="hidden-section">
+            <h2>Account Information</h2>
+            <p>Account Balance: <span id="account-balance">0 ETH</span></p> <!-- Keep same id as above -->
+            <p>Accrual Interval: <span id="accrual-interval">Unknown</span></p>
+            <p>Interest Rate: <span id="interest-rate">0%</span></p>
+            <button id="refresh-account">Refresh Account Info</button>
 
-			<button id="distributeInterest">Distribute Interest</button>
-			<p>Status: <span id="withdraw-interest-status">Not withdrawn yet</span></p>
-		</div>
+            <h2>Distribute Interest</h2>
+            <label for="Recipient-Address">Recipient Address :</label>
+            <input type="text" id="Recipient-Address"  value="Child / Parent Address">
+            <label for="distribute-Percentage">Distribute Percentage(%) :</label>
+            <input type="number" id="distribute-percentage" min="1" max="100" placeholder="Percentage to distribute"> <!-- Changed distribute-Percentage to distribute-percentage -->
 
-		<!-- Change Interval -->
-		<div id="interestIntervalAdjustment" class="hidden-section">
-			<h2>Change Accrual Interval</h2>
-			<label for="interval-select">Choose Interval:</label>
-			<select id="interval-select">
-				<option value="2592000">Monthly</option>
-				<option value="31536000">Yearly</option>
-				<option value="30">Testing (30s)</option>
-			</select>
-			<button id="change-interval">Change Interval</button>
-			<p>Status: <span id="change-interval-status">Interval not changed yet</span></p>
-		</div>
+            <button id="distribute-interest">Distribute Interest</button> <!-- Changed from distributeInterest -->
+            <p>Status: <span id="distribute-interest-status">Not distributed yet</span></p> <!-- Changed from withdraw-interest-status -->
+        </div>
 
-		<!-- Interest Histories -->
-		<div id="interestHistory" class="hidden-section">
-			<h2>Interest Histories</h2>
-			<button id="fetch-history">Fetch History</button>
-			<h3>Withdrawal History</h3>
-			<ul id="withdrawal-history"></ul>
+        <!-- Change Interval -->
+        <div id="interestIntervalAdjustment" class="hidden-section">
+            <h2>Change Accrual Interval</h2>
+            <label for="interval-select">Choose Interval:</label>
+            <select id="interval-select">
+                <option value="2592000">Monthly</option>
+                <option value="31536000">Yearly</option>
+                <option value="30">Testing (30s)</option>
+            </select>
+            <button id="change-interval">Change Interval</button>
+            <p>Status: <span id="change-interval-status">Interval not changed yet</span></p>
+        </div>
 
-			<h3>Add Interest History</h3>
-			<ul id="add-interest-history"></ul>
+        <!-- Interest Histories -->
+        <div id="interestHistory" class="hidden-section">
+            <h2>Interest Histories</h2>
+            <button id="fetch-history" onclick="getInterestHistory()">Fetch History</button>
+            <h3>Withdrawal History</h3>
+            <ul id="withdrawal-history"></ul>
 
-			<h3>Distribution History</h3>
-			<ul id="distribution-history"></ul>
-		</div>
+            <h3>Add Interest History</h3>
+            <ul id="add-interest-history"></ul>
+
+            <h3>Distribution History</h3>
+            <ul id="distribution-history"></ul>
+        </div>
 		
 	</main>
 
@@ -2563,6 +2563,170 @@
 				document.getElementById('status').innerText = 'Failed to unpause contract: ' + error.message;
 			}
 		}
+
+	// Interest Module -- Start
+        // Refresh account information
+        async function refreshAccountInfo() {
+            const accounts = await web3.eth.getAccounts();
+            const sender = accounts[0];
+            const balance = await contract.methods.getAccountBalances().call({ from: sender }); // Fixed accounts[0]
+            document.getElementById("account-balance").innerText = web3.utils.fromWei(balance, "ether") + " ETH";
+
+            accrualInterval = await contract.methods.getUserAccrualInterval().call({ from: sender });
+			if(accrualInterval == 31536000){
+				accrualInterval = "Yearly";
+			}else if(accrualInterval == 2592000){
+				accrualInterval = "Monthly";
+			}else if (accrualInterval == 30){
+				accrualInterval = "Testing (30 seconds)";
+			}
+            document.getElementById("accrual-interval").innerText = accrualInterval;
+
+            const interestRate = await contract.methods.getAccountInterestRates().call({ from: sender });
+            document.getElementById("interest-rate").innerText = interestRate + "%";
+        }
+
+        // Calculate interest
+        document.getElementById("calculate-interest").addEventListener('click', async () => {
+            const calcAmount = document.getElementById("calc-amount").value;
+            const amount = web3.utils.toWei(calcAmount, "ether");
+            console.log(amount);
+            const startTimes = document.getElementById("startTime").value;
+            const endTimes = document.getElementById("endTime").value;
+
+            // Convert to Date objects
+            const startDate = new Date(startTimes);
+            const endDate = new Date(endTimes);
+
+            // Convert to epoch time in seconds
+            const startEpoch = Math.floor(startDate.getTime() / 1000);
+            const endEpoch = Math.floor(endDate.getTime() / 1000);
+            console.log(startEpoch);
+			console.log(endEpoch);
+
+            try {
+                const result = await contract.methods.interestCalculator(amount, startEpoch, endEpoch).call(); // Adjust start and end epochs
+                document.getElementById("interest-test").innerText = web3.utils.fromWei(result[0], "ether") + " ETH";
+                document.getElementById("interest-month").innerText = web3.utils.fromWei(result[1], "ether") + " ETH";
+                document.getElementById("interest-year").innerText = web3.utils.fromWei(result[2], "ether") + " ETH";
+            } catch (error) {
+                console.error("Error calculating interest:", error);
+            }
+        });
+
+		//
+
+
+        // Add interest
+        document.getElementById("add-interest").addEventListener('click', async () => {
+            const accounts = await web3.eth.getAccounts();
+            const sender = accounts[0];
+            try {
+                await contract.methods.addInterest().send({ from: sender });
+                document.getElementById("add-interest-status").innerText = "Interest added successfully!";
+            } catch (error) {
+                document.getElementById("add-interest-status").innerText = "Error adding interest.";
+                console.error(error);
+            }
+        });
+
+        // Withdraw interest
+        document.getElementById("withdraw-interest").addEventListener('click', async () => {
+			const accounts = await web3.eth.getAccounts();
+            const sender = accounts[0];
+            try {
+                await contract.methods.withdrawInterest().send({ from: sender });
+                document.getElementById("withdraw-interest-status").innerText = "Interest withdrawn successfully!";
+            } catch (error) {
+                document.getElementById("withdraw-interest-status").innerText = "Error withdrawing interest.";
+                console.error(error);
+            }
+        });
+
+        // Distribute interest
+        document.getElementById("distribute-interest").addEventListener('click', async () => {
+			const accounts = await web3.eth.getAccounts();
+            const sender = accounts[0];
+            const percentage = document.getElementById("distribute-percentage").value; // Corrected ID
+            const recipientAddress = document.getElementById("Recipient-Address").value;
+
+            try {
+                await contract.methods.distributeInterest(percentage, recipientAddress).send({ from: sender });
+                document.getElementById("distribute-interest-status").innerText = "Interest distributed successfully!"; // Corrected ID
+            } catch (error) {
+                document.getElementById("distribute-interest-status").innerText = "Error distributing interest."; // Corrected ID
+                console.error(error);
+            }
+        });
+
+        // Change accrual interval
+		document.getElementById("change-interval").addEventListener('click', async () => {
+			const accounts = await web3.eth.getAccounts();
+            const sender = accounts[0];
+            const selectedInterval = document.getElementById("interval-select").value;
+
+            try {
+                await contract.methods.setUserAccrualInterval(selectedInterval).send({ from: sender });
+                document.getElementById("change-interval-status").innerText = "Interval changed successfully!";
+            } catch (error) {
+                document.getElementById("change-interval-status").innerText = "Error changing interval.";
+                console.error(error);
+            }
+        });
+
+		// Get Interest History
+		async function getInterestHistory() {
+			const accounts = await web3.eth.getAccounts();
+			const sender = accounts[0];
+			console.log(sender);
+
+			// Clear previous history display
+			document.getElementById("withdrawal-history").innerHTML = ''; 
+			document.getElementById("distribution-history").innerHTML = ''; 
+			document.getElementById("add-interest-history").innerHTML = '';
+
+			// Get withdrawal history
+			try {
+				const withdrawalHistory = await contract.methods.getWithdrawalHistory().call({ from: sender });
+				withdrawalHistory.forEach(item => {
+					const li = document.createElement("li");
+					const interestInEther = web3.utils.fromWei(item.interestAmount.toString(), 'ether'); // Convert Wei to Ether
+					li.textContent = `Date & Time: ${new Date(item.timestamp * 1000).toLocaleString()}, Interest Amount: ${interestInEther} ETH, Recipient: ${item.recipient}`;
+					document.getElementById("withdrawal-history").appendChild(li);
+				});
+			} catch (error) {
+				console.error("Error fetching withdrawal history:", error);
+			}
+
+			// Get distribution history
+			try {
+				const distributionHistory = await contract.methods.getDistributionHistory().call({ from: sender });
+				distributionHistory.forEach(item => {
+					const li = document.createElement("li");
+					const interestInEther = web3.utils.fromWei(item.interestAmount.toString(), 'ether'); // Convert Wei to Ether
+					li.textContent = `Date & Time: ${new Date(item.timestamp * 1000).toLocaleString()}, Interest Amount: ${interestInEther} ETH, Recipient: ${item.recipient}`;
+					document.getElementById("distribution-history").appendChild(li);
+				});
+			} catch (error) {
+				console.error("Error fetching distribution history:", error);
+			}
+
+			// Get Add Interest history
+			try {
+				const addInterestHistory = await contract.methods.getUserAddInterestHistory().call({ from: sender });
+				addInterestHistory.forEach(item => {
+					const li = document.createElement("li");
+					const interestInEther = web3.utils.fromWei(item.interestAmount.toString(), 'ether'); // Convert Wei to Ether
+					li.textContent = `Date & Time: ${new Date(item.timestamp * 1000).toLocaleString()}, Interest Amount: ${interestInEther} ETH, Recipient: ${item.recipient}`;
+					document.getElementById("add-interest-history").appendChild(li);
+				});
+			} catch (error) {
+				console.error("Error fetching add interest history:", error);
+			}
+		}
+
+
+        // Interest Module -- End 
 	</script>
 </body>
 
