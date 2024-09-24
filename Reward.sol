@@ -48,7 +48,7 @@ contract Reward {
         _;
     }
 
-    constructor(address _transactionAddress, address _interestModuleAddress) {
+    constructor(address _transactionAddress, address payable _interestModuleAddress) {
         transactionContract = Transaction(_transactionAddress);
         interestModule = InterestModule(_interestModuleAddress);
     }
