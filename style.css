@@ -3,6 +3,7 @@ body {
     background-image: url(images/BeeWalletBGI.webp);
     /* height: 200vh; */
     position: relative;
+    background-attachment: fixed;
 }
 
 body::-webkit-scrollbar {

@@ -9,6 +9,7 @@
   <title>BeeWallet</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
 </head>
 <style>
   /* General Styling */
@@ -21,6 +22,7 @@
     min-height: 100vh;
     text-align: center;
 
+
   }
 
   #profileHistory {
@@ -31,7 +33,7 @@
     padding: 20px;
     border: 2px solid #ccc;
     border-radius: 10px;
-    background-color: #f0f8ff;
+    background: linear-gradient(111.72deg, rgb(242, 252, 255,0.3) 2.94%, rgb(255, 231, 216,0.3) 100%), rgb(255, 255, 255,0.3);
     /* Light blue background */
     font-family: Arial, sans-serif;
   }
@@ -65,21 +67,20 @@
     margin-top: 20px;
   }
 
-  th,
-  td {
+  th, td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-  }
+}
 
-  th {
-    background-color: #b6f3fd;
+th {
+    
     color: #0066cc;
-  }
+}
 
-  tr:hover {
+tr:hover {
     background-color: #b6f3fd;
-  }
+} 
 
 
 
@@ -107,13 +108,17 @@
 
   /* Form and Input Styling */
   form {
-    background-color: #e6f2ff;
-    padding: 10px 0px;
-    border-radius: 24px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    width: 50%;
-    text-align: center;
+    background: linear-gradient(111.72deg, rgb(242, 252, 255,0.3) 2.94%, rgb(255, 231, 216,0.3) 100%), rgb(255, 255, 255,0.3);
+		padding: 10px 0px;
+		border-radius: 24px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		margin-bottom: 20px;
+		width: 50%;
+		text-align: center;
+    
+  }
+  #migrationForm{
+    margin-left: 20px;
   }
 
   input[type="text"],
@@ -194,6 +199,7 @@
   #archiveInfo {
     text-align: center;
   }
+  
 
   /* Flex layout for the logs */
   #logs {
@@ -303,6 +309,15 @@
     top: 4px;
     /* Adjust the top position if necessary */
   }
+  .profile-box {
+        padding: 20px;
+        margin: 20px auto;
+        border-radius: 10px;
+        background: linear-gradient(111.72deg, rgb(242, 252, 255,0.3) 2.94%, rgb(255, 231, 216,0.3) 100%), rgb(255, 255, 255,0.3);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds shadow for depth */
+        
+         
+    }
 </style>
 
 <body>
@@ -323,10 +338,9 @@
                     <li class="has-children">
                       <a href="#"><span>Deposit And Withdrawals</span></a>
                       <ul class="dropdown arrow-top">
-                          <li onclick="showSection('addFundsSection')"><a
-                                  href="DepositAndWithdraw.html">Deposit</a></li>
-                          <li onclick="showSection('instantWithdrawSection')"><a
-                                  href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
+                          <li onclick="showSection('addFundsSection')"><a href="DepositAndWithdraw.html">Deposit</a></li>
+                          <li onclick="showSection('instantWithdrawSection')"><a href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
+                          <li onclick="showSection('listWithdrawalsSection')"><a href="DepositAndWithdraw.html">List Withdrawals</a></li>        
                           <li class="has-children">
                               <a href="#">Withdrawals</a>
                               <ul class="dropdown">
@@ -341,8 +355,48 @@
                           </li>
                       </ul>
                   </li>
-              <li><a href="trackmoduleUI.html"><span>Transaction</span></a></li>
-              <li><a href="interest.html"><span>Interest</span></a></li>
+                  <li class="has-children">
+                    <a href="#"><span>Transaction</span></a>
+                    <ul class="dropdown arrow-top">
+                      <li onclick="showSection('instantTransferSection')"><a href="trackmoduleUI.html">Instant Transfer</a></li>
+                      <li class="has-children">
+                        <a href="#">Scheduled Transfers</a>
+                        <ul class="dropdown">
+                          <li onclick="showSection('scheduleAutoExecution')"><a href="trackmoduleUI.html">Schedule Auto Execution</a></li>
+                          <li onclick="showSection('executeAutoScheduledTransfers')"><a href="trackmoduleUI.html">Execute Auto Scheduled Transfers</a></li>
+                          <li onclick="showSection('getAllScheduledTransfers')"><a href="trackmoduleUI.html">Get All Scheduled Transfers</a></li>
+                          <li onclick="showSection('cancelScheduledTransfer')"><a href="trackmoduleUI.html">Cancel Scheduled Transfer</a></li>
+                        </ul>
+                      </li>
+                      <li class="has-children">
+                        <a href="#">Transfer History</a>
+                        <ul class="dropdown">
+                          <li onclick="showSection('transferHistory')"><a href="trackmoduleUI.html">Transfer History</a></li>
+                          <li onclick="showSection('getAllTransferHistory')"><a href="trackmoduleUI.html">All Transfer History</a></li>
+                          <li onclick="showSection('transferDetails')"><a href="trackmoduleUI.html">Transfer Details</a></li>
+                          <li onclick="showSection('getTotalTransactionAmount')"><a href="trackmoduleUI.html">Total Transaction Amount</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="has-children class">
+                
+                    <a href="#"><span>Interest</span></a>
+                    <ul class="dropdown arrow-top">
+                      <li onclick="showSection('interestAccountInfo')"><a href="interest.html">Interest Account</a></li>
+                      <li onclick="showSection('interestIntervalAdjustment')"><a href="interest.html">Interest Interval Adjustment</a></li>
+                      <li class="has-children">
+                      <a href="#">Interest Withdrawal</a>
+                      <ul class="dropdown">
+                        <li onclick="showSection('addInterest')"><a href="interest.html">Add Interest</a></li>
+                        <li onclick="showSection('withdrawInterest')"><a href="interest.html">Withdraw Interest</a></li>
+                        <li onclick="showSection('distributeInterest')"><a href="interest.html">Distribute Interest</a></li>
+                      </ul>
+                      </li>
+                      <li onclick="showSection('interestCalculator')"><a href="interest.html">Interest Calculator</a></li>
+                      <li onclick="showSection('interestHistory')"><a href="interest.html">Interest History</a></li>
+                    </ul>
+                    </li>
               <li><a href="reward.html"><span>Reward</span></a></li>
             </ul>
           </nav>
@@ -352,7 +406,7 @@
 
     </div>
     <img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
-    <input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%;">
+    <input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%; font-size: 13px;">
   </header>
 
   <div id="intro" style="position: absolute; top: 30%;left: 20%; ">
@@ -364,8 +418,8 @@
   </div>
   <!-- Button to connect to MetaMask -->
   <button id="connectButton"><img src="images/metalogo.png" alt="logo" id="connectLogo" height="40px"
-      width="40px">Connect to
-    MetaMask</button>
+      width="40px" style="margin-right: 10px;">Connect to
+    MetaMask &rarr;</button>
   <div id="accountArea" style="display: none;"></div>
 
   <!-- Registration Section -->
@@ -414,12 +468,26 @@
         <h2>Modify Profile</h2>
         <br><br>
         <form id="modifyForm">
-          <label>Name: </label><input disabled type="text" id="modName" required><br>
-          <label>Email: </label><input disabled type="email" id="modEmail" required><br>
-          <label>Age &nbsp;&nbsp;: </label><input type="number" disabled id="modAge" required><br>
+          <table>
+            <tr>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name:</td>
+              <td><input disabled type="text" id="modName" required></td>
+            </tr>
+            <tr>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email&nbsp;:</td>
+              <td><input disabled type="email" id="modEmail" required></td>
+            </tr>
+            <tr>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age &nbsp;&nbsp;&nbsp;:</td>
+              <td><input type="number" disabled id="modAge" required></td>
+            </tr>
+          </table>
+          <!-- <label>Name: </label><input disabled type="text" id="modName" required><br>
+          <label>Email: </label><br>
+          <label>Age &nbsp;&nbsp;: </label><input type="number" disabled id="modAge" required><br> -->
           <button type="submit" id="modifyProfileBtn">Modify Profile</button>
         </form>
-        <br><br>
+        <br>
         <h2>Grant Child Modification Access</h2>
 
         <form id="accessForm" style="display:none;">
@@ -430,9 +498,9 @@
           <button type="button" onclick="revokeAccess()">Revoke Access</button>
         </form>
 
-        <p id="parentMessage" style="display:none;">You are logged in as a parent. You can grant or revoke
+        <p id="parentMessage" style="display:none;color: white;">You are logged in as a parent. You can grant or revoke
           modification access for your children.</p>
-        <p id="nonParentMessage" style="display:none;">You are not authorized to grant or revoke access.
+        <p id="nonParentMessage" style="display:none;color: white;">You are not authorized to grant or revoke access.
           <br><br><br><br><br><br><br><br><br>
         </p>
 
@@ -448,7 +516,7 @@
     <div id="bottomsection">
 
       <form id="migrationForm">
-        <h2>Account Migration</h2>
+        <h2 style="color: #0066cc;">Account Migration</h2>
         <label for="newAddress">New Address:</label>
         <input type="text" id="newAddress" placeholder="Enter new address..." required>
         <button type="submit">Migrate Account</button>
@@ -475,9 +543,8 @@
   <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
   <script>
     const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
-
     const contractAddress = "0x3652FD3932c3cFEf42DD9398C8fD875A8f2E515c";  // Replace with deployed contract address
-    const contractABI = [
+		const contractABI = [
 	{
 		"anonymous": false,
 		"inputs": [
@@ -515,6 +582,72 @@
 		],
 		"name": "AccountReactivated",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "archiveAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "checkArchiveStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deleteAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "grantModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "login",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "migrateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -567,6 +700,29 @@
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			}
+		],
+		"name": "modifyProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -602,6 +758,59 @@
 		],
 		"name": "ProfileModified",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "reactivateAccount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_parent",
+				"type": "address"
+			},
+			{
+				"internalType": "enum Account.AccountType",
+				"name": "_accountType",
+				"type": "uint8"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_child",
+				"type": "address"
+			}
+		],
+		"name": "revokeModificationAccess",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -660,20 +869,6 @@
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "archiveAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "checkArchiveStatus",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -695,13 +890,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "deleteAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -900,51 +1088,6 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_child",
-				"type": "address"
-			}
-		],
-		"name": "grantModificationAccess",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_account",
-				"type": "address"
-			}
-		],
-		"name": "login",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_newAddress",
-				"type": "address"
-			}
-		],
-		"name": "migrateAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
@@ -958,82 +1101,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_email",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_age",
-				"type": "uint256"
-			}
-		],
-		"name": "modifyProfile",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reactivateAccount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_email",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_age",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "_parent",
-				"type": "address"
-			},
-			{
-				"internalType": "enum Account.AccountType",
-				"name": "_accountType",
-				"type": "uint8"
-			}
-		],
-		"name": "register",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_child",
-				"type": "address"
-			}
-		],
-		"name": "revokeModificationAccess",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1092,6 +1159,8 @@
 	}
 ];
 
+
+
     const accountContract = new web3.eth.Contract(contractABI, contractAddress);
 
     let account;
@@ -1149,36 +1218,38 @@
       // Display profile details and account balance
       // Display profile details and account balance
       profileArea.innerHTML = `
-    <table>
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Name:</td>
-                <td>${profile.name}</td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td>${profile.email}</td>
-            </tr>
-            <tr>
-                <td>Age:</td>
-                <td>${profile.age}</td>
-            </tr>
-            <tr>
-                <td>Ether Balance:</td>
-                <td>${balanceFormatted} ETH</td>
-            </tr>
-            <tr>
-                <td>Account Type:</td>
-                <td>${type}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="profile-box">
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Name:</td>
+                    <td>${profile.name}</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>${profile.email}</td>
+                </tr>
+                <tr>
+                    <td>Age:</td>
+                    <td>${profile.age}</td>
+                </tr>
+                <tr>
+                    <td>Ether Balance:</td>
+                    <td>${balanceFormatted} ETH</td>
+                </tr>
+                <tr>
+                    <td>Account Type:</td>
+                    <td>${type}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 `;
       profileArea.style.textAlign = 'left';
       profileArea.style.marginLeft = '20%';
@@ -1192,29 +1263,45 @@
       if (profile.accountType == '0') { // 0 corresponds to Parent in the enum
         // Fetch and display child accounts
         const childAccounts = await accountContract.methods.getChildren(account).call();
-        linkedAccountsInfo.innerHTML = '<h3>Children Accounts:</h3><table>' +
-          '<thead>' +
-          '<tr>' +
-          '<th>Child Address</th>' +
-          '<th>Name</th>' +
-          '<th>Email</th>' +
-          '<th>Age</th>' +
-          '</tr>' +
-          '</thead>' +
-          '<tbody>';
 
-        for (const child of childAccounts) {
-          const childProfile = await accountContract.methods.getProfile().call({ from: child });
-          linkedAccountsInfo.innerHTML += `
+// Start with the initial HTML structure
+let htmlContent = `
+    <div class="profile-box">
+        <h3 style="color:#0066cc">Children Accounts:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Child Address</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+            <tbody>
+`;
+
+// Loop through child accounts and append rows
+for (const child of childAccounts) {
+    const childProfile = await accountContract.methods.getProfile().call({ from: child });
+    htmlContent += `
         <tr>
             <td>${child}</td>
             <td>${childProfile.name}</td>
             <td>${childProfile.email}</td>
             <td>${childProfile.age}</td>
-        </tr>`;
-        }
+        </tr>
+    `;
+}
 
-        linkedAccountsInfo.innerHTML += '</tbody></table>';
+// Close the table, tbody, and div tags
+htmlContent += `
+        </tbody>
+    </table>
+    </div>
+`;
+
+// Now assign the accumulated HTML to linkedAccountsInfo
+linkedAccountsInfo.innerHTML = htmlContent;
         // Enable inputs and buttons if access is granted
         document.getElementById('modName').disabled = false;
         document.getElementById('modEmail').disabled = false;
@@ -1223,7 +1310,29 @@
       } else { // Child account
         // Fetch and display parent account
         const parentProfile = await accountContract.methods.getParent(account).call();
-        linkedAccountsInfo.innerHTML = `<h3>Parent Account:</h3>${parentProfile.account}: ${parentProfile.name}, ${parentProfile.email}, ${parentProfile.age} years old`;
+        linkedAccountsInfo.innerHTML = `
+    <div class="profile-box">
+        <h3 style="color: #0066cc">Parent Accounts:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parent Address</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+            <td>${parentProfile.account}</td>
+            <td>${parentProfile.name}</td>
+            <td>${parentProfile.email}</td>
+            <td>${parentProfile.age}</td>
+             </tr>
+            </tbody>
+        </table>
+    </div>
+`;
 
 
       }
@@ -1444,7 +1553,7 @@
         eventsList.sort((a, b) => b.timestamp - a.timestamp);
 
         // Create a table for the events
-        let tableHTML = `<table>
+        let tableHTML = `<div class="profile-box"><table>
             <thead>
                 <tr>
                     <th>Event Type</th>
@@ -1453,7 +1562,7 @@
                     <th>Transaction Hash</th>
                 </tr>
             </thead>
-            <tbody>`;
+            <tbody></div>`;
 
         // Display the sorted events in the table
         eventsList.forEach(event => {

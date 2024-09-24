@@ -116,6 +116,13 @@
         .AmountBtn button {
             width: 15%;
         }
+
+        #addFundsSection{
+            display: block;
+            opacity: 1;
+            transition: opacity 0.5s ease;/* Smooth transition */
+            background-color: rgb(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 
@@ -152,8 +159,48 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a href="trackmoduleUI.html"><span>Transaction</span></a></li>
-                            <li><a href="interest.html"><span>Interest</span></a></li>
+                            <li class="has-children">
+								<a href="#"><span>Transaction</span></a>
+								<ul class="dropdown arrow-top">
+									<li onclick="showSection('instantTransferSection')"><a href="trackmoduleUI.html">Instant Transfer</a></li>
+									<li class="has-children">
+										<a href="#">Scheduled Transfers</a>
+										<ul class="dropdown">
+											<li onclick="showSection('scheduleAutoExecution')"><a href="trackmoduleUI.html">Schedule Auto Execution</a></li>
+											<li onclick="showSection('executeAutoScheduledTransfers')"><a href="trackmoduleUI.html">Execute Auto Scheduled Transfers</a></li>
+											<li onclick="showSection('getAllScheduledTransfers')"><a href="trackmoduleUI.html">Get All Scheduled Transfers</a></li>
+											<li onclick="showSection('cancelScheduledTransfer')"><a href="trackmoduleUI.html">Cancel Scheduled Transfer</a></li>
+										</ul>
+									</li>
+									<li class="has-children">
+										<a href="#">Transfer History</a>
+										<ul class="dropdown">
+											<li onclick="showSection('transferHistory')"><a href="trackmoduleUI.html">Transfer History</a></li>
+											<li onclick="showSection('getAllTransferHistory')"><a href="trackmoduleUI.html">All Transfer History</a></li>
+											<li onclick="showSection('transferDetails')"><a href="trackmoduleUI.html">Transfer Details</a></li>
+											<li onclick="showSection('getTotalTransactionAmount')"><a href="trackmoduleUI.html">Total Transaction Amount</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+ 							<li class="has-children class">
+                
+								<a href="#"><span>Interest</span></a>
+								<ul class="dropdown arrow-top">
+								  <li onclick="showSection('interestAccountInfo')"><a href="interest.html">Interest Account</a></li>
+								  <li onclick="showSection('interestIntervalAdjustment')"><a href="interest.html">Interest Interval Adjustment</a></li>
+								  <li class="has-children">
+									<a href="#">Interest Withdrawal</a>
+									<ul class="dropdown">
+									  <li onclick="showSection('addInterest')"><a href="interest.html">Add Interest</a></li>
+									  <li onclick="showSection('withdrawInterest')"><a href="interest.html">Withdraw Interest</a></li>
+									  <li onclick="showSection('distributeInterest')"><a href="interest.html">Distribute Interest</a></li>
+									</ul>
+								  </li>
+								  <li onclick="showSection('interestCalculator')"><a href="interest.html">Interest Calculator</a></li>
+								  <li onclick="showSection('interestHistory')"><a href="interest.html">Interest History</a></li>
+								</ul>
+							  </li>
                             <li><a href="Reward.html"><span>Reward</span></a></li>
                         </ul>
                     </nav>
@@ -162,7 +209,7 @@
 
         </div>
         <img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
-        <input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%;">
+        <input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%; font-size: 13px;">
     </header>
     <main>
         <!-- Add Funds Section -->
@@ -173,7 +220,7 @@
             </div>
             <!-- Check Balance Section -->
             <div>
-                <h2>Balance: <span id="balanceResult">0</span> ETH</h2>
+                <h2>Balance: <span class="balanceResult">0</span> ETH</h2>
             </div>
             <form id="addFundsForm">
                 <p style="font-weight: bold; margin: 0; font-size: larger;">Input Deposit Amount</p>
@@ -236,22 +283,21 @@
             </div>
             <!-- Check Balance Section -->
             <div>
-                <h2>Balance: <span id="balanceResult">0</span> ETH</h2>
+                <h2>Balance: <span class="balanceResult">0</span> ETH</h2>
             </div>
             <div id="timeRemainingSection">
                 <h2>Time Remaining: <span id="timeRemaining"></span></h2>
             </div>
             <form>
                 <p style="font-weight: bold; margin: 0; font-size: larger;">Input Withdraw Amount</p>
-                <input type="number" id="instantWithdrawAmount" placeholder="Enter Amount in ETH"
-                    style="width: 100%;" /> <br>
+                <input type="number" id="instantWithdrawAmount" placeholder="Enter Amount in ETH" style="width: 100%;" /> <br>
                 <div style="width: 100%;" class="AmountBtn">
-                    <button type="button" onclick="setAmount(10)">10 ETH</button>
-                    <button type="button" onclick="setAmount(20)">20 ETH</button>
-                    <button type="button" onclick="setAmount(30)">30 ETH</button>
-                    <button type="button" onclick="setAmount(40)">40 ETH</button>
-                    <button type="button" onclick="setAmount(50)">50 ETH</button>
-                    <button type="button" onclick="setAmount(100)">100 ETH</button>
+                    <button type="button" onclick="setWithdrawAmount(10)">10 ETH</button>
+                    <button type="button" onclick="setWithdrawAmount(20)">20 ETH</button>
+                    <button type="button" onclick="setWithdrawAmount(30)">30 ETH</button>
+                    <button type="button" onclick="setWithdrawAmount(40)">40 ETH</button>
+                    <button type="button" onclick="setWithdrawAmount(50)">50 ETH</button>
+                    <button type="button" onclick="setWithdrawAmount(100)">100 ETH</button>
                 </div>
                 <button onclick="instantWithdraw()" style="width: 100%;">Withdraw</button>
             </form>
@@ -265,7 +311,7 @@
             </div>
             <!-- Check Balance Section -->
             <div>
-                <h2>Balance: <span id="balanceResult">0</span>ETH</h2>
+                <h2>Balance: <span class="balanceResult">0</span> ETH</h2>
             </div>
             <form>
                 <p style="font-weight: bold; margin: 0; font-size: larger;">Input Schedule Withdraw Amount</p>
@@ -315,7 +361,12 @@
             </form>
         </div>
     </main>
-
+    <script>
+        // Run when the page loads
+        window.onload = function() {
+            showSection('addFundsSection');
+        };
+    </script>
 
     <script src="script.js"></script>
 </body>

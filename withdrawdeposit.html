@@ -1995,17 +1995,17 @@
         });
         
         window.addEventListener('load', connectWallet);
-        window.addEventListener('load', async () => {
-    try {
-        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-				account = accounts[0];
-        // Call the contract method and handle the result
-        const result = await contract.methods.copyUserToAccount(account).send({ from: account });
-        console.log(result); // Handle the result (if needed)
-    } catch (error) {
-        console.error("Error calling contract method:", error);
-    }
-});
+//         window.addEventListener('load', async () => {
+//     try {
+//         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+// 				account = accounts[0];
+//         // Call the contract method and handle the result
+//         const result = await contract.methods.copyUserToAccount(account).send({ from: account });
+//         console.log(result); // Handle the result (if needed)
+//     } catch (error) {
+//         console.error("Error calling contract method:", error);
+//     }
+// });
 
     </script>
 </body>

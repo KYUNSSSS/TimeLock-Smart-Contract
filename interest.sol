@@ -1,7 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
+import "./InterfaceCombine.sol"; // Import the interface
 contract InterestModule {
+
+    IDepositAndWithdraw public interfaceDepositAndWithdraw;
+
+    constructor(address _depositAndWithdrawAddress)  payable {
+        interfaceDepositAndWithdraw = IDepositAndWithdraw(_depositAndWithdrawAddress);
+    }
+
     //InterestModule Yew Wen Kang
     //Variable Declaration
     uint256 public monthlyInterestRate = 2; // 2% for monthly
@@ -58,8 +65,7 @@ contract InterestModule {
         _;
     }
 
-    constructor() payable {
-    }
+    
 
 
     // Calculator for interest, input amount, time, rate, show the interest for testing, month , year
@@ -88,24 +94,35 @@ contract InterestModule {
 
     //-----------------------------
     // Deposit ether into the contract  (Remove after combine, check before remove)
-    function deposit(uint256 value,address acount) public positiveAmount(value) payable {
-        accountBalances[acount] += value;
+    function deposit(uint256 value,address account) public positiveAmount(value) payable {
+
+        accountBalances[account] += value;
 
         // If first deposit, set the last interest calculation time and default interval
-        if (lastInterestCalculationTime[acount] == 0) {
-            lastInterestCalculationTime[acount] = block.timestamp;
-            userAccrualIntervals[acount] = TESTING_INTERVAL; // Default should be monthly but testing for test
-            accountInterestRates[acount] = testingInterestRate;
+        if (lastInterestCalculationTime[account] == 0) {
+            lastInterestCalculationTime[account] = block.timestamp;
+            userAccrualIntervals[account] = TESTING_INTERVAL; // Default should be monthly but testing for test
+            accountInterestRates[account] = testingInterestRate;
         }
 
-        emit Deposit(acount, value);
+        emit Deposit(account, value);
+    }
+
+     function updateLastInterestCalculationTime(address account) public payable {
+        // If first deposit, set the last interest calculation time and default interval
+        if (lastInterestCalculationTime[account] == 0) {
+            lastInterestCalculationTime[account] = block.timestamp;
+            userAccrualIntervals[account] = TESTING_INTERVAL; // Default should be monthly but testing for test
+            accountInterestRates[account] = testingInterestRate;
+        }
     }
 
 
+
+
     // Calculate interest for a specific account with a time lock
-    function calculateInterest(address account) public view onlyReachInterval(account) returns (uint256){
+    function calculateInterest(address account,uint256 balance) public view onlyReachInterval(account) returns (uint256){
         uint256 interest;
-        uint256 balance = accountBalances[account];
         uint256 timeElapsed = block.timestamp - lastInterestCalculationTime[account]; //Second Passed correct
 
         //For testing
@@ -130,11 +147,14 @@ contract InterestModule {
     }
 
     // Add interest to the balance
-    function addInterest(address account) public onlyReachInterval(account) {
-        uint256 interest = calculateInterest(account);
+    function addInterest(address account) public onlyReachInterval(account) returns (uint256) {
+        uint256 balance = getAccountBalances(account);
+        // setFirstDeposit(account);//if no last time deposit , set current time
+        uint256 interest = calculateInterest(account,balance);
         require(interest > 0, "No interest to add");
 
-        accountBalances[account] += interest;
+        //Add at js
+        // accountBalances[account] += interest;
         lastInterestCalculationTime[account] = block.timestamp; // Update the last calculation time for the specific account
         
         // Save addInterest history
@@ -147,6 +167,7 @@ contract InterestModule {
         );
 
         emit InterestAdd(interest, account);
+        return interest;
     }
 
     // Allow users to change their accrual interval (monthly or yearly or testing) 
@@ -173,8 +194,9 @@ contract InterestModule {
 
 
     // Withdraw accrued interest and reset interest calculation
-    function withdrawInterest(address account) public onlyReachInterval(account) returns (bool)  {
-        uint256 interest = calculateInterest(account);
+    function withdrawInterest(address account) public onlyReachInterval(account) returns (uint256)  {
+        uint256 balance = getAccountBalances(account);
+        uint256 interest = calculateInterest(account,balance);
         require(interest > 0, "No interest available to withdraw");
 
         // Add to withdrawal history
@@ -188,20 +210,58 @@ contract InterestModule {
 
         //payable(account).transfer(10);//Remove
         emit InterestWithdrawn(interest, account);
-        return true;
+        return interest;
     }
 
     // Distribute a percentage of interest to a specific account in a single transaction
-    function distributeInterest(uint256 percentage, address toAccount, address fromAccount) public onlyReachInterval(fromAccount) returns (bool) {
+    // function distributeInterest(uint256 percentage, address toAccount, address fromAccount,uint256 balance) public onlyReachInterval(fromAccount) returns (bool) {
+    //     require(percentage > 0 && percentage <= 100, "Invalid percentage value"); // Ensure percentage is between 0 and 100
+    //     require(toAccount != address(0), "Invalid address"); // Ensure a valid account address
+
+    //     uint interest = calculateInterest(fromAccount,balance);
+
+    //     uint256 interestDistributed = (interest * percentage) / 100; // Calculate interest to distribute
+    //     uint256 interestWithdraw = interest - interestDistributed; //Remain interest withdraw
+
+    //     //accountBalances[fromAccount] -= interest; //Deduct the balance
+
+    //     //payable(toAccount).transfer(interestDistributed); // Transfer the calculated interest to the account
+    //     emit InterestWithdrawn(interestDistributed, toAccount); // Emit the event for interest distribution
+
+    //     //payable(fromAccount).transfer(interestWithdraw); // Withdraw the remain interest
+    //     emit InterestWithdrawn(interestWithdraw, fromAccount); // Emit the event for interest withdraw
+
+    //     // Add to distribution history for both sender and recipient
+    //     distributionHistory[fromAccount].push(
+    //         InterestHistory({
+    //             timestamp: block.timestamp,
+    //             interestAmount: interestDistributed,
+    //             recipient: toAccount
+    //         })
+    //     );
+
+    //     withdrawalHistory[fromAccount].push(
+    //         InterestHistory({
+    //             timestamp: block.timestamp,
+    //             interestAmount: interestWithdraw,
+    //             recipient: fromAccount
+    //         })
+    //     );
+    //     return true;
+    // }
+
+    function distributeInterest(uint256 percentage, address toAccount, address fromAccount) public onlyReachInterval(fromAccount) returns (uint256 interestDistributed, uint256 interestWithdraw) 
+    {
+        uint256 balance = getAccountBalances(fromAccount);
         require(percentage > 0 && percentage <= 100, "Invalid percentage value"); // Ensure percentage is between 0 and 100
         require(toAccount != address(0), "Invalid address"); // Ensure a valid account address
 
-        uint interest = calculateInterest(fromAccount);
+        uint interest = calculateInterest(fromAccount, balance);
 
-        uint256 interestDistributed = (interest * percentage) / 100; // Calculate interest to distribute
-        uint256 interestWithdraw = interest - interestDistributed; //Remain interest withdraw
+        interestDistributed = (interest * percentage) / 100; // Calculate interest to distribute
+        interestWithdraw = interest - interestDistributed; // Remain interest withdraw
 
-        //accountBalances[fromAccount] -= interest; //Deduct the balance
+        //accountBalances[fromAccount] -= interest; // Deduct the balance
 
         //payable(toAccount).transfer(interestDistributed); // Transfer the calculated interest to the account
         emit InterestWithdrawn(interestDistributed, toAccount); // Emit the event for interest distribution
@@ -225,8 +285,10 @@ contract InterestModule {
                 recipient: fromAccount
             })
         );
-        return true;
+
+        return (interestDistributed, interestWithdraw);
     }
+
 
     // Fallback function to accept Ether into the contract
     receive() external payable {}
@@ -265,10 +327,28 @@ contract InterestModule {
         return account;
     }
 
-    function getAccountBalances(address account) public view returns (uint256) {
-        return accountBalances[account];
+    // function getAccountBalances(address account) public view returns (uint256) {
+    //     return accountBalances[account];
+    // }
+
+    function getLastInterestCalculationTime(address account) public view returns (uint256) {
+        return lastInterestCalculationTime[account];
     }
 
+    //Use this two together
+    // Access the account balance via the interface
+    function getAccountBalances(address account) public view returns (uint256) {
+        (uint256 balance, , , , ) = interfaceDepositAndWithdraw.accounts(account);
+        // setFirstDeposit(account);
+        return balance;
+    }
 
-
+    function setFirstDeposit(address account) public {
+        // If first deposit, set the last interest calculation time and default interval
+        if (lastInterestCalculationTime[account] == 0) {
+            lastInterestCalculationTime[account] = block.timestamp;
+            userAccrualIntervals[account] = TESTING_INTERVAL; // Default should be monthly but testing for test
+            accountInterestRates[account] = testingInterestRate;
+        }
+    }
 }

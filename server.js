@@ -12,6 +12,22 @@ app.use(express.static(path.join(__dirname+"/images")));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname + "/Main.html"));
 });
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname + "/interest.html"));
+});
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname + "/DepositAndWithdraw.html"));
+});
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname + "/Transaction.html"));
+});
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname + "/Reward.html"));
+});
+
+
 
 // Variables to store OTP and its expiration time
 let currentOTP;
