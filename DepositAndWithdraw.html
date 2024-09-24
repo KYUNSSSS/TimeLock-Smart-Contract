@@ -101,7 +101,7 @@
 
                         <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
                             <li><a href="main.html"><span>Home</span></a></li>
-                            <li onclick="showSection('accountInfo')"><a href="AccountInfo.html"><span>Account
+                            <li onclick="showSection('accountInfo')" id="accountDetails"><a href="AccountInfo.html"><span>Account
                                         Info</span></a></li>
                             <li class="has-children active">
                                 <a href="DepositAndWithdraw.html"><span>Deposit And Withdrawals</span></a>
@@ -113,19 +113,19 @@
                                             <a href="#">List Withdrawals</a>
                                         </li>
                                     <li class="has-children">
-                                        <a href="#">Withdrawals</a>
+                                        <a href="#">Schedule</a>
                                         <ul class="dropdown">
                                             <li onclick="showSection('listScheduledSection')">
                                                 <a href="#">List Scheduled Withdrawals</a>
                                             </li>
                                             <li onclick="showSection('scheduleWithdrawSection')"><a
-                                                    href="#">Schedule Withdrawals</a></li>
+                                                    href="#">Schedule Withdraw</a></li>
                                             <li onclick="showSection('executeWithdrawSection')"><a
                                                     href="#">Execute Withdrawals</a></li>
                                             <li onclick="showSection('cancelWithdrawal')"><a
                                                     href="#">Cancel Withdrawals</a></li>
                                             <li onclick="showSection('childScheduleWithdraw')"><a
-                                                    href="#">Schedule Withdrawals For Child</a>
+                                                    href="#">Schedule For Child</a>
                                             </li>
                                         </ul>
                                     </li>
@@ -159,13 +159,6 @@
                 <button type="submit">Deposit</button>
             </form>
         </div>
-
-        <!-- Add Child Account Section -->
-        <!-- <div id="addChildSection" class="hidden-section">
-            <h3>Add Child Account</h3>
-            <input type="text" id="childAddress" placeholder="Child Account Address" /> <br>
-            <button onclick="addChildAccount()">Add Child</button>
-        </div> -->
 
     <!-- List Withdrawal History Section -->
     <div id="listWithdrawalsSection" class="hidden-section" style="text-align: center; margin-left: 0px;">

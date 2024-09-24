@@ -12,13 +12,39 @@
 	body {
 		font-family: Arial, sans-serif;
 		background-color: #f0f8ff;
-		color: #333;
+		color: #333333;
 		justify-content: center;
 		align-items: center;
 		min-height: 100vh;
 		text-align: center;
 
 	}
+	#profileHistory {
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color:#b6f3fd;
+    color: #0066cc;
+}
+
+tr:hover {
+    background-color: #b6f3fd;
+}
+
+
 
 	h1,
 	h2,
@@ -215,10 +241,28 @@
 	#accountArea{
 		background-color: #b6f3fd;
 	}
+	#navAddress{
+		position:absolute;
+    right: 20px; /* Distance from the right edge of the screen */
+    top: 30px; /* Adjust the top position if necessary */
+    background-color: #b6f3fd; /* Consistent background color */
+    padding: 10px;
+    border-radius: 20px;
+    color: #004d99;
+    font-weight: bold;
+	width: 5%;
+	}
+	#connecLogo{
+		position:absolute;
+    right: 117px; /* Distance from the right edge of the screen */
+    top: 34px; /* Adjust the top position if necessary */
+	}
+	
+
 </style>
 	
 <body>
-	<h1>Saving Account Profile</h1>
+	<h1>Profile</h1>
 
 	<!-- Button to connect to MetaMask -->
 	<button id="connectButton"><img src="metalogo.png" alt="logo" id="connectLogo" height="40px" width="40px">Connect to
@@ -229,18 +273,17 @@
 	<div id="registrationSection" style="display:none;">
 		<h2>Register Account</h2>
 		<form id="registerForm">
-			<label>Name: </label><input type="text" id="regName" required><br>
-			<label>Age: </label><input type="number" id="regAge" required><br>
-			<label>Email: </label><input type="email" id="regEmail" required>
+			<label>Name: </label><br><input type="text" id="regName" required><br>
+			<label>Age: </label><br><input type="number" id="regAge" required><br>
+			<label>Email: </label><br><input type="email" id="regEmail" required>
 			<button onclick="sendOTP()">Send OTP</button><br>
-			<label for="otp">Enter the OTP you received:</label>
-			<input type="text" id="otp" >  
-			 <!--add required^  -->
-			<button onclick="verifyOTP()">Verify OTP</button>
-			<span id="result"></span><br>
+			<label for="otp">Enter the OTP you received:</label><br>
+			<input type="text" id="otp" required>  
+			<button type="button" onclick="verifyOTP(event)">Verify OTP</button>
+			<p id="result"></p>
 
-			<label>Register as Parent: </label><input type="checkbox" id="isParent"><br>
-			<label>Parent Address (if Child): </label><input type="text" id="parentAddress" placeholder="0x..."><br>
+			<label>Register as Parent: </label><input type="checkbox" id="isParent"><br><br>
+			<label>Parent Address (if Child): </label><br><input type="text" id="parentAddress" placeholder="0x..."><br>
 			<button type="submit" id="registerBtn" style="display: none;">Register</button>
 		</form>
 	</div>
@@ -248,25 +291,28 @@
 	<!-- Profile Section -->
 	<div id="profileSection" style="display: none;">
 		<div id="navbar">
-		<a href="http://127.0.0.1:5000/Transaction">Transaction</a>
-		<a href="http://127.0.0.1:5000/Transaction">Withdraw and Deposit</a>
-		<a href="http://127.0.0.1:5000/Transaction">Interest</a>
-		<a href="http://127.0.0.1:5000/Transaction">Reward</a>
+			<a href="http://127.0.0.1:5000/Transaction">Transaction</a>
+			<a href="http://127.0.0.1:5000/Transaction">Withdraw and Deposit</a>
+			<a href="http://127.0.0.1:5000/Transaction">Interest</a>
+			<a href="http://127.0.0.1:5000/Transaction">Reward</a>
+			<img src="metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
+			<input type="text" name="address" id="navAddress" disabled>
 		</div>
 		<div id="mainprofile">
 			<div id="profileSectionLeft">
 				<h2>Profile Information</h2>
-				<pre id="profile"></pre>
+				<p id="profile"></p>
 
 				<!-- Parent/Child Accounts Section -->
 				<div id="linkedAccountsSection" style="display: none;">
-					<br><br><br><br>
+					<br>
 					<h2>Linked Accounts</h2>
-					<div id="linkedAccountsInfo"></div>
+					<div id="linkedAccountsInfo" style="margin-left: 20px;"></div>
 				</div>
 			</div>
 			<div id="profileSectionRight">
 				<h2>Modify Profile</h2>
+				<br><br>
 				<form id="modifyForm">
 					<label>Name: </label><input disabled type="text" id="modName" required><br>
 					<label>Email: </label><input disabled type="email" id="modEmail" required><br>
@@ -291,10 +337,10 @@
 
 			</div>
 		</div>
-		<h2>Profile History</h2>
+		<h2 style="text-align: left;padding-left: 25px;">Profile History</h2>
 		<ul id="profileHistory"></ul>
 
-		<button id="fetchEventsButton">Fetch History</button>
+		<button id="fetchEventsButton">Refresh History</button>
 
 		
 		<br><br>
@@ -309,7 +355,7 @@
 			<p id="resultMessage"></p>
 			<div id="out">
 				<button id="archiveBtn" onclick="archiveAccount()">Archive Account</button>
-				<button onclick="window.location.reload()">Logout</button>
+				<button onclick="window.location.reload()">Disconnect Account</button>
 			</div>
 		</div>
 
@@ -954,7 +1000,7 @@
 				const accounts = await ethereum.request({ method: "eth_requestAccounts" });
 				account = accounts[0];
 				document.getElementById("accountArea").innerHTML = `Connected Account: ${account}`;
-
+				document.getElementById('navAddress').value =account;
 				// Check if the account is registered
 				const isRegistered = await accountContract.methods.login(account).call();
 				if (isRegistered) {
@@ -996,28 +1042,74 @@
 				type = "CHILD";
 			}
 			// Display profile details and account balance
-			profileArea.textContent = `Name  : ${profile.name}\n` +
-				`Email : ${profile.email}\n` +
-				`Age   : ${profile.age}\n` +
-				`Ether Balance : ${balanceFormatted} ETH\n` +
-				`Account Type  : ${type}\n`;
-			profileArea.style.textAlign = 'left';
-			profileArea.style.marginLeft = '20%';
-			profileArea.style.fontSize = "24px";
+			// Display profile details and account balance
+			profileArea.innerHTML = `
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Name:</td>
+                <td>${profile.name}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>${profile.email}</td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td>${profile.age}</td>
+            </tr>
+            <tr>
+                <td>Ether Balance:</td>
+                <td>${balanceFormatted} ETH</td>
+            </tr>
+            <tr>
+                <td>Account Type:</td>
+                <td>${type}</td>
+            </tr>
+        </tbody>
+    </table>
+`;
+profileArea.style.textAlign = 'left';
+profileArea.style.marginLeft = '20%';
+profileArea.style.fontSize = "16px";
 
 
+			fetchEvents();
 			// Show linked accounts information
 			const linkedAccountsInfo = document.getElementById("linkedAccountsInfo");
 
 			if (profile.accountType == '0') { // 0 corresponds to Parent in the enum
 				// Fetch and display child accounts
 				const childAccounts = await accountContract.methods.getChildren(account).call();
-				linkedAccountsInfo.innerHTML = '<h3>Children Accounts:</h3><ul>';
-				for (const child of childAccounts) {
-					const childProfile = await accountContract.methods.getProfile().call({ from: child });
-					linkedAccountsInfo.innerHTML += `<li>${child}: ${childProfile.name}, ${childProfile.email}, ${childProfile.age} years old</li>`;
-				}
-				linkedAccountsInfo.innerHTML += '</ul>';
+				linkedAccountsInfo.innerHTML = '<h3>Children Accounts:</h3><table>' +
+    '<thead>' +
+    '<tr>' +
+    '<th>Child Address</th>' +
+    '<th>Name</th>' +
+    '<th>Email</th>' +
+    '<th>Age</th>' +
+    '</tr>' +
+    '</thead>' +
+    '<tbody>';
+
+for (const child of childAccounts) {
+    const childProfile = await accountContract.methods.getProfile().call({ from: child });
+    linkedAccountsInfo.innerHTML += `
+        <tr>
+            <td>${child}</td>
+            <td>${childProfile.name}</td>
+            <td>${childProfile.email}</td>
+            <td>${childProfile.age}</td>
+        </tr>`;
+}
+
+linkedAccountsInfo.innerHTML += '</tbody></table>';
 				// Enable inputs and buttons if access is granted
 				document.getElementById('modName').disabled = false;
 				document.getElementById('modEmail').disabled = false;
@@ -1042,7 +1134,11 @@
 			const regAge = document.getElementById("regAge").value;
 			const isParent = document.getElementById("isParent").checked;
 			const parentAddress = document.getElementById("parentAddress").value;
-
+			if(isParent){
+				document.getElementById('parentAddress').disabled=true;
+			}else{
+				document.getElementById('parentAddress').disabled=false;
+			}
 			const parentAccount = isParent ? "0x0000000000000000000000000000000000000000" : parentAddress;
 			const accountType = isParent ? 0 : 1;
 
@@ -1154,7 +1250,8 @@
             eventsList.push({
                 eventType: 'Profile Modified',
                 details: `${name} | ${email} | ${age}`,
-                timestamp: parseInt(timestamp)
+                timestamp: parseInt(timestamp),
+                transactionHash: event.transactionHash
             });
         });
 
@@ -1169,7 +1266,8 @@
             eventsList.push({
                 eventType: 'Account Archived',
                 details: '',
-                timestamp: parseInt(timestamp)
+                timestamp: parseInt(timestamp),
+                transactionHash: event.transactionHash
             });
         });
 
@@ -1183,8 +1281,9 @@
             const { timestamp } = event.returnValues;
             eventsList.push({
                 eventType: 'Account Reactivated',
-				details: '',
-                timestamp: parseInt(timestamp)
+                details: '',
+                timestamp: parseInt(timestamp),
+                transactionHash: event.transactionHash
             });
         });
 
@@ -1199,7 +1298,8 @@
             eventsList.push({
                 eventType: 'User Registered',
                 details: `${name} | ${email} | ${age}`,
-                timestamp: parseInt(timestamp)
+                timestamp: parseInt(timestamp),
+                transactionHash: event.transactionHash
             });
         });
 
@@ -1214,7 +1314,8 @@
             eventsList.push({
                 eventType: 'Access Granted',
                 details: `Parent ${parent} granted access to Child ${child}`,
-                timestamp: parseInt(timestamp)
+                timestamp: parseInt(timestamp),
+                transactionHash: event.transactionHash
             });
         });
 
@@ -1229,23 +1330,45 @@
             eventsList.push({
                 eventType: 'Access Revoked',
                 details: `Parent ${parent} revoked access from Child ${child}`,
-                timestamp: parseInt(timestamp)
+                timestamp: parseInt(timestamp),
+                transactionHash: event.transactionHash
             });
         });
 
         // Sort the events based on timestamp (most recent first)
         eventsList.sort((a, b) => b.timestamp - a.timestamp);
 
-        // Display the sorted events
+        // Create a table for the events
+        let tableHTML = `<table>
+            <thead>
+                <tr>
+                    <th>Event Type</th>
+                    <th>Details</th>
+                    <th>Date</th>
+                    <th>Transaction Hash</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+        // Display the sorted events in the table
         eventsList.forEach(event => {
             const date = new Date(event.timestamp * 1000).toLocaleString();
-            profileHistoryElement.innerHTML += `<li>${event.eventType}: ${event.details} | ${date}</li>`;
+            tableHTML += `<tr>
+                <td>${event.eventType}</td>
+                <td>${event.details}</td>
+                <td>${date}</td>
+                <td>${event.transactionHash}</td>
+            </tr>`;
         });
+
+        tableHTML += `</tbody></table>`;
+        profileHistoryElement.innerHTML = tableHTML;
 
     } catch (error) {
         console.error("Error fetching events:", error);
     }
 };
+
 
 		// Fetch events when a button is clicked
 		document.getElementById("fetchEventsButton").addEventListener("click", fetchEvents);
@@ -1494,9 +1617,9 @@ async function childVerifyOTP() {
 		}
 
 		// Function to verify OTP
-		function verifyOTP() {
+		function verifyOTP(event) {
 			const otp = document.getElementById('otp').value;
-
+			event.preventDefault;
 			fetch('/verify-otp', {
 				method: 'POST',
 				headers: {
