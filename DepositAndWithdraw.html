@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit and Withdrawal</title>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="style3.css">
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hidden-section h3 {
+            font-size: 2.5em;
+        }
+
+        .hidden-section {
+            padding-top: 100px;
+            margin-left: 100px;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        #withdrawalHistoryTable {
+            margin: 20px auto;
+            width: 50%;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+
+        #withdrawalHistoryTable th,
+        #withdrawalHistoryTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            width: 20%;
+        }
+
+        #withdrawalHistoryTable th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        input {
+            width: 50%;
+            height: 30px;
+            padding: 10px 20px;
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            background: #fafcff;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+
+            &::-webkit-file-upload-button {
+                padding: 6px;
+                border-radius: 20px;
+                border: 1px solid #ccc;
+                background: linear-gradient(to bottom right, #f7fbff, #ccd1d8);
+                cursor: pointer;
+            }
+        }
+
+        button {
+            font-size: 1em;
+            padding: 15px 30px;
+            background: linear-gradient(to bottom right, #42b7f1, #2385e6);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease-in-out;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: linear-gradient(to bottom right, rgb(29, 4, 90), #0d56a5);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-navbar" role="banner">
+
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-11 col-xl-2">
+                    <h1 class="mb-0 site-logo"><a href="main.html" class="text-white mb-0"><b
+                                style="color: yellow;">Bee</b>Wallet</a></h1>
+                </div>
+                <div class="col-12 col-md-10 d-none d-xl-block">
+                    <nav class="site-navigation position-relative text-right" role="navigation">
+
+                        <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+                            <li><a href="main.html"><span>Home</span></a></li>
+                            <li onclick="showSection('accountInfo')"><a href="AccountInfo.html"><span>Account
+                                        Info</span></a></li>
+                            <li class="has-children active">
+                                <a href="DepositAndWithdraw.html"><span>Deposit And Withdrawals</span></a>
+                                <ul class="dropdown arrow-top">
+                                    <li onclick="showSection('addFundsSection')"><a href="#">Deposit</a></li>
+                                    <li onclick="showSection('instantWithdrawSection')"><a
+                                            href="#">Instant Withdrawals</a></li>
+                                    <li onclick="showSection('listWithdrawalsSection')">
+                                            <a href="#">List Withdrawals</a>
+                                        </li>
+                                    <li class="has-children">
+                                        <a href="#">Withdrawals</a>
+                                        <ul class="dropdown">
+                                            <li onclick="showSection('listScheduledSection')">
+                                                <a href="#">List Scheduled Withdrawals</a>
+                                            </li>
+                                            <li onclick="showSection('scheduleWithdrawSection')"><a
+                                                    href="#">Schedule Withdrawals</a></li>
+                                            <li onclick="showSection('executeWithdrawSection')"><a
+                                                    href="#">Execute Withdrawals</a></li>
+                                            <li onclick="showSection('cancelWithdrawal')"><a
+                                                    href="#">Cancel Withdrawals</a></li>
+                                            <li onclick="showSection('childScheduleWithdraw')"><a
+                                                    href="#">Schedule Withdrawals For Child</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="listings.html"><span>Transaction</span></a></li>
+                            <li><a href="about.html"><span>Interest</span></a></li>
+                            <li><a href="blog.html"><span>Reward</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+
+                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a
+                        href="#" class="site-menu-toggle js-menu-toggle text-white"><span
+                            class="icon-menu h3"></span></a></div>
+
+            </div>
+
+        </div>
+        </div>
+
+    </header>
+    <main>
+        <!-- Add Funds Section -->
+        <div id="addFundsSection" class="hidden-section">
+            <form id="addFundsForm">
+                <h3>Add Funds</h3>
+                <input type="number" id="amount" name="amount" min="0.0001" step="0.0001" required
+                    placeholder="Enter Amount in Ether">
+                <button type="submit">Deposit</button>
+            </form>
+        </div>
+
+        <!-- Add Child Account Section -->
+        <!-- <div id="addChildSection" class="hidden-section">
+            <h3>Add Child Account</h3>
+            <input type="text" id="childAddress" placeholder="Child Account Address" /> <br>
+            <button onclick="addChildAccount()">Add Child</button>
+        </div> -->
+
+    <!-- List Withdrawal History Section -->
+    <div id="listWithdrawalsSection" class="hidden-section" style="text-align: center; margin-left: 0px;">
+        <h3>Withdrawal History</h3>
+        <table id="withdrawalHistoryTable" border="1">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Amount (ETH)</th>
+                    <th>Date & Time</th>
+                </tr>
+            </thead>
+            <tbody id="withdrawalHistoryBody"></tbody>
+        </table>
+    </div>
+
+        <!-- List Scheduled Withdrawals Section -->
+        <div id="listScheduledSection" class="hidden-section" style="text-align: center; margin-left: 0px;">
+            <h3>Scheduled Withdrawals</h3>
+            <table id="withdrawalHistoryTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Amount (ETH)</th>
+                        <th>Unlock Time</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+                <tbody id="withdrawalsBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Instant Withdraw Section -->
+        <div id="instantWithdrawSection" class="hidden-section">
+            <h3>Instant Withdraw</h3>
+            <input type="number" id="instantWithdrawAmount" placeholder="Amount in ETH" /> <br>
+            <button onclick="instantWithdraw()">Withdraw</button>
+        </div>
+
+        <!-- Schedule Withdrawal Section -->
+        <div id="scheduleWithdrawSection" class="hidden-section">
+            <h3>Schedule Withdrawal</h3>
+            <input type="number" id="withdrawAmount" placeholder="Amount in ETH" /> <br>
+            <input type="datetime-local" id="withdrawDateTime" /> <br>
+            <button onclick="addScheduleWithdraw()">Schedule Withdraw</button>
+        </div>
+
+        <!-- Execute Withdrawal Section -->
+        <div id="executeWithdrawSection" class="hidden-section">
+            <h3>Execute Scheduled Withdrawal</h3>
+            <input type="number" id="withdrawIndex" placeholder="Withdrawal Index" /> <br>
+            <button onclick="executeScheduledWithdraw()">Execute Withdrawal</button>
+        </div>
+
+        <!-- Cancel Scheduled Withdraw -->
+        <div id="cancelWithdrawal" class="hidden-section">
+            <form id="cancelWithdrawalForm">
+                <h3>Cancel Scheduled Withdraw</h3>
+                <input type="number" id="withdrawalIndex" name="withdrawalIndex" min="0" required
+                    placeholder="Enter index Schedule Withdraw">
+                <button type="submit">Cancel Withdrawal</button>
+            </form>
+            <p id="cancelResponse"></p>
+        </div>
+
+        <div id="childScheduleWithdraw" class="hidden-section">
+            <form id="withdrawForm">
+                <h3>Schedule Withdrawal for Child</h3>
+                <label for="childAddress">Child's Address:</label><br>
+                <input type="text" id="childAddress" name="childAddress" placeholder="Enter child's address"
+                    required><br><br>
+
+                <label for="amountWithdraw">Amount (in Ether):</label><br>
+                <input type="number" id="amountWithdraw" name="amountWithdraw" placeholder="Enter amount in Ether"
+                    required><br><br>
+
+                <label for="unlockTime">Unlock Date:</label><br>
+                <input type="datetime-local" id="unlockTime" name="unlockTime" required><br><br>
+
+                <button type="submit">Schedule Withdrawal</button>
+            </form>
+        </div>
+    </main>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
