@@ -471,34 +471,26 @@ const ABI = [
         "type": "function"
     }
 ];
-const Address = "0xEB3f419932CcE2cC43a012bC9239E10c0C4b03d1"; // Replace with your contract address
-
-// Function to show the correct section and hide others
-// function showSection(sectionId) {
-//     const sections = document.querySelectorAll('.hidden-section');
-//     sections.forEach(section => section.style.display = 'none');  // Hide all sections
-//     document.getElementById(sectionId).style.display = 'block';  // Show the selected section
-// }
+const Address = "0xEB3f419932CcE2cC43a012bC9239E10c0C4b03d1";
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.hidden-section');
     
     // Hide all sections
     sections.forEach(section => {
-        section.style.opacity = 0;  // Set opacity to 0 for fade-out effect
+        section.style.opacity = 0;
         setTimeout(() => {
-            section.style.display = 'none';  // Hide after fade-out
-        }, 500);  // Keep in sync with the transition duration
+            section.style.display = 'none';
+        }, 500);
     });
 
     const targetSection = document.getElementById(sectionId);
     
     if (targetSection) {
-        // Show the selected section with fade-in effect
         setTimeout(() => {
-            targetSection.style.display = 'block';  // First, make it visible
-            setTimeout(() => targetSection.style.opacity = 1, 10);  // Then apply fade-in effect
-        }, 500);  // Delay showing until all others are hidden
+            targetSection.style.display = 'block';
+            setTimeout(() => targetSection.style.opacity = 1, 10);
+        }, 500);
     }
 
     // Update the URL hash without reloading the page
