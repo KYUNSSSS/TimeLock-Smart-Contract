@@ -185,10 +185,10 @@ a:hover {
     position: relative;
 }
 
-.site-navbar    .site-menu .has-children .dropdown>li.has-children>a:after {
+.site-navbar .site-menu .has-children .dropdown>li.has-children>a:after {
     position: absolute;
     right: 0;
-    content: "\25B6";
+    content: "\25BC";
     right: 20px;
 }
 

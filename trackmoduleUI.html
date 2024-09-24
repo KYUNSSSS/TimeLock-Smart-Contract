@@ -7,6 +7,7 @@
 	<title>Trackmodule 2.0</title>
 	<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
 	<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
 	<style>
 /* body {
         font-family: 'Arial', sans-serif;
@@ -238,40 +239,42 @@
               <nav class="site-navigation position-relative text-right" role="navigation">
   
                 <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
-                  <li class="active"><a href="main.html"><span>Home</span></a></li>
-                  <li><a href="regEdit.html"><span>Account Info</span></a></li>
+                  <li><a href="main.html"><span>Home</span></a></li>
+                  <li><a href="AccountInfo.html"><span>Account Info</span></a></li>
                   <li class="has-children">
-                    <a href="DepositAndWithdraw.html"><span>Deposit And Withdrawals</span></a>
-                    <ul class="dropdown arrow-top">
-                      <li><a href="#">Deposit</a></li>
-                      <li class="has-children">
-                        <a href="#">Withdrawals</a>
-                        <ul class="dropdown">
-                          <li><a href="#">List Scheduled Withdrawals</a></li>
-                          <li><a href="#">Schedule Withdrawals</a></li>
-                          <li><a href="#">Execute Withdrawals</a></li>
-                          <li><a href="#">Cancel Withdrawals</a></li>
-                          <li><a href="#">Schedule Withdrawals For Child</a></li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a href="trackmoduleUI.html"><span>Transaction</span></a></li>
-                  <li><a href="about.html"><span>Interest</span></a></li>
-                  <li><a href="blog.html"><span>Reward</span></a></li>
+					<a href="#"><span>Deposit And Withdrawals</span></a>
+					<ul class="dropdown arrow-top">
+						<li onclick="showSection('addFundsSection')"><a
+								href="DepositAndWithdraw.html">Deposit</a></li>
+						<li onclick="showSection('instantWithdrawSection')"><a
+								href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
+						<li class="has-children">
+							<a href="#">Withdrawals</a>
+							<ul class="dropdown">
+								<li onclick="showSection('listScheduledSection')">
+									<a href="DepositAndWithdraw.html">List Scheduled Withdrawals</a>
+								</li>
+								<li onclick="showSection('scheduleWithdrawSection')"><a href="DepositAndWithdraw.html">Schedule Withdrawals</a></li>
+								<li onclick="showSection('executeWithdrawSection')"><a href="DepositAndWithdraw.html">Execute Withdrawals</a></li>
+								<li onclick="showSection('cancelWithdrawal')"><a href="DepositAndWithdraw.html">Cancel Withdrawals</a></li>
+								<li onclick="showSection('childScheduleWithdraw')"><a href="DepositAndWithdraw.html">Schedule Withdrawals For Child</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+                  <li class="active"><a href="trackmoduleUI.html"><span>Transaction</span></a></li>
+                  <li><a href="interest.html"><span>Interest</span></a></li>
+                  <li><a href="Reward.html"><span>Reward</span></a></li>
                 </ul>
-                <input type="text" name="address" id="navAddress" disabled>
               </nav>
             </div>
-  
-  
-            <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
   
             </div>
   
           </div>
         </div>
-        
+		<img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
+        <input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%;">
       </header>
 
     <div id="statusModal" class="modal">

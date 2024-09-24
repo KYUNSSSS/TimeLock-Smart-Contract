@@ -51,12 +51,10 @@
             <div class="row align-items-center">
 
                 <div class="col-11 col-xl-2">
-                    <h1 class="mb-0 site-logo"><a href="main.html" class="text-white mb-0"><b
-                                style="color: yellow;">Bee</b>Wallet</a></h1>
+                    <h1 class="mb-0 site-logo"><a href="main.html" class="text-white mb-0"><b style="color: yellow;">Bee</b>Wallet</a></h1>
                 </div>
                 <div class="col-12 col-md-10 d-none d-xl-block">
                     <nav class="site-navigation position-relative text-right" role="navigation">
-
                         <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
                             <li><a href="main.html"><span>Home</span></a></li>
                             <li onclick="showSection('accountInfo')" class="active"><a
@@ -64,10 +62,8 @@
                             <li class="has-children">
                                 <a href="#"><span>Deposit And Withdrawals</span></a>
                                 <ul class="dropdown arrow-top">
-                                    <li onclick="showSection('addFundsSection')"><a
-                                            href="DepositAndWithdraw.html">Deposit</a></li>
-                                    <li onclick="showSection('instantWithdrawSection')"><a
-                                            href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
+                                    <li onclick="showSection('addFundsSection')"><a href="DepositAndWithdraw.html">Deposit</a></li>
+                                    <li onclick="showSection('instantWithdrawSection')"><a href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
                                     <li class="has-children">
                                         <a href="#">Withdrawals</a>
                                         <ul class="dropdown">
@@ -82,20 +78,16 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a href="listings.html"><span>Transaction</span></a></li>
-                            <li><a href="about.html"><span>Interest</span></a></li>
-                            <li><a href="blog.html"><span>Reward</span></a></li>
+                            <li><a href="trackmoduleUI.html"><span>Transaction</span></a></li>
+                            <li><a href="interest.html"><span>Interest</span></a></li>
+                            <li><a href="Reward.html"><span>Reward</span></a></li>
                         </ul>
                     </nav>
                 </div>
-
-                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
-                    <a href="#" class="site-menu-toggle js-menu-toggle text-white">
-                        <span class="icon-menu h3"></span>
-                    </a>
-                </div>
             </div>
         </div>
+        <img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
+        <input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%;">
     </header>
 
     <main>
@@ -105,13 +97,14 @@
                 <h2>Account: <span id="account"></span></h2>
             </div>
             <!-- Check Balance Section -->
-            <div>
-                <h2>Check Balance: <span id="balanceResult">0</span> ETH</h2>
+            <div style="text-align: center;">
+                <h1 style="font-size: 100px;"><span id="balanceResult">0</span> ETH</h1>
             </div>
             <div>
                 <!-- Child Check time remaining -->
                 <h2>Time Remaining: <span id="timeRemainingResult"></span></h2>
             </div>
+
         </div>
 
     </main>

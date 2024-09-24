@@ -72,7 +72,7 @@
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 30px;
-            background: #fafcff;
+            /* background: #fafcff; */
             box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
             display: flex;
             justify-content: center;
@@ -128,7 +128,6 @@
                 </div>
                 <div class="col-12 col-md-10 d-none d-xl-block">
                     <nav class="site-navigation position-relative text-right" role="navigation">
-
                         <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
                             <li><a href="main.html"><span>Home</span></a></li>
                             <li onclick="showSection('accountInfo')" id="accountDetails"><a href="AccountInfo.html"><span>Account Info</span></a></li>
@@ -150,22 +149,17 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li><a href="listings.html"><span>Transaction</span></a></li>
-                            <li><a href="about.html"><span>Interest</span></a></li>
-                            <li><a href="blog.html"><span>Reward</span></a></li>
+                            <li><a href="trackmoduleUI.html"><span>Transaction</span></a></li>
+                            <li><a href="interest.html"><span>Interest</span></a></li>
+                            <li><a href="Reward.html"><span>Reward</span></a></li>
                         </ul>
                     </nav>
-                </div>
-
-                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
-                    <a href="#" class="site-menu-toggle js-menu-toggle text-white">
-                        <span class="icon-menu h3"></span>
-                    </a>
                 </div>
             </div>
 
         </div>
-
+        <img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
+        <input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%;">
     </header>
     <main>
         <!-- Add Funds Section -->
