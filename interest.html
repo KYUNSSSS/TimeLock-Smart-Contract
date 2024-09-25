@@ -132,12 +132,13 @@
     }
 
     .history-table th {
-      background-color: #f2f2f2;
+      /* background-color: #f2f2f2; */
       color: black;
+      background-color: #b8f9ff;
     }
 
     .history-table tr:nth-child(even) {
-      background-color: #f9f9f9;
+      background-color: #b8f9ff;
     }
 
     .history-table tr:hover {
@@ -175,7 +176,7 @@
   </style>
 </head>
 
-<body onload="connectWallet()">
+<body onload="connectWallet(),refreshAccountInfo()">
   <header class="site-navbar" role="banner">
     <div id="account2" , id="account3"></div>
 
@@ -283,7 +284,6 @@
   </header>
   <main>
     <div id="interestAccountInfo" class="hidden-section">
-      <button onclick="defaultSetInterval()">Testing Default Set Interval to Testing</button>
 
       <h2>Account Information</h2>
       <p style="font-weight: bold; margin: 0; font-size: larger;">Connected Account: <span id="account"
@@ -292,9 +292,9 @@
       <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
           style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
       <!-- Changed from account-balances -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span class="accrual-interval"
           style="font-weight: normal; margin: 0; font-size: smaller;">N/A</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span class="interest-rate"
           style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
 
       <button id="refresh-account-info" onclick="refreshAccountInfo()">Refresh Account Info</button>
@@ -325,9 +325,9 @@
       <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
           style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
       <!-- Keep same id as above -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span class="accrual-interval"
           style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span class="interest-rate"
           style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
       <button id="refresh-account" onclick="refreshAccountInfo()"">Refresh Account Info</button>
 
@@ -343,9 +343,9 @@
       <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
           style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
       <!-- Keep same id as above -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span class="accrual-interval"
           style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span class="interest-rate"
           style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
       <button id="refresh-account" onclick="refreshAccountInfo()">Refresh Account Info</button>
 
@@ -361,9 +361,9 @@
       <p style="font-weight: bold; margin: 0; font-size: larger;">Account Balance: <span id="account-balance"
           style="font-weight: normal; margin: 0; font-size: smaller;" class="balanceResult">0 ETH</span></p>
       <!-- Keep same id as above -->
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span id="accrual-interval"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Accrual Interval: <span class="accrual-interval"
           style="font-weight: normal; margin: 0; font-size: smaller;">Unknown</span></p>
-      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span id="interest-rate"
+      <p style="font-weight: bold; margin: 0; font-size: larger;">Interest Rate: <span class="interest-rate"
           style="font-weight: normal; margin: 0; font-size: smaller;">0%</span></p>
       <button id="refresh-account" onclick="refreshAccountInfo()">Refresh Account Info</button>
 

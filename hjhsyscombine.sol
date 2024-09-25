@@ -633,9 +633,5 @@ function upgradeToParent(address _child) internal {
         if (account.isChild) {
             account.parent = user.parent;
         }
-
-
     }
-
-
 }

@@ -6,7 +6,6 @@
 	<title>Trackmodule 2.0</title>
 	<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
 	<link rel="stylesheet" href="style.css">
-	<script src="script.js"></script>
 
 	<style>
 /* body {
@@ -18,69 +17,23 @@
         padding: 20px;
         background-color: #f0f2f5;
     } */
-
-	.hidden-section h3 {
-            font-size: 2.5em;
-        }
-
-		.hidden-section {
-            display: none;
-            opacity: 0;  /* Initially hidden */
-            transition: opacity 0.5s ease;  /* Smooth transition */
-            background-color: rgb(255,255,255,0.2);
-        }
-		
-		main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding-top: 100px;
-        }
-
-		.hidden-section {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #f2f2f2;
-            border-radius: 30px;
-            width: 60%;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
-        }
-
-		form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-		button {
-            font-size: 1em;
-            padding: 15px 30px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease-in-out;
-            margin: 5px;
-        }
-
-        button:hover {
-            background: linear-gradient(to bottom right, rgb(29, 4, 90), #0d56a5);
-        }
-
-        button[type=button] {
-            border-radius: 20px;
-        }
+	.container-transaction {
+        display: block;
+        position: absolute;
+		margin-top: 100px;
+		top: 50%;
+		left: 30%;
+		right: 30%;
+    }
 
     .section {
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.2); /* Increased transparency */
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         padding: 20px 30px 20px 30px;
         transition: all 0.3s ease;
-		margin-bottom: 20px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(5px); /* Add blur effect for better readability */
     }
     .section:hover {
         transform: translateY(-5px);
@@ -141,7 +94,7 @@
         box-sizing: border-box;
         font-size: 14px;
     }
-    /* button {
+    button {
         background-color: #3498db;
         color: white;
         border: none;
@@ -151,9 +104,9 @@
         transition: background-color 0.3s, transform 0.1s;
         font-size: 14px;
         width: 100%;
-    } */
+    }
     button:hover {
-        background: linear-gradient(to bottom right, rgb(29, 4, 90), #0d56a5);
+        background-color: #2980b9;
     }
 	button:active {
         transform: scale(0.98);
@@ -169,18 +122,20 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
         }
+
 		.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 90%;
-    max-width: 800px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    max-height: 80vh;
-    overflow-y: auto;
-}
+        background-color: rgba(254, 254, 254, 0.7); /* More transparent modal */
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%;
+        max-width: 800px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        max-height: 80vh;
+        overflow-y: auto;
+        backdrop-filter: blur(10px); /* Add blur effect for better readability */
+    }
         .close {
             color: #aaa;
             float: right;
@@ -194,45 +149,11 @@
             text-decoration: none;
             cursor: pointer;
         }
-		/* .metamask-container {
-    text-align: center;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  .metamask-title {
-    color: #343a40;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  .metamask-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f6851b;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .metamask-button:hover {
-    background-color: #e2761b;
-  }
-  .metamask-logo {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-  } */
+
   #scheduledTransfersContent table {
     width: 100%;
     border-collapse: collapse;
 }
-
 #scheduledTransfersContent th, #scheduledTransfersContent td {
     border: 1px solid #ddd;
     padding: 8px;
@@ -242,172 +163,136 @@
     background-color: #f2f2f2;
 }
 
-#instantTransferSection{
-            display: block;
-            opacity: 1;
-            transition: opacity 0.5s ease;/* Smooth transition */
-            background-color: rgb(255, 255, 255, 0.2);
-        }
 	</style>
 </head>
 <body>
 	<header class="site-navbar" role="banner">
 
 		<div class="container">
-			<div class="row align-items-center">
-
-				<div class="col-11 col-xl-2">
-					<h1 class="mb-0 site-logo"><a href="main.html" class="text-white mb-0"><b
-								style="color: yellow;">Bee</b>Wallet</a></h1>
-				</div>
-				<div class="col-12 col-md-10 d-none d-xl-block">
-					<nav class="site-navigation position-relative text-right" role="navigation">
-						<ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
-							<li><a href="main.html"><span>Home</span></a></li>
-							<li onclick="showSection('accountInfo')" id="accountDetails"><a
-									href="AccountInfo.html"><span>Account Info</span></a></li>
-							<li class="has-children">
-								<a href="#"><span>Deposit And Withdrawals</span></a>
-								<ul class="dropdown arrow-top">
-									<li onclick="showSection('addFundsSection')"><a
-											href="DepositAndWithdraw.html">Deposit</a></li>
-									<li onclick="showSection('instantWithdrawSection')"><a
-											href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
-									<li onclick="showSection('listWithdrawalsSection')"><a
-											href="DepositAndWithdraw.html">List Withdrawals</a></li>
-									<li class="has-children">
-										<a href="#">Withdrawals</a>
-										<ul class="dropdown">
-											<li onclick="showSection('listScheduledSection')">
-												<a href="DepositAndWithdraw.html">List Scheduled Withdrawals</a>
-											</li>
-											<li onclick="showSection('scheduleWithdrawSection')"><a
-													href="DepositAndWithdraw.html">Schedule Withdrawals</a></li>
-											<li onclick="showSection('executeWithdrawSection')"><a
-													href="DepositAndWithdraw.html">Execute Withdrawals</a></li>
-											<li onclick="showSection('cancelWithdrawal')"><a
-													href="DepositAndWithdraw.html">Cancel Withdrawals</a></li>
-											<li onclick="showSection('childScheduleWithdraw')"><a
-													href="DepositAndWithdraw.html">Schedule Withdrawals For Child</a>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li class="has-children active">
-								<a href="#"><span>Transaction</span></a>
-								<ul class="dropdown arrow-top">
-									<li onclick="showSection('instantTransferSection')"><a
-											href="#">Instant Transfer</a></li>
-									<li class="has-children">
-										<a href="#">Scheduled Transfers</a>
-										<ul class="dropdown">
-											<li onclick="showSection('scheduleAutoExecution')"><a
-													href="#">Schedule Auto Execution</a></li>
-											<li onclick="showSection('executeAutoScheduledTransfers')"><a
-													href="#">Execute Auto Scheduled Transfers</a></li>
-											<li onclick="showSection('getAllScheduledTransfers')"><a
-													href="#">Get All Scheduled Transfers</a></li>
-											<li onclick="showSection('cancelScheduledTransfer')"><a
-													href="#">Cancel Scheduled Transfer</a></li>
-										</ul>
-									</li>
-									<li class="has-children">
-										<a href="#">Transfer History</a>
-										<ul class="dropdown">
-											<li onclick="showSection('transferHistory')"><a
-													href="#">Transfer History</a></li>
-											<li onclick="showSection('getAllTransferHistory')"><a
-													href="#">All Transfer History</a></li>
-											<li onclick="showSection('transferDetails')"><a
-													href="#">Transfer Details</a></li>
-											<li onclick="showSection('getTotalTransactionAmount')"><a
-													href="#">Total Transaction Amount</a></li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li class="has-children class">
-
-								<a href="#"><span>Interest</span></a>
-								<ul class="dropdown arrow-top">
-									<li onclick="showSection('interestAccountInfo')"><a href="interest.html">Interest
-											Account</a></li>
-									<li onclick="showSection('interestIntervalAdjustment')"><a
-											href="interest.html">Interest Interval Adjustment</a></li>
-									<li class="has-children">
-										<a href="#">Interest Withdrawal</a>
-										<ul class="dropdown">
-											<li onclick="showSection('addInterest')"><a href="interest.html">Add
-													Interest</a></li>
-											<li onclick="showSection('withdrawInterest')"><a
-													href="interest.html">Withdraw Interest</a></li>
-											<li onclick="showSection('distributeInterest')"><a
-													href="interest.html">Distribute Interest</a></li>
-										</ul>
-									</li>
-									<li onclick="showSection('interestCalculator')"><a href="interest.html">Interest
-											Calculator</a></li>
-									<li onclick="showSection('interestHistory')"><a href="interest.html">Interest
-											History</a></li>
-								</ul>
-							</li>
-							<li><a href="reward.html"><span>Reward</span></a></li>
-						</ul>
-					</nav>
-				</div>
-
+		  <div class="row align-items-center">
+	
+			<div class="col-11 col-xl-2">
+			  <h1 class="mb-0 site-logo"><a href="main.html" class="text-white mb-0"><b
+					style="color: yellow;">Bee</b>Wallet</a></h1>
 			</div>
-
+			<div class="col-12 col-md-10 d-none d-xl-block">
+			  <nav class="site-navigation position-relative text-right" role="navigation">
+				<ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+				  <li><a href="main.html"><span>Home</span></a></li>
+				  <li onclick="showSection('accountInfo')" id="accountDetails"><a href="AccountInfo.html"><span>Account Info</span></a></li>
+						<li class="has-children">
+						  <a href="#"><span>Deposit And Withdrawals</span></a>
+						  <ul class="dropdown arrow-top">
+							  <li onclick="showSection('addFundsSection')"><a href="DepositAndWithdraw.html">Deposit</a></li>
+							  <li onclick="showSection('instantWithdrawSection')"><a href="DepositAndWithdraw.html">Instant Withdrawals</a></li>
+							  <li onclick="showSection('listWithdrawalsSection')"><a href="DepositAndWithdraw.html">List Withdrawals</a></li>        
+							  <li class="has-children">
+								  <a href="#">Withdrawals</a>
+								  <ul class="dropdown">
+									  <li onclick="showSection('listScheduledSection')">
+										  <a href="DepositAndWithdraw.html">List Scheduled Withdrawals</a>
+									  </li>
+									  <li onclick="showSection('scheduleWithdrawSection')"><a href="DepositAndWithdraw.html">Schedule Withdrawals</a></li>
+									  <li onclick="showSection('executeWithdrawSection')"><a href="DepositAndWithdraw.html">Execute Withdrawals</a></li>
+									  <li onclick="showSection('cancelWithdrawal')"><a href="DepositAndWithdraw.html">Cancel Withdrawals</a></li>
+									  <li onclick="showSection('childScheduleWithdraw')"><a href="DepositAndWithdraw.html">Schedule Withdrawals For Child</a></li>
+								  </ul>
+							  </li>
+						  </ul>
+					  </li>
+					  <li class="has-children active">
+						<a href="#"><span>Transaction</span></a>
+						<ul class="dropdown arrow-top">
+							<li onclick="toggleInstantTransfer()"><a href="#">Instant Transfer</a></li>
+						  <li class="has-children"> 
+							<a href="#">Scheduled Transfers</a>
+							<ul class="dropdown">
+								<li onclick="toggleScheduleAutoExecution()"><a href="#">Schedule Auto Execution</a></li>
+								<li onclick="toggleexecuteScheduledTransfersSection()"><a href="#">Execute Auto Scheduled Transfers</a></li>
+								<li onclick="togglegetAllScheduledTransfersSection()"><a href="#">Get All Scheduled Transfers</a></li>
+								<li onclick="tooglecancelScheduledTransferSection()"><a href="#">Cancel Scheduled Transfer</a></li>
+							</ul>
+						  </li>
+						  <li class="has-children">
+							<a href="#">Transfer History</a>
+							<ul class="dropdown">
+							  <li onclick="toggleTransferHistorySection()"><a href="#">Transfer History</a></li>
+							  <li onclick="togglegetAllTransferHistorySection()"><a href="#">All Transfer History</a></li>
+							  <li onclick="toggleTransferDetailsSection()"><a href="#">Transfer Details</a></li>
+							  <li onclick="toggleTotalAmountSection() "><a href="#">Total Transaction Amount</a></li>
+							</ul>
+						  </li>
+						</ul>
+					  </li>
+					  <li class="has-children class">
+					
+						<a href="#"><span>Interest</span></a>
+						<ul class="dropdown arrow-top">
+						  <li onclick="showSection('interestAccountInfo')"><a href="interest.html">Interest Account</a></li>
+						  <li onclick="showSection('interestIntervalAdjustment')"><a href="interest.html">Interest Interval Adjustment</a></li>
+						  <li class="has-children">
+						  <a href="#">Interest Withdrawal</a>
+						  <ul class="dropdown">
+							<li onclick="showSection('addInterest')"><a href="interest.html">Add Interest</a></li>
+							<li onclick="showSection('withdrawInterest')"><a href="interest.html">Withdraw Interest</a></li>
+							<li onclick="showSection('distributeInterest')"><a href="interest.html">Distribute Interest</a></li>
+						  </ul>
+						  </li>
+						  <li onclick="showSection('interestCalculator')"><a href="interest.html">Interest Calculator</a></li>
+						  <li onclick="showSection('interestHistory')"><a href="interest.html">Interest History</a></li>
+						</ul>
+						</li>
+				  <li><a href="reward.html"><span>Reward</span></a></li>
+				</ul>
+			  </nav>
+			</div>
+	
+		  </div>
+	
 		</div>
 		<img src="images/metalogo.png" alt="logo" id="connecLogo" height="40px" width="40px">
-		<input type="text" name="address" id="navAddress" disabled
-			style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%; font-size: 13px;">
-	</header>
+		<input type="text" name="address" id="navAddress" disabled style="position:absolute;  right: 20px; top: 0px; padding: 10px; border-radius: 20px; color: white; font-weight: bold; width: 6%; font-size: 13px;">
+	  </header>
 
-	  <main>
 
-	  <div id="statusModal" class="modal">
-		<div class="modal-content">
-			<span class="close">&times;</span>
-			<p id="modalContent"></p>
-		</div>
-	</div>
-
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalContent"></p>
+        </div>
+    </div>
 	<div id="transferHistoryModal" class="modal">
 		<div class="modal-content">
 			<span class="close">&times;</span>
 			<div id="transferHistoryContent"></div>
 		</div>
 	</div>
-
 	<div id="scheduledTransfersModal" class="modal">
 		<div class="modal-content">
 			<span class="close">&times;</span>
 			<div id="scheduledTransfersContent"></div>
 		</div>
 	</div>
-
-	<div id="transferHistoryModal" class="modal">
+	<div id="allTransferHistoryModal" class="modal">
 		<div class="modal-content">
 			<span class="close">&times;</span>
-			<div id="transferHistoryContent"></div>
-		</div>
-	</div>
+        <div id="allTransferHistoryContent"></div>
+    </div>
+</div>
 
-	<div id="transferDetailsModal" class="modal">
-		<div class="modal-content">
-			<span class="close">&times;</span>
-			<div id="transferDetailsContent"></div>
-		</div>
+<div id="transferDetailsModal" class="modal">
+	<div class="modal-content">
+		<span class="close">&times;</span>
+		<div id="transferDetailsContent"></div>
 	</div>
+</div>
 
-	<div id="totalAmountModal" class="modal">
-		<div class="modal-content">
-			<span class="close">&times;</span>
-			<div id="totalAmountContent"></div>
-		</div>
-	</div>
+<div id="totalAmountModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="totalAmountContent"></div>
+    </div>
+</div>
 	<!-- <div class="metamask-container">
 		<h2 class="metamask-title">Connect to MetaMask</h2>
 		<button class="metamask-button" onclick="connectMetaMask()">
@@ -423,97 +308,71 @@
 		<input type="number" id="addFundsAmount" placeholder="Amount in Ether">
 		<button onclick="addFunds()">Add Funds</button>
 	</div> -->
-	<!-- <div class="container-transaction"> -->
-		<!-- <div class="section">
-			<h2>Check Balance</h2>
-			<input type="text" id="checkBalanceAddress" placeholder="Address">
-			<button onclick="checkBalance()">Check Balance</button>
-		</div> -->
-	
-		<div id="instantTransferSection" class="hidden-section">
+	<div class="container-transaction">
+		<!-- Group: Instant Transfer -->
+		<div class="section" id="instantTransferSection" style="display: none;">
 			<h2>Instant Transfer</h2>
-			<form>
-				<p>Receiver Address</p>
-				<input type="text" id="instantTransferTo" placeholder="To Address">
-				<p>Transfer Amount</p>
-				<input type="number" id="instantTransferAmount" placeholder="Amount in Ether">
-				<button onclick="instantTransfer()">Transfer</button>
-			</form>
+			<input type="text" id="instantTransferTo" placeholder="To Address">
+			<input type="number" id="instantTransferAmount" placeholder="Amount in Ether">
+			<button onclick="instantTransfer()">Transfer</button>
 		</div>
 
+		<!-- Group: Scheduled Transfers -->
+		<div class="section" id="scheduleAutoExecutionSection" style="display: none;">
+			<h2>Schedule Auto Execution</h2>
+			<input type="text" id="autoScheduleTransferTo" placeholder="To Address">
+			<input type="number" id="autoScheduleTransferAmount" placeholder="Amount in Ether">
+			<input type="datetime-local" id="autoScheduleTransferUnlockTime">
+			<button onclick="scheduleAutoExecution()" class="btn-success">Schedule Auto Execution</button>
+		</div>
 
-			<div id="getAllScheduledTransfers" class="hidden-section">
-				<h2>Scheduled Transfers</h2>
-				<button onclick="getAllScheduledTransfers()" class="btn-primary">Get All Scheduled Transfers</button>
-			</div>
-	
-			<div id="cancelScheduledTransfer" class="hidden-section">
-				<h2>Cancel Transfer</h2>
-				<input type="number" id="cancelTransferIndex" placeholder="Transfer Index">
+		<div class="section" id="executeAutoScheduledTransfersSection" style="display: none;">
+			<h2>Auto Scheduled Transfers</h2>
+			<button onclick="executeAutoScheduledTransfers()" class="btn-warning">Execute Auto Scheduled Transfers</button>
+		</div>
+		
+		<div class="section" id="getAllScheduledTransfersSection" style="display: none;">
+			<h2>Scheduled Transfers</h2>
+			<button onclick="getAllScheduledTransfers()" class="btn-primary">Get All Scheduled Transfers</button>
+		</div>
+		<div class="section" id="cancelScheduledTransferSection" style="display: none;">
+			<h2>Cancel Transfer</h2>
+			<input type="number" id="cancelTransferIndex" placeholder="Transfer Index">
 				<button onclick="cancelScheduledTransfer()" class="btn-danger">Cancel Transfer</button>
 			</div>
-	
-			<div id="scheduleAutoExecution" class="hidden-section">
-				<h2>Schedule Auto Execution</h2>
-				<form>
-					<p>Receiver Address</p>
-					<input type="text" id="autoScheduleTransferTo" placeholder="To Address">
-					<p>Transfer Amount</p>
-					<input type="number" id="autoScheduleTransferAmount" placeholder="Amount in Ether">
-					<p>Release Date Time</p>
-					<input type="datetime-local" id="autoScheduleTransferUnlockTime">
-					<button onclick="scheduleAutoExecution()" class="btn-success">Schedule Auto Execution</button>
-				</form>
-			</div>
-			<div id="executeAutoScheduledTransfers" class="hidden-section">
-				<h2>Auto Scheduled Transfers</h2>
-				<button onclick="executeAutoScheduledTransfers()" class="btn-warning">Execute Auto Scheduled Transfers</button>
-			</div>
-		<div id="transferHistory" class="hidden-section">
+		
+
+		<!-- Group: Track History -->
+		<div class="section" id="transferHistorySection" style="display: none;">
 			<h2>Transfer History</h2>
-			<form>
-				<p>User 1</p>
-				<input type="text" id="transferHistoryUser1" placeholder="User 1 Address">
-				<p>User 2</p>
-				<input type="text" id="transferHistoryUser2" placeholder="User 2 Address">
-				<button onclick="getTransferHistory()" class="btn-info">Get History</button>
-			</form>
+			<input type="text" id="transferHistoryUser1" placeholder="User 1 Address">
+			<input type="text" id="transferHistoryUser2" placeholder="User 2 Address">
+			<button onclick="getTransferHistory()" class="btn-info">Get History</button>
 		</div>
+
+		<div class="section" id="allTransferHistorySection" style="display: none;">	
+			<h2>All Transfer History</h2>
+			<input type="text" id="allTransferHistoryUser" placeholder="User Address">
+			<button onclick="getAllTransferHistory()" class="btn-info">Get All History</button>
+		</div>
+
+		<div class="section" id="transferDetailsSection" style="display: none;">
+			<h2>Transfer Details</h2>
+			<input type="text" id="transferDetailsUser" placeholder="User Address">
+			<input type="number" id="transferDetailsIndex" placeholder="Transfer Index">
+			<button onclick="getTransferDetails()" class="btn-info">Get Details</button>
+		</div>
+
+		<div class="section" id="totalAmountSection" style="display: none;">
+			<h2>Total Transaction Amount</h2>
+			<input type="text" id="totalAmountSender" placeholder="Sender Address">
+			<input type="text" id="totalAmountReceiver" placeholder="Receiver Address">
+			<button onclick="getTotalTransactionAmount()" class="btn-info">Get Total Amount</button>
+		</div>
+	</div>
+
 
 		
-		<div id="getAllTransferHistory" class="hidden-section">
-			<h2>All Transfer History</h2>
-			<form>
-				<p>User Address</p>
-				<input type="text" id="allTransferHistoryUser" placeholder="User Address">
-				<button onclick="getAllTransferHistory()" class="btn-info">Get All History</button>
-			</form>
-		</div>
-	
-		<div id="transferDetails" class="hidden-section">
-			<h2>Transfer Details</h2>
-			<form>
-				<p>Track Address</p>
-				<input type="text" id="transferDetailsUser" placeholder="User Address">
-				<p>Transfer Index</p>
-				<input type="number" id="transferDetailsIndex" placeholder="Transfer Index">
-				<button onclick="getTransferDetails()" class="btn-info">Get Details</button>
-			</form>
-		</div>
-	
-		<div id="getTotalTransactionAmount" class="hidden-section">
-			<h2>Total Transaction Amount</h2>
-			<form>
-				<p>Sender Address</p>
-				<input type="text" id="totalAmountSender" placeholder="Sender Address">
-				<p>Receiver Address</p>
-				<input type="text" id="totalAmountReceiver" placeholder="Receiver Address">
-				<button onclick="getTotalTransactionAmount()" class="btn-info">Get Total Amount</button>
-			</form>
-		</div>
-</main>
-
-
 	<script>
 		let web3;
 		let contract;
@@ -2174,6 +2033,57 @@ window.onclick = function(event) {
     }
 }
 
+function hideAllSections() {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => section.style.display = 'none');
+}
+
+function toggleInstantTransfer() {
+    const section = document.getElementById('instantTransferSection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleScheduleAutoExecution() {
+    const section = document.getElementById('scheduleAutoExecutionSection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleexecuteScheduledTransfersSection() {
+    const section = document.getElementById('executeAutoScheduledTransfersSection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function togglegetAllScheduledTransfersSection() {
+    const section = document.getElementById('getAllScheduledTransfersSection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function tooglecancelScheduledTransferSection() {
+    const section = document.getElementById('cancelScheduledTransferSection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleTransferHistorySection() {
+    const section = document.getElementById('transferHistorySection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function togglegetAllTransferHistorySection() {
+    const section = document.getElementById('allTransferHistorySection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleTransferDetailsSection() {
+    const section = document.getElementById('transferDetailsSection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleTotalAmountSection() {
+    const section = document.getElementById('totalAmountSection');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+
 
 		async function instantTransfer() {
 			const to = document.getElementById('instantTransferTo').value;
@@ -2375,7 +2285,7 @@ window.onclick = function(event) {
                 '(Ready for execution)';
             html += `
                 <tr>
-                    <td>${i + 1}</td>
+                    <td>${i}</td>
                     <td>${receivers[i]}</td>
                     <td>${parseFloat(web3.utils.fromWei(amounts[i], 'ether')).toFixed(4)}</td>
                     <td>${unlockDate.toLocaleString()} ${timeRemaining}</td>
@@ -2473,42 +2383,44 @@ window.onclick = function(event) {
 		// 		document.getElementById('status').innerText = 'Failed to get all transfer history';
 		// 	}
 		// }
-	async function getAllTransferHistory() {
-		const user = document.getElementById('allTransferHistoryUser').value;
-		try {
-			const history = await contract.methods.getAllTransferHistory(user).call();
-			const formattedHistory = history.map(transfer => ({
-				sender: transfer.sender,
-				receiver: transfer.receiver,
-				amount: web3.utils.fromWei(transfer.amount, 'ether'),
-				timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
-			}));
-			let html = `
-				<h3>All Transfer History:</h3>
-				<table border="1" cellpadding="5" cellspacing="0">
+			async function getAllTransferHistory() {
+			const user = document.getElementById('allTransferHistoryUser').value;
+			try {
+				const history = await contract.methods.getAllTransferHistory(user).call();
+				const formattedHistory = history.map(transfer => ({
+					sender: transfer.sender,
+					receiver: transfer.receiver,
+					amount: web3.utils.fromWei(transfer.amount, 'ether'),
+					timestamp: new Date(transfer.timestamp * 1000).toLocaleString()
+				}));
+
+				let html = `
+					<h3>All Transfer History:</h3>
+					<table border="1" cellpadding="5" cellspacing="0">
+						<tr>
+							<th>From</th>
+							<th>To</th>
+							<th>Amount (ETH)</th>
+							<th>Date</th>
+						</tr>
+				`;
+				html += formattedHistory.map(t => `
 					<tr>
-						<th>From</th>
-						<th>To</th>
-						<th>Amount (ETH)</th>
-						<th>Date</th>
+						<td>${t.sender}</td>
+						<td>${t.receiver}</td>
+						<td>${t.amount}</td>
+						<td>${t.timestamp}</td>
 					</tr>
-			`;
-			html += formattedHistory.map(t => `
-				<tr>
-					<td>${t.sender}</td>
-					<td>${t.receiver}</td>
-					<td>${t.amount}</td>
-					<td>${t.timestamp}</td>
-				</tr>
-			`).join('');
-			html += '</table>';
-			document.getElementById('allTransferHistoryContent').innerHTML = html;
-			document.getElementById('allTransferHistoryModal').style.display = 'block';
-		} catch (error) {
-			console.error(error);
-			showStatus('Failed to get all transfer history: ' + error.message);
+				`).join('');
+				html += '</table>';
+
+				document.getElementById('allTransferHistoryContent').innerHTML = html;
+				document.getElementById('allTransferHistoryModal').style.display = 'block';
+			} catch (error) {
+				console.error(error);
+				showStatus('Failed to get all transfer history: ' + error.message);
+			}
 		}
-	}
 		// async function getTransferDetails() {
 		// 	const user = document.getElementById('transferDetailsUser').value;
 		// 	const index = document.getElementById('transferDetailsIndex').value;

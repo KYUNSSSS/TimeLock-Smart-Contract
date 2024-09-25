@@ -2464,8 +2464,8 @@ const ABIInterest = [
 
 
 // Define the ABI and contract address globally
-const Address = "0x6259E6F4c1B94f18F18ca46bC2CdB8A7b5Bd475F";
-const AddressInterest = "0x4ea147Bc6F6EED52aD5129bCfcFe35a5f1885FAe"; //Interest Module Addres
+const Address = "0x341604dA1445683c04400C82d7957E9135e2f4cE";
+const AddressInterest = "0xe19484d2d89E741b6E604eEEbc227736810E6CA4"; //Interest Module Addres
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.hidden-section');
@@ -2796,6 +2796,36 @@ cancelWithdrawalForm.addEventListener('submit', async (e) => {
         });
 });
 
+async function ScheduleForChild() {
+    try {
+        if (typeof ethereum !== 'undefined') {
+            const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+            const sender = accounts[0];
+
+            // Assuming accountContract is already defined and initialized
+            const profile = await contract.methods.getProfile().call({ from: sender });
+            const age = profile.age;
+
+            // Check if the user is 18 or older
+            if (age >= 18) {
+                document.getElementById('withdrawForm').style.display = "block";
+                document.getElementById('nonParentMessageScheduleWIthdraw').style.display = "none";
+                
+                return; // Exit the function early if the user is 18 or older
+            }else{
+                document.getElementById('nonParentMessageScheduleWIthdraw').style.display = "block";
+                document.getElementById('withdrawForm').style.display = "none";
+            }
+        } else {
+            alert("Please install MetaMask!");
+        }
+    } catch (error) {
+        console.error("Error occurred:", error);
+        document.getElementById('timeRemainingResult').innerText = "An error occurred while fetching the data.";
+    }
+};
+
+
 document.getElementById('withdrawForm').addEventListener('submit', async function (e) {
     e.preventDefault(); // Prevent form from submitting the default way
 
@@ -2812,14 +2842,9 @@ document.getElementById('withdrawForm').addEventListener('submit', async functio
     // Get the parent (the current connected account) from MetaMask
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const parentAccount = accounts[0];
-    const childAccounts = await contract.methods.getChildren(parentAccount).call();
-    alert(childAccounts);
-    const childprofile = await contract.methods.getProfile().call({ from: childAccounts });
-    console.log(childprofile);
-    const myparent =childprofile.parent;
+
     
-    if(parentAccount==myparent){
-    // Call the addScheduleWithdrawForChild function
+
     try {
         await contract.methods.addScheduleWithdrawForChild(childAddress, weiAmount, unlockTimestamp)
             .send({ from: parentAccount });
@@ -2828,8 +2853,6 @@ document.getElementById('withdrawForm').addEventListener('submit', async functio
     } catch (error) {
         console.error(error);
         alert('Error scheduling withdrawal. See console for details.');
-    }}else{
-        alert("NOT YOUR CHILD!");
     }
 });
 
@@ -2913,22 +2936,30 @@ window.addEventListener('load', connectWallet);
 		// Convert to epoch time in seconds
 		const startEpoch = Math.floor(startDate.getTime() / 1000);
 		const endEpoch = Math.floor(endDate.getTime() / 1000);
-		console.log(startEpoch);
-		console.log(endEpoch);
-  
-		try {
-		  contractInterest.methods.interestCalculator(amount, startEpoch, endEpoch).call()
-			.then((result) => {
-			  document.getElementById("interest-test").innerText = web3.utils.fromWei(result[0], "ether") + " ETH";
-			  document.getElementById("interest-month").innerText = web3.utils.fromWei(result[1], "ether") + " ETH";
-			  document.getElementById("interest-year").innerText = web3.utils.fromWei(result[2], "ether") + " ETH";
-			})
-			.catch((error) => {
-			  console.error("Error calculating interest:", error);
-			});
-		} catch (error) {
-		  console.error("Error:", error);
+
+		if(endEpoch-startEpoch > 0){
+			try {
+				contractInterest.methods.interestCalculator(amount, startEpoch, endEpoch).call()
+				  .then((result) => {
+					document.getElementById("interest-test").innerText = web3.utils.fromWei(result[0], "ether") + " ETH";
+					document.getElementById("interest-month").innerText = web3.utils.fromWei(result[1], "ether") + " ETH";
+					document.getElementById("interest-year").innerText = web3.utils.fromWei(result[2], "ether") + " ETH";
+				  })
+				  .catch((error) => {
+					console.error("Error calculating interest:", error);
+				  });
+			  } catch (error) {
+				console.error("Error:", error);
+			  }
+		}else{
+			document.getElementById("interest-test").innerText = "Invalid Date";
+			document.getElementById("interest-month").innerText = "Invalid Date";
+			document.getElementById("interest-year").innerText = "Invalid Date";
 		}
+		// console.log(startEpoch);
+		// console.log(endEpoch);
+  
+		
 	  }
   
   
@@ -2995,7 +3026,7 @@ window.addEventListener('load', connectWallet);
 		  const sender = accounts[0];
 		  const percentage = document.getElementById("distribute-percentage").value;
 		  const recipientAddress = document.getElementById("Recipient-Address").value;
-  
+		  
 		  try {
 			// Call the contract to distribute interest
 			const result = await contractInterest.methods.distributeInterest(percentage, recipientAddress, sender).send({ from: sender });
@@ -3033,7 +3064,7 @@ window.addEventListener('load', connectWallet);
 		  const selectedInterval = document.getElementById("interval-select").value;
   
 		  try {
-			console.log(test1);
+			console.log("test1");
 			// Call the contract to set the user's accrual interval
 			await contractInterest.methods.setUserAccrualInterval(selectedInterval, sender).send({ from: sender });
   

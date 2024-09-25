@@ -342,8 +342,8 @@
         </div>
 
         <div id="childScheduleWithdraw" class="hidden-section">
-            <form id="withdrawForm">
-                <h3>Schedule Withdrawal for Child</h3>
+            <h3>Schedule Withdrawal for Child</h3>
+            <form id="withdrawForm" style="display: none;">
                 <label for="childAddress">Child's Address:</label>
                 <input type="text" id="childAddress" name="childAddress" placeholder="Enter child's address"
                     required><br><br>
@@ -357,6 +357,9 @@
 
                 <button type="submit">Schedule Withdrawal</button>
             </form>
+            <div id="nonParentMessageScheduleWIthdraw" style="display: none;">
+                <h1>Only Parent Can Schedule For Child</h1>
+            </div>
         </div>
     </main>
     <script>
