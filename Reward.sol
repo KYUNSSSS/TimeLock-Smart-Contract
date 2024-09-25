@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "./latestCombine.sol";
+
+/*
 import "./account.sol"; // Importing Account contract
 import "./Trackmodule2.0.sol"; // Importing Transaction contract
 import "./DepositAndWithdrawals.sol"; // Importing DepositAndWithdraw contract
-
+*/
 contract RewardSystem {
-    Account public accountContract; // Link to Account contract
-    Transaction public transactionContract; // Link to Transaction contract
-    DepositAndWithdraw public depositContract; // Link to Deposit/Withdraw contract
+    DepositAndWithdraw public accountContract;
+    DepositAndWithdraw public transactionContract;
+    DepositAndWithdraw public depositContract;
 
     struct UserRewards {
         uint256 totalPoints;
@@ -46,17 +49,18 @@ contract RewardSystem {
         uint256 timestamp
     );
 
-    constructor(
+   constructor(
         address _accountAddress,
         address _transactionAddress,
         address _depositAddress,
         address _accountContractAddress
     ) {
-        accountContract = Account(_accountAddress);
-        transactionContract = Transaction(_transactionAddress);
+        accountContract = DepositAndWithdraw(_accountAddress);
+        transactionContract = DepositAndWithdraw(_transactionAddress);
         depositContract = DepositAndWithdraw(_depositAddress);
-        accountContract = Account(_accountContractAddress);
+        accountContract = DepositAndWithdraw(_accountContractAddress);
     }
+
 
     modifier userExists() {
         // Fetch the user details from the Account contract
