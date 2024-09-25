@@ -61,6 +61,30 @@ contract DepositAndWithdraw {
     event Paused();
     event Unpaused();
 
+//for Reward
+function getUser(address _account) public view returns (
+        address account, 
+        string memory name, 
+        string memory email, 
+        uint age, 
+        AccountType accountType, 
+        address parent, 
+        AccountStatus status, 
+        uint archiveTimestamp
+    ) {
+        User memory user = users[_account];
+        return (
+            user.account, 
+            user.name, 
+            user.email, 
+            user.age, 
+            user.accountType, 
+            user.parent, 
+            user.status, 
+            user.archiveTimestamp
+        );
+    }
+
     address public owner;
     bool public paused;
 
