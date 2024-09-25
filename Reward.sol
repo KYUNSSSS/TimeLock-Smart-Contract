@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "./latestCombine.sol";
+
+/*
 import "./account.sol"; // Importing Account contract
 import "./Trackmodule2.0.sol"; // Importing Transaction contract
 import "./DepositAndWithdrawals.sol"; // Importing DepositAndWithdraw contract
-
+*/
 contract RewardSystem {
     Account public accountContract; // Link to Account contract
     Transaction public transactionContract; // Link to Transaction contract
@@ -52,10 +55,10 @@ contract RewardSystem {
         address _depositAddress,
         address _accountContractAddress
     ) {
-        accountContract = Account(_accountAddress);
-        transactionContract = Transaction(_transactionAddress);
-        depositContract = DepositAndWithdraw(_depositAddress);
-        accountContract = Account(_accountContractAddress);
+        contract RewardSystem {
+    DepositAndWithdraw public accountContract;
+    DepositAndWithdraw public transactionContract;
+    DepositAndWithdraw public depositContract;
     }
 
     modifier userExists() {
