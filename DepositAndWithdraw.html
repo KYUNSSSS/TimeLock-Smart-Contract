@@ -151,10 +151,10 @@
                                         <a href="#">Schedule</a>
                                         <ul class="dropdown">
                                             <li onclick="showSection('listScheduledSection'),listScheduledWithdrawals()"><a href="#">List Scheduled Withdrawals</a></li>
-                                            <li onclick="showSection('scheduleWithdrawSection')"><a href="#">Schedule Withdraw</a></li>
+                                            <li onclick="showSection('scheduleWithdrawSection'),ScheduleWithdraw()"><a href="#">Schedule Withdraw</a></li>
                                             <li onclick="showSection('executeWithdrawSection')"><a href="#">Execute Withdrawals</a></li>
                                             <li onclick="showSection('cancelWithdrawal')"><a href="#">Cancel Withdrawals</a></li>
-                                            <li onclick="showSection('childScheduleWithdraw')"><a href="#">Schedule For Child</a></li>
+                                            <li onclick="showSection('childScheduleWithdraw'),ScheduleForChild()"><a href="#">Schedule For Child</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -311,13 +311,15 @@
             <div>
                 <h2>Balance: <span class="balanceResult">0</span> ETH</h2>
             </div>
-            <form>
+            <form id="ScheduleWithdrawForm">
                 <p style="font-weight: bold; margin: 0; font-size: larger;">Input Schedule Withdraw Amount</p>
                 <input type="number" id="withdrawAmount" placeholder="Enter Amount in ETH" style="width: 100%;" /> <br>
                 <input type="datetime-local" id="withdrawDateTime" style="width: 100%;" /> <br>
                 <button onclick="addScheduleWithdraw()" style="width: 100%;">Schedule Withdraw</button>
             </form>
-
+            <div id="NoChildScheduleWithdraw" style="display: none;">
+                <h1>Only Parent Can Schedule Withdraw</h1>
+            </div>
         </div>
 
         <!-- Execute Withdrawal Section -->
@@ -343,19 +345,19 @@
 
         <div id="childScheduleWithdraw" class="hidden-section">
             <h3>Schedule Withdrawal for Child</h3>
-            <form id="withdrawForm" style="display: none;">
+            <form id="withdrawForm" style="display: block;">
                 <label for="childAddress">Child's Address:</label>
                 <input type="text" id="childAddress" name="childAddress" placeholder="Enter child's address"
-                    required><br><br>
+                    required style="width: 100%;">
 
                 <label for="amountWithdraw">Amount (in Ether):</label>
                 <input type="number" id="amountWithdraw" name="amountWithdraw" placeholder="Enter amount in Ether"
-                    required><br><br>
+                    required style="width: 100%;">
 
                 <label for="unlockTime">Unlock Date:</label>
-                <input type="datetime-local" id="unlockTime" name="unlockTime" required><br><br>
+                <input type="datetime-local" id="unlockTime" name="unlockTime" required style="width: 100%;">
 
-                <button type="submit">Schedule Withdrawal</button>
+                <button type="submit" style="width: 100%;">Schedule Withdrawal</button>
             </form>
             <div id="nonParentMessageScheduleWIthdraw" style="display: none;">
                 <h1>Only Parent Can Schedule For Child</h1>

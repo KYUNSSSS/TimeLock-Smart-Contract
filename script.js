@@ -2731,6 +2731,35 @@ async function listScheduledWithdrawals() {
     }
 }
 
+async function ScheduleWithdraw() {
+    try {
+        if (typeof ethereum !== 'undefined') {
+            const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+            const sender = accounts[0];
+
+            // Assuming accountContract is already defined and initialized
+            const profile = await contract.methods.getProfile().call({ from: sender });
+            const age = profile.age;
+
+            // Check if the user is 18 or older
+            if (age >= 18) {
+                document.getElementById('ScheduleWithdrawForm').style.display = "block";
+                document.getElementById('NoChildScheduleWithdraw').style.display = "none";
+                
+                return; // Exit the function early if the user is 18 or older
+            }else{
+                document.getElementById('NoChildScheduleWithdraw').style.display = "block";
+                document.getElementById('ScheduleWithdrawForm').style.display = "none";
+            }
+        } else {
+            alert("Please install MetaMask!");
+        }
+    } catch (error) {
+        console.error("Error occurred:", error);
+        document.getElementById('timeRemainingResult').innerText = "An error occurred while fetching the data.";
+    }
+};
+
 // Schedule withdrawal for the child account
 async function addScheduleWithdraw() {
     const amount = document.getElementById('withdrawAmount').value;
